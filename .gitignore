@@ -1,2 +1,9 @@
+# IntelliJ Editor
 .idea/*
 react-dashboard.iml
+
+# NodeJS
+node_modules/*
+
+# React build directory
+dist/*

@@ -1,0 +1,12 @@
+$background-dark: #333333;
+$foreground-light: #f9f9f9;
+$font-family: Calibri, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+// SCSS TEST
+body {
+  font-family: $font-family;
+  background: $background-dark;
+  color: $foreground-light;
+  padding: 0;
+  margin: 0;
+}
