@@ -1,6 +1,6 @@
 # Selficient React dashboard
 
-This is a web based Dashboard for interacting with the selficient backend.
+This is a web based Dashboard for interacting with the Selficient back end.
 
 _This project uses __TypeScript__ and __SASS__ for logic and styling._
 
@@ -57,4 +57,4 @@ See also the list of [contributors](https://github.com/wytho/React/contributors)
 
 ## License
 
-###### TODO: Add a LICENCE.md file if nessecary
+###### TODO: Add a LICENCE.md file if necessary
