@@ -1,8 +1,9 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+const path = require('path'),
+      HtmlWebpackPlugin = require('html-webpack-plugin'),
+      ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
+    // context: __dirname + '/public',
     entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -44,7 +45,7 @@ module.exports = {
     },
     plugins: [
         // reloads webpack after file changes
-        new HtmlWebpackPlugin({ template: './index.html' }),
+        new HtmlWebpackPlugin({ template: path.resolve(__dirname, 'index.html') }),
 
         // makes a style.css file with all the minified styles from all the sass files
         new ExtractTextWebpackPlugin('style.css')

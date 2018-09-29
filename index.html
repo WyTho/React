@@ -2,17 +2,27 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Hello React!</title>
+    <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no" />
+    <meta name="theme-color" content="#242424" />
+    <link rel="manifest" href="manifest.json"> <!--  https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/ -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="76x76" href="apple-icon.png">
 
+    <!-- Fonts and icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <title>Hello React!</title>
 </head>
 <body>
+<noscript>
+    You need to enable JavaScript to run this app.
+</noscript>
 <div id="app"></div>
 
-<!-- Dependencies (optional). This way these dependencies can be cashed by the browser. -->
-<script src="./node_modules/react/umd/react.development.js"></script>
-<script src="./node_modules/react-dom/umd/react-dom.development.js"></script>
+<!-- Direct dependencies (optional). This way these dependencies can be cashed by the browser. -->
+<script src="node_modules/react/umd/react.development.js"></script>
+<script src="node_modules/react-dom/umd/react-dom.development.js"></script>
 
 <!-- Main -->
 <script src="/bundle.js"></script>
