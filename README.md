@@ -36,6 +36,8 @@ npm run start:dev
 ```
 Navigate to [localhost:8080](http://localhost:8080) and take a look around.
 
+Alternatively you can go to [localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/) to see the app running there, along with any log statements.
+
 *Note: if port 8080 is in use, the server will start at port 8081*
 
 ## Running the tests
