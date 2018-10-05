@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemAvatar, ListItemText, Avatar } from '@material-ui/core';
+import {List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Icon} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
@@ -22,6 +22,8 @@ export class Overview extends React.Component<{}, IState> {
         return (
             <div className='Overview'>
                 <button onClick={this.openModalHandler}>Open Modal</button>
+                <Icon>add_circle</Icon>
+                <Typography variant="srOnly">Create a user</Typography>
                 {this.modalJSX()}
             </div>
         )

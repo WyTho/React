@@ -1,13 +1,12 @@
 import * as React from 'react';
-import './Layout.scss';
+import Navbar from '../Navbar/Navbar';
 
 const layout = (props: any) => (
-    <div className='Layout'>
-        <div>Navbar, backdrop</div>
-        <main className='content'>
+    <>
+        <Navbar>
             { props.children }
-        </main>
-    </div>
+        </Navbar>
+    </>
 );
 
 export default layout;
