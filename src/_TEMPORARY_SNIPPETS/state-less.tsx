@@ -1,10 +1,15 @@
 import * as React from 'react';
-// import './Name.scss';
 
-const name = (props: any) => (
-    <div className='Name'>
+interface IProps {
+    x: string
+}
+const name = (props: IProps) => {
+    const { x } = props;
+    return (
+        <div className='Name'>
 
-    </div>
-);
+        </div>
+    );
+};
 
 export default name;
