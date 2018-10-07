@@ -48,10 +48,6 @@ export default (
             duration: transitions.duration.enteringScreen,
         }),
     },
-    menuButton: {
-        marginLeft: 12,
-        marginRight: 36,
-    },
     hide: {
         display: 'none',
     },
@@ -75,6 +71,16 @@ export default (
         [breakpoints.up('md')]: {
             display: 'none',
         },
+    },
+    iconPadding: {
+        padding: '0 16px 0 12px'
+    },
+    toolbarSpacingLeft: {
+        marginLeft: 12,
+        marginRight: 36,
+    },
+    toolbarSpacingRight: {
+        paddingRight: 12
     },
 
     // SideDrawer

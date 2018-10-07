@@ -1,19 +1,48 @@
 import * as React from 'react';
 import Layout from './components/Layout/Layout';
-import { CssBaseline } from '@material-ui/core';
+import {CssBaseline, MuiThemeProvider, createMuiTheme, Theme} from '@material-ui/core';
 import { BrowserRouter, Route } from 'react-router-dom';
+import teal from '@material-ui/core/colors/teal';
+import purple from '@material-ui/core/colors/purple';
+import deepPurple from '@material-ui/core/colors/deepPurple';
 
 import routes from './config.routes';
 
-export class App extends React.PureComponent<{}, {}> {
+const lightTheme = createMuiTheme({
+    palette: {
+        primary: teal,
+        secondary: {
+            main: '#ef6c00',
+        },
+    },
+});
+const darkTheme = createMuiTheme({
+    palette: {
+        type: 'dark',
+        primary: purple,
+        secondary: deepPurple,
+    },
+});
+
+interface IState {
+    darkThemeActive: boolean,
+    theme: Theme
+}
+
+export class App extends React.Component<{}, IState> {
+    public state = {
+        darkThemeActive: false,
+        theme: lightTheme
+    };
 
     public render() {
+        const { theme, darkThemeActive } = this.state;
 
         return (
-            <>
+            <MuiThemeProvider theme={theme}>
                 <CssBaseline />
                 <BrowserRouter>
-                    <Layout>
+                    <Layout darkThemeActive={darkThemeActive} handleThemeToggle={this.toggleThemeHandler}>
                         { routes.map((route, i) =>
                             <Route exact={route.path === '/'}
                                    path={route.path}
@@ -22,8 +51,24 @@ export class App extends React.PureComponent<{}, {}> {
                         )}
                     </Layout>
                 </BrowserRouter>
-            </>
+            </MuiThemeProvider>
         )
+    }
+
+    private toggleThemeHandler = () => {
+        this.setState(prevState => {
+            if (prevState.darkThemeActive) {
+                return {
+                    darkThemeActive: false,
+                    theme: lightTheme
+                }
+            } else {
+                return {
+                    darkThemeActive: true,
+                    theme: darkTheme
+                }
+            }
+        })
     }
 }
 

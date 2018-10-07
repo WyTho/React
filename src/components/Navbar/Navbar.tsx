@@ -8,7 +8,12 @@ interface IState {
     drawerOpened: boolean
 }
 
-class Navbar extends React.Component<{} & WithStyles, IState> {
+interface IProps {
+    darkThemeActive: boolean,
+    handleThemeToggle: any
+}
+
+class Navbar extends React.Component<IProps & WithStyles, IState> {
     public state = {
         title: 'Selficient Dashboard',
         drawerOpened: false
@@ -16,7 +21,7 @@ class Navbar extends React.Component<{} & WithStyles, IState> {
 
     public render() {
         const { title, drawerOpened } = this.state;
-        const { classes, children } = this.props;
+        const { classes, children, darkThemeActive, handleThemeToggle } = this.props;
 
         return (
             <div className={classes.root}>
@@ -25,7 +30,9 @@ class Navbar extends React.Component<{} & WithStyles, IState> {
                     title={title}
                     classes={classes}
                     drawerOpened={drawerOpened}
-                    handleDrawerOpen={this.handleDrawerOpen}/>
+                    handleDrawerOpen={this.handleDrawerOpen}
+                    darkThemeActive={darkThemeActive}
+                    handleThemeToggle={handleThemeToggle}/>
 
                 <SideDrawer
                     classes={classes}

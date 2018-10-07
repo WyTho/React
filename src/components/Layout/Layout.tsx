@@ -3,7 +3,7 @@ import Navbar from '../Navbar/Navbar';
 
 const layout = (props: any) => (
     <>
-        <Navbar>
+        <Navbar darkThemeActive={props.darkThemeActive} handleThemeToggle={props.handleThemeToggle}>
             { props.children }
         </Navbar>
     </>

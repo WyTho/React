@@ -8,71 +8,121 @@ import {
     WithStyles,
     Badge,
     Menu,
-    MenuItem, Icon
+    MenuItem,
+    Icon
 } from '@material-ui/core';
 
 interface IProps {
     title: string,
     drawerOpened: boolean,
-    handleDrawerOpen: any
+    darkThemeActive: boolean,
+    handleDrawerOpen: any,
+    handleThemeToggle: any
 }
 
 interface IState {
-    menuDesktopEl: HTMLElement,
-    menuMobileEl: HTMLElement
+    mobileMenuAnchorEl: HTMLElement,
+    menuItems: any[]
 }
 
 class TopBar extends React.Component<IProps & WithStyles, IState> {
 
     public state = {
-        menuDesktopEl: null as HTMLElement,
-        menuMobileEl: null as HTMLElement
+        mobileMenuAnchorEl: null as HTMLElement,
+        menuItems: [
+            {
+                key: 'notifications',
+                text: 'Notificaties',
+                icon: 'notifications',
+                badge: {
+                    amount: 11,
+                    color: 'secondary'
+                }
+            },
+            {
+                key: 'theme',
+                text: 'Donker thema',
+                icon: 'brightness_2',
+                whenDarkTheme: {
+                    text: 'Licht thema',
+                    icon: 'wb_sunny'
+                }
+            },
+            {
+                key: 'settings',
+                text: 'Instellingen',
+                icon: 'settings'
+            },
+        ]
     };
 
     public render() {
-        const { classes, title, drawerOpened, handleDrawerOpen } = this.props;
-        const { menuDesktopEl, menuMobileEl } = this.state;
+        const { classes, title, drawerOpened, darkThemeActive, handleDrawerOpen } = this.props;
+        const { menuItems, mobileMenuAnchorEl } = this.state;
 
-        const isSettingsMenuOpen = Boolean(menuDesktopEl);
-        const isMobileMenuOpen = Boolean(menuMobileEl);
+        const isMobileMenuOpen = Boolean(mobileMenuAnchorEl);
 
-        const renderSettingsMenu = (
-            <Menu
-                anchorEl={menuDesktopEl}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                open={isSettingsMenuOpen}
-                onClose={this.handleMenuClose}>
-                <MenuItem onClick={this.handleMenuClose}>Test 1</MenuItem>
-                <MenuItem onClick={this.handleMenuClose}>Test 2</MenuItem>
-                <MenuItem onClick={this.handleMenuClose}>Test 3</MenuItem>
-            </Menu>
-        );
+        const renderDesktopMenuItems = menuItems.map((menuItem: any) => {
+            const icon = darkThemeActive && menuItem.key === 'theme' ?
+                menuItem.whenDarkTheme.icon : menuItem.icon;
+
+            let item = <Icon>{icon}</Icon>;
+
+            if (menuItem.badge) {
+                item = (
+                    <Badge badgeContent={menuItem.badge.amount} color={menuItem.badge.color}>
+                        <Icon>{icon}</Icon>
+                    </Badge>
+                );
+            }
+            return (
+                <IconButton key={menuItem.key} color='inherit' onClick={() => this.handleButtonClick(menuItem.key)}>
+                    {item}
+                </IconButton>
+            )
+        });
 
         const renderMobileMenu = (
             <Menu
-                anchorEl={menuMobileEl}
+                anchorEl={mobileMenuAnchorEl}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                 open={isMobileMenuOpen}
                 onClose={this.handleMobileMenuClose}>
+                {
+                    menuItems.map((menuItem: any) => {
+                        let text;
+                        let icon;
 
-                <MenuItem>
-                    <IconButton color='inherit'>
-                        <Badge className={classes.margin} badgeContent={11} color='secondary'>
-                            <Icon>notifications</Icon>
-                        </Badge>
-                    </IconButton>
-                    <p>Notifications</p>
-                </MenuItem>
+                        if (darkThemeActive && menuItem.key === 'theme') {
+                            text = menuItem.whenDarkTheme.text;
+                            icon = menuItem.whenDarkTheme.icon;
+                        } else {
+                            text = menuItem.text;
+                            icon = menuItem.icon;
 
-                <MenuItem onClick={this.handleProfileMenuOpen}>
-                    <IconButton color='inherit'>
-                        <Icon>settings</Icon>
-                    </IconButton>
-                    <p>Settings</p>
-                </MenuItem>
+                        }
 
+                        let item = <Icon className={classes.iconPadding}>{icon}</Icon>;
+
+                        if (menuItem.badge) {
+                            item = (
+                                <span className={classes.iconPadding}>
+                                    <Badge badgeContent={menuItem.badge.amount} color={menuItem.badge.color}>
+                                        <Icon>{icon}</Icon>
+                                    </Badge>
+                                </span>
+
+                            );
+                        }
+                        return (
+                            <MenuItem key={menuItem.key} onClick={() => this.handleButtonClick(menuItem.key)}>
+                                { item }
+                                <p>{text}</p>
+                            </MenuItem>
+                        )
+                    })
+                }
             </Menu>
         );
 
@@ -84,7 +134,7 @@ class TopBar extends React.Component<IProps & WithStyles, IState> {
                         <IconButton color='inherit'
                                     aria-label='Open drawer'
                                     onClick={handleDrawerOpen}
-                                    className={classNames(classes.menuButton, drawerOpened && classes.hide)}>
+                                    className={classNames(classes.toolbarSpacingLeft, drawerOpened && classes.hide)}>
                             <Icon>menu</Icon>
                         </IconButton>
 
@@ -96,19 +146,7 @@ class TopBar extends React.Component<IProps & WithStyles, IState> {
 
                         <div className={classes.sectionDesktop}>
 
-                            <IconButton color='inherit'>
-                                <Badge className={classes.margin} badgeContent={7} color='secondary'>
-                                    <Icon>notifications</Icon>
-                                </Badge>
-                            </IconButton>
-                            <IconButton
-                                aria-owns={isSettingsMenuOpen ? 'material-appbar' : null}
-                                aria-haspopup='true'
-                                onClick={this.handleProfileMenuOpen}
-                                color='inherit'>
-                                <Icon>settings</Icon>
-                            </IconButton>
-
+                            {renderDesktopMenuItems}
                         </div>
 
                         <div className={classes.sectionMobile}>
@@ -117,29 +155,30 @@ class TopBar extends React.Component<IProps & WithStyles, IState> {
                             </IconButton>
                         </div>
 
+                        <div className={classes.toolbarSpacingRight} />
+
                     </Toolbar>
                 </AppBar>
-                {renderSettingsMenu}
                 {renderMobileMenu}
             </>
         );
     }
-    private handleProfileMenuOpen = (event: any) => {
-        this.setState({ menuDesktopEl: event.currentTarget });
-    };
-
-    private handleMenuClose = () => {
-        this.setState({ menuDesktopEl: null });
-        this.handleMobileMenuClose();
-    };
 
     private handleMobileMenuOpen = (event: any) => {
-        this.setState({ menuMobileEl: event.currentTarget });
+        this.setState({ mobileMenuAnchorEl: event.currentTarget });
     };
 
     private handleMobileMenuClose = () => {
-        this.setState({ menuMobileEl: null });
+        this.setState({ mobileMenuAnchorEl: null });
     };
+
+    private handleButtonClick = (key: string) => {
+        this.handleMobileMenuClose();
+
+        if (key === 'theme') {
+            this.props.handleThemeToggle();
+        }
+    }
 }
 
 export default TopBar;
