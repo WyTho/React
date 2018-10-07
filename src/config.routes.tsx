@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Overzicht from './containers/Overview/Overzicht';
+import Overzicht from './containers/Overzicht/Overzicht';
 import Ruimtes from './containers/Ruimtes/Ruimtes';
 import Planning from './containers/Planning/Planning';
 import Toezicht from './containers/Toezicht/Toezicht';

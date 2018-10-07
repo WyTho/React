@@ -1,8 +1,9 @@
-import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography } from '@material-ui/core';
+import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Paper } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
 import './Overzicht.scss';
+import RandomChart1 from './RandomChart/RandomChart1'
 
 interface IState {
     modal: {
@@ -24,6 +25,14 @@ export class Overzicht extends React.Component<{}, IState> {
                 <Typography variant='display2'>
                     Overzicht
                 </Typography>
+
+                <Paper style={{height: 540, width: 960, margin: 64, padding: 64}} elevation={24}>
+                    <Typography variant='headline'>
+                        Test chart ding
+                    </Typography>
+                    <RandomChart1/>
+                </Paper>
+
                 <button onClick={this.openModalHandler}>Open Modal</button>
                 {this.modalJSX()}
             </div>
