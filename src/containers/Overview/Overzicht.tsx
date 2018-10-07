@@ -1,8 +1,8 @@
-import {List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Icon} from '@material-ui/core';
+import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
-import './Overview.scss';
+import './Overzicht.scss';
 
 interface IState {
     modal: {
@@ -10,7 +10,7 @@ interface IState {
     }
 }
 
-export class Overview extends React.Component<{}, IState> {
+export class Overzicht extends React.Component<{}, IState> {
     public state = {
         modal: {
             opened: false
@@ -20,10 +20,11 @@ export class Overview extends React.Component<{}, IState> {
     public render() {
 
         return (
-            <div className='Overview'>
+            <div className='Overzicht'>
+                <Typography variant='display2'>
+                    Overzicht
+                </Typography>
                 <button onClick={this.openModalHandler}>Open Modal</button>
-                <Icon>add_circle</Icon>
-                <Typography variant="srOnly">Create a user</Typography>
                 {this.modalJSX()}
             </div>
         )
@@ -56,4 +57,4 @@ export class Overview extends React.Component<{}, IState> {
 
 }
 
-export default Overview;
+export default Overzicht;
