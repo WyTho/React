@@ -3,8 +3,7 @@ import Layout from './components/Layout/Layout';
 import {CssBaseline, MuiThemeProvider, createMuiTheme, Theme} from '@material-ui/core';
 import { BrowserRouter, Route } from 'react-router-dom';
 import teal from '@material-ui/core/colors/teal';
-import purple from '@material-ui/core/colors/purple';
-import deepPurple from '@material-ui/core/colors/deepPurple';
+import blue from '@material-ui/core/colors/blue';
 
 import routes from './config.routes';
 
@@ -19,8 +18,10 @@ const lightTheme = createMuiTheme({
 const darkTheme = createMuiTheme({
     palette: {
         type: 'dark',
-        primary: purple,
-        secondary: deepPurple,
+        primary: blue,
+        secondary: {
+            main: '#ef6c00',
+        }
     },
 });
 

@@ -1,9 +1,10 @@
-import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Paper } from '@material-ui/core';
+import {List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Paper, Grid} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
 import './Overzicht.scss';
-import RandomChart1 from './RandomChart/RandomChart1'
+
+import ChartDingus from './chart';
 
 interface IState {
     modal: {
@@ -25,15 +26,33 @@ export class Overzicht extends React.Component<{}, IState> {
                 <Typography variant='display2'>
                     Overzicht
                 </Typography>
+                <Grid
+                    container
+                    direction='row'
+                    justify='center'
+                    alignItems='stretch'
+                    spacing={24}
+                >
+                    <Grid item md={4} sm={6} xs={12}>
+                        <Paper style={{ height: '100%', width: '100%' }} elevation={3}>
+                            <ChartDingus/>
+                        </Paper>
+                    </Grid>
+                    <Grid item md={4} sm={6} xs={12}>
+                        <Paper style={{ height: '100%', width: '100%' }} elevation={3}>
+                            <ChartDingus/>
+                        </Paper>
+                    </Grid>
+                    <Grid item md={4} sm={6} xs={12}>
+                        <Paper style={{ height: '100%', width: '100%' }} elevation={3}>
+                            <ChartDingus/>
+                        </Paper>
+                    </Grid>
+                    <Grid item md={4} sm={6} xs={12}>
+                        <button style={{ height: '100%', width: '100%' }} onClick={this.openModalHandler}>Open Modal</button>
+                    </Grid>
 
-                <Paper style={{height: 540, width: 960, margin: 64, padding: 64}} elevation={24}>
-                    <Typography variant='headline'>
-                        Test chart ding
-                    </Typography>
-                    <RandomChart1/>
-                </Paper>
-
-                <button onClick={this.openModalHandler}>Open Modal</button>
+                </Grid>
                 {this.modalJSX()}
             </div>
         )
