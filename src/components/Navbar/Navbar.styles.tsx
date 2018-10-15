@@ -29,6 +29,15 @@ export default (
         flexGrow: 1,
         backgroundColor: palette.background.default,
         padding: spacing.unit * 3,
+        overflow: 'auto',
+
+        marginTop: 56,
+        [`${breakpoints.up('xs')} and (orientation: landscape)`]: {
+            marginTop: 48,
+        },
+        [breakpoints.up('sm')]: {
+            marginTop: 64,
+        },
     },
 
     // TopBar

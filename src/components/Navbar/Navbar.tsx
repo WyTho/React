@@ -39,8 +39,8 @@ class Navbar extends React.Component<IProps & WithStyles, IState> {
                     drawerOpened={drawerOpened}
                     handleDrawerClose={this.handleDrawerClose}/>
 
+                <div className={classes.toolbar} />
                 <main className={classes.content}>
-                    <div className={classes.toolbar} />
                     { children }
                 </main>
 

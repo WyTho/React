@@ -3,7 +3,7 @@ const path = require('path'),
       ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-    // context: __dirname + '/public',
+    // context: path.resolve(__dirname, 'public'),
     entry: './src/index.tsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -27,13 +27,13 @@ module.exports = {
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
 
-
             // All files with a '.scss' extension will be handled by 'css-loader & sass-loader'.
             {
                 test: /\.scss$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
+
                         {
                             loader: 'css-loader',
                             options: {
@@ -53,11 +53,8 @@ module.exports = {
                             }
                         },
                         {
-                            loader: 'sass-loader',
-                            options: {
-                                sourceMap: true
-                            }
-                        }
+                            loader: 'sass-loader'
+                        },
                     ]
                 })
             }

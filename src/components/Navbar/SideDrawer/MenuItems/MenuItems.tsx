@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Icon, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import './menuItems.scss';
 
-const menuItems = [
+export const menuItems = [
     { path: '/', title: 'Overzicht', icon: 'dashboard' },
     { path: '/ruimtes', title: 'Ruimtes', icon: 'tune' },
     { path: '/planning', title: 'Planning', icon: 'schedule' },
@@ -10,11 +11,23 @@ const menuItems = [
     { path: '/community', title: 'Community', icon: 'people' }
 ];
 
-export const mainListItems = menuItems.map((menuItem, index) => (
-    <ListItem button key={index} component={({innerRef, ...props}) => <Link {...props} to={menuItem.path} />}>
+export const menuItemsJSX = menuItems.map((menuItem, index) => (
+    <ListItem
+        className={'menuItem'}
+        button
+        key={index}
+        component={
+            ({innerRef, ...props}) =>
+                <NavLink
+                    {...props}
+                    to={menuItem.path}
+                    exact={menuItem.path === '/'} />
+        }>
             <ListItemIcon>
                 <Icon>{menuItem.icon}</Icon>
             </ListItemIcon>
             <ListItemText primary={menuItem.title} />
     </ListItem>
 ));
+
+export default menuItemsJSX;

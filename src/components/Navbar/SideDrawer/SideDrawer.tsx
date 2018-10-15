@@ -8,7 +8,7 @@ import {
     List,
     WithStyles
 } from '@material-ui/core';
-import { mainListItems } from './MenuItems/MenuItems';
+import menuItems from './MenuItems/MenuItems';
 
 interface IProps {
     drawerOpened: boolean,
@@ -30,7 +30,7 @@ const sideDrawer = (props: IProps & WithStyles) => {
             </div>
             <Divider />
             <List>
-                {mainListItems}
+                {menuItems}
             </List>
         </Drawer>
     );

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Layout from './components/Layout/Layout';
-import {CssBaseline, MuiThemeProvider, createMuiTheme, Theme} from '@material-ui/core';
+import { CssBaseline, MuiThemeProvider, createMuiTheme, Theme } from '@material-ui/core';
 import { BrowserRouter, Route } from 'react-router-dom';
 import teal from '@material-ui/core/colors/teal';
 import blue from '@material-ui/core/colors/blue';

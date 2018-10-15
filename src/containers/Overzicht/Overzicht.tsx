@@ -23,33 +23,43 @@ export class Overzicht extends React.Component<{}, IState> {
 
         return (
             <div className='Overzicht'>
-                <Typography variant='display2'>
+                <Typography variant='display2' gutterBottom>
                     Overzicht
                 </Typography>
                 <Grid
+                    className={'GridContainer'}
                     container
                     direction='row'
                     justify='center'
                     alignItems='stretch'
                     spacing={24}
                 >
-                    <Grid item md={4} sm={6} xs={12}>
-                        <Paper style={{ height: '100%', width: '100%' }} elevation={3}>
+                    <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
+                        <Paper className='card' elevation={1}>
                             <ChartDingus/>
                         </Paper>
                     </Grid>
-                    <Grid item md={4} sm={6} xs={12}>
-                        <Paper style={{ height: '100%', width: '100%' }} elevation={3}>
+                    <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
+                        <Paper className='card' elevation={1}>
                             <ChartDingus/>
                         </Paper>
                     </Grid>
-                    <Grid item md={4} sm={6} xs={12}>
-                        <Paper style={{ height: '100%', width: '100%' }} elevation={3}>
+                    <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
+                        <Paper className='card' elevation={1}>
                             <ChartDingus/>
                         </Paper>
                     </Grid>
-                    <Grid item md={4} sm={6} xs={12}>
-                        <button style={{ height: '100%', width: '100%' }} onClick={this.openModalHandler}>Open Modal</button>
+                    <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
+                        <Paper className='card' elevation={1}>
+                            <ChartDingus/>
+                        </Paper>
+                    </Grid>
+
+                    <Grid className='Grid' item md={12} sm={12} xs={12}>
+                        <button style={{ height: '100%', width: '100%' }}
+                                onClick={this.openModalHandler}>
+                            Open Modal
+                        </button>
                     </Grid>
 
                 </Grid>
