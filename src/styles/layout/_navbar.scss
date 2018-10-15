@@ -1,0 +1,11 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the navbar of the site/application.
+// -----------------------------------------------------------------------------
+
+.Navbar {
+  .menuItem.active {
+    box-shadow:
+            0 0 6px 0 rgba(0, 0, 0, .3) inset,
+            0 0 24px 0 rgba(0, 0, 0, .2) inset;
+  }
+}

@@ -2,7 +2,6 @@ import {List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Paper,
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
-import './Overzicht.scss';
 
 import ChartDingus from './chart';
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { WithStyles, withStyles } from '@material-ui/core';
 import SideDrawer from './SideDrawer/SideDrawer';
 import TopBar from './TopBar/TopBar';
-import styles from './Navbar.styles';
+import styles from '../../styles/layout/_navbar.material-ui';
 
 interface IState {
     drawerOpened: boolean
@@ -24,7 +24,7 @@ class Navbar extends React.Component<IProps & WithStyles, IState> {
         const { classes, children, darkThemeActive, handleThemeToggle } = this.props;
 
         return (
-            <div className={classes.root}>
+            <div className={['Navbar', classes.root].join(' ')}>
 
                 <TopBar
                     title={title}
@@ -39,7 +39,7 @@ class Navbar extends React.Component<IProps & WithStyles, IState> {
                     drawerOpened={drawerOpened}
                     handleDrawerClose={this.handleDrawerClose}/>
 
-                <div className={classes.toolbar} />
+                <div className={classes.toolbarHeight} />
                 <main className={classes.content}>
                     { children }
                 </main>

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Icon, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
-import './menuItems.scss';
 
 export const menuItems = [
     { path: '/', title: 'Overzicht', icon: 'dashboard' },
