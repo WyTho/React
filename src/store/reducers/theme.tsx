@@ -1,9 +1,9 @@
-import * as actionTypes from '../actionTypes';
 import { updateObject } from '../utilities';
 
 import { createMuiTheme, Theme } from '@material-ui/core';
 import blue from '@material-ui/core/colors/blue';
 import teal from '@material-ui/core/colors/teal';
+import Actions from '../actionTypes';
 
 const lightTheme = createMuiTheme({
     palette: {
@@ -33,6 +33,7 @@ const initialState = {
     darkThemeActive: false,
     theme: lightTheme
 };
+
 const toggleTheme = ( oldState: IState) => {
     let theme: Theme = lightTheme;
     const darkThemeActive: boolean = !oldState.darkThemeActive;
@@ -42,7 +43,7 @@ const toggleTheme = ( oldState: IState) => {
 
 const reducer = ( state: IState = initialState, action: any ) => {
     switch ( action.type ) {
-        case actionTypes.THEME_TOGGLE : return toggleTheme(state);
+        case Actions.THEME_TOGGLE : return toggleTheme(state);
     }
     return state;
 };

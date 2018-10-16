@@ -1,5 +1,5 @@
 import thunk from 'redux-thunk';
-import {Action, applyMiddleware} from 'redux';
+import { Action, applyMiddleware } from 'redux';
 
 const logger: any = (store: any) => {
     return (next: any) => {

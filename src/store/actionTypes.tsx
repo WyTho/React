@@ -1,1 +1,5 @@
-export const THEME_TOGGLE = 'THEME_TOGGLE';
+enum Actions {
+    THEME_TOGGLE = 'THEME_TOGGLE'
+}
+
+export default Actions;
