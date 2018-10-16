@@ -3,7 +3,8 @@ import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
 
-import ChartDingus from './chart';
+import ChartDingus from './chartJS';
+import ChartDingus2 from './apexCharts';
 
 interface IState {
     modal: {
@@ -35,12 +36,12 @@ export class Overzicht extends React.Component<{}, IState> {
                 >
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
                         <Paper className='card' elevation={1}>
-                            <ChartDingus/>
+                            <ChartDingus2/>
                         </Paper>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
                         <Paper className='card' elevation={1}>
-                            <ChartDingus/>
+                            <ChartDingus2/>
                         </Paper>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
