@@ -21,6 +21,7 @@ export const fetchTemperatureFailed = (error: any) => ({
 });
 
 export const fetchTemperature = () => {
+    console.log('[store/actions/data.tsx] ___ fetchTemperature()');
     return (dispatch: any) => {
         dispatch(fetchTemperatureStart());
         axios.get('/api/graph/AVERAGE_TEMPERATURE')

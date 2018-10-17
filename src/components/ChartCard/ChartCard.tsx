@@ -1,36 +1,72 @@
 import * as React from 'react';
-import {Button, Paper, Typography} from '@material-ui/core';
+import { Button, Paper, Typography } from '@material-ui/core';
+import { ChartData, ChartOptions } from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import Loading from '../../components/Loading/Loading'
 
 interface IProps {
     children: any,
     title: string,
-    elevation?: number
+    elevation?: number,
+    loading: boolean,
+    error: boolean,
+    chartData: ChartData,
+    chartOptions: ChartOptions,
+    onFetchData: () => void
 }
 const defaults = {
     elevation: 1
 };
 
 const chartCard = (props: IProps) => {
-    const { children, title, elevation } = props;
+    const {
+        children,
+        title,
+        elevation,
+        loading,
+        error,
+        chartData,
+        chartOptions
+    } = props;
+    let content = (
+        <div className='absoluteFlexContainer'>
+            <Loading size={120} />
+        </div>
+    );
+    if (!loading) {
+        content = (
+            <>
+                <div className={'content'}>
+                    <Typography>
+                        {children}
+                    </Typography>
+                </div>
+                <div className={'chartContainer'}>
+                    <Line data={chartData} options={chartOptions}/>
+                </div>
+            </>
+        );
+    }
+    if (error) {
+        content = (
+            <div className='absoluteFlexContainer'>
+                <Typography variant='display1'>
+                    Het laden van {title} is mislukt!
+                </Typography>
+                <Button color='primary' onClick={props.onFetchData}>
+                    Probeer het opnieuw
+                </Button>
+            </div>
+        );
+    }
     return (
         <Paper className='card ChartCard' elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}>
             <div className={'titleContainer'}>
                 <Typography variant='title'>
                     { title }
                 </Typography>
-                {/*<div className={'buttonContainer'}>
-                    <Button className={'timeToggleButton'} variant='outlined' size='small' color='primary'>
-                        Maand
-                    </Button>
-                    <Button className={'timeToggleButton'} variant='outlined' size='small' color='primary'>
-                        Week
-                    </Button>
-                    <Button className={'timeToggleButton'} variant='outlined' size='small' color='primary'>
-                        Dag
-                    </Button>
-                </div>*/}
             </div>
-            { children }
+            { content }
         </Paper>
     )
 };

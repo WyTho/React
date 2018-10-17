@@ -14,17 +14,11 @@ module.exports = {
     devtool: 'source-map',
 
     devServer: {
-        // proxy: {
-        //     "*": "http://[::1]:5000"
-        //     // "secure": false,
-        //     // "changeOrigin": true
-        // }
         proxy: {
             '/api': {
                 target: 'http://127.0.0.1:5000'
             }
         },
-        // proxy: { '/api/**': { target: 'http://127.0.0.1:5000/', changeOrigin: true, pathRewrite: { '^/api': '/api' }, secure: false, logLevel: 'debug' } }
     },
 
     resolve: {

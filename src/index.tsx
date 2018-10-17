@@ -7,5 +7,4 @@ import './styles.scss';
 import './styles/main.scss';
 
 const ROOT = document.getElementById('root');
-
 ReactDOM.render(<Provider store={store}><App /></Provider>, ROOT);

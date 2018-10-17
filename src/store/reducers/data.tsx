@@ -17,7 +17,8 @@ const setTimespanForGraphs = (state: any, action: any) => {
 const fetchTemperatureStart = (state: any) => {
     return updateObject(state, {
         temperature: updateObject(state.temperature, {
-            loading: true
+            loading: true,
+            error: false
         })
     });
 };
