@@ -9,19 +9,24 @@ import routes from './config.routes';
 interface IProps {
     darkThemeActive: boolean,
     theme: Theme,
-    toggleThemeHandler: () => void
+    toggleThemeHandler: () => void,
+    onFetchTemperature: () => void
 }
 
 export class App extends React.Component<IProps, {}> {
 
+    public componentDidMount() {
+        this.props.onFetchTemperature();
+    }
+
     public render() {
-        const { theme, darkThemeActive, toggleThemeHandler } = this.props;
+        const { props, props: { theme, darkThemeActive } } = this;
 
         return (
             <MuiThemeProvider theme={theme}>
                 <CssBaseline />
                 <BrowserRouter>
-                    <Layout darkThemeActive={darkThemeActive} handleThemeToggle={toggleThemeHandler}>
+                    <Layout darkThemeActive={darkThemeActive} handleThemeToggle={props.toggleThemeHandler}>
                         { routes.map((route, i) =>
                             <Route exact={route.path === '/'}
                                    path={route.path}
@@ -41,7 +46,8 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
-    toggleThemeHandler: () => dispatch(actions.toggleTheme())
+    toggleThemeHandler: () => dispatch(actions.toggleTheme()),
+    onFetchTemperature: () => dispatch(actions.fetchTemperature())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

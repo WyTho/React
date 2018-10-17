@@ -1,21 +1,21 @@
-import {List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Paper, Grid} from '@material-ui/core';
+import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Grid } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
+import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 
-import ChartDingus from './chart';
+import { connect } from 'react-redux';
 
 interface IState {
-    modal: {
-        opened: boolean
-    }
+    modalOpened: boolean
 }
+// interface IProps {
+//     theme: Theme
+// }
 
 export class Overzicht extends React.Component<{}, IState> {
     public state = {
-        modal: {
-            opened: false
-        }
+        modalOpened: false
     };
 
     public render() {
@@ -31,27 +31,18 @@ export class Overzicht extends React.Component<{}, IState> {
                     direction='row'
                     justify='center'
                     alignItems='stretch'
-                    spacing={24}
-                >
+                    spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <Paper className='card' elevation={1}>
-                            <ChartDingus/>
-                        </Paper>
+                        <ChartForKlimaatbeheer/>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <Paper className='card' elevation={1}>
-                            <ChartDingus/>
-                        </Paper>
+                        <ChartForKlimaatbeheer/>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <Paper className='card' elevation={1}>
-                            <ChartDingus/>
-                        </Paper>
+                        <ChartForKlimaatbeheer/>
                     </Grid>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <Paper className='card' elevation={1}>
-                            <ChartDingus/>
-                        </Paper>
+                        <ChartForKlimaatbeheer/>
                     </Grid>
 
                     <Grid className='Grid' item md={12} sm={12} xs={12}>
@@ -68,13 +59,13 @@ export class Overzicht extends React.Component<{}, IState> {
     }
 
     private openModalHandler = () => {
-        this.setState({ modal: { opened: true } } )
+        this.setState({ modalOpened: true } )
     };
 
     private modalJSX = () => (
         <Modal title={'Hello planet!'}
-               opened={this.state.modal.opened}
-               onClosed={() => this.setState({ modal: { opened: false } } )}>
+               opened={this.state.modalOpened}
+               onClosed={() => this.setState({ modalOpened: false } )}>
             <div>
                 <List>
 
@@ -93,5 +84,8 @@ export class Overzicht extends React.Component<{}, IState> {
     );
 
 }
-
-export default Overzicht;
+// const mapStateToProps = (state: any) => {
+//     const { theme } = state.theme;
+//     return { theme }
+// };
+export default Overzicht; // connect(mapStateToProps)(Overzicht);

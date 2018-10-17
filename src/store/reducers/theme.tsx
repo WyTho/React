@@ -29,11 +29,6 @@ interface IState {
     theme: Theme
 }
 
-const initialState = {
-    darkThemeActive: false,
-    theme: lightTheme
-};
-
 const toggleTheme = ( oldState: IState) => {
     let theme: Theme = lightTheme;
     const darkThemeActive: boolean = !oldState.darkThemeActive;
@@ -41,11 +36,16 @@ const toggleTheme = ( oldState: IState) => {
     return updateObject(oldState, { darkThemeActive, theme });
 };
 
-const reducer = ( state: IState = initialState, action: any ) => {
+const initialState = {
+    darkThemeActive: false,
+    theme: lightTheme
+};
+
+const REDUCER = ( state: IState = initialState, action: any ) => {
     switch ( action.type ) {
         case Actions.THEME_TOGGLE : return toggleTheme(state);
     }
     return state;
 };
 
-export default reducer;
+export default REDUCER;
