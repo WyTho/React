@@ -1,9 +1,19 @@
 import Actions from '../actionTypes';
-import axios from '../../axios.config';
+import axios from '../../config.axios';
+import { TimeSpan } from '../../utils/chartDataUtilities';
 
-export const setTimespanForGraphs = (timeSpan: string) => ({
+export const setTimeSpanForGraphs = (timeSpan: TimeSpan) => ({
     type: Actions.SET_TIMESPAN_FOR_GRAPHS,
     payload: { timeSpan }
+});
+
+export const setStartDateForGraphs = (startDate: Date) => ({
+    type: Actions.SET_START_DATE_FOR_GRAPHS,
+    payload: { startDate }
+});
+export const setCurrentDate = (currentDate: Date) => ({
+    type: Actions.SET_CURRENT_DATE,
+    payload: { currentDate }
 });
 
 export const fetchTemperatureStart = () => ({

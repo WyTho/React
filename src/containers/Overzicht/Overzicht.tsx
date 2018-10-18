@@ -1,30 +1,96 @@
-import { List, ListItem, ListItemAvatar, ListItemText, Avatar, Typography, Grid } from '@material-ui/core';
+import {
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Avatar,
+    Typography,
+    Grid,
+    Button,
+    Icon,
+    IconButton
+} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
 import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 
 import { connect } from 'react-redux';
+import {TimeSpan} from '../../utils/chartDataUtilities';
+import * as actions from '../../store/actions';
+import {getDisplayName, getNextDate, getPreviousDate} from '../../utils/dateUtilities';
 
 interface IState {
     modalOpened: boolean
 }
-// interface IProps {
-//     theme: Theme
-// }
+interface IProps {
+    selected: {
+        timeSpan: TimeSpan,
+        graphStartDateTime: Date
+        currentDateTime: Date
+    },
+    setTimeSpan: (timeSpan: TimeSpan) => void,
+    setStartDate: (date: Date) => void
+}
 
-export class Overzicht extends React.Component<{}, IState> {
+export class Overzicht extends React.Component<IProps, IState> {
     public state = {
         modalOpened: false
     };
 
     public render() {
+        const { props, props: { selected: { timeSpan, graphStartDateTime } } } = this;
 
         return (
             <div className='Overzicht'>
-                <Typography variant='display2' gutterBottom>
-                    Overzicht
-                </Typography>
+                <div className={'titleContainer'}>
+                    <Typography variant='display2' gutterBottom>
+                        Overzicht
+                    </Typography>
+                    <div className='buttonContainer'>
+                        <IconButton onClick={() => props.setStartDate(getPreviousDate(timeSpan, graphStartDateTime))}>
+                            <Icon>chevron_left</Icon>
+                        </IconButton>
+                        <Button color='primary' onClick={() => props.setStartDate(new Date())}>
+                            { getDisplayName(timeSpan, graphStartDateTime) }
+                        </Button>
+                        <IconButton onClick={() => props.setStartDate(getNextDate(timeSpan, graphStartDateTime))}>
+                            <Icon>chevron_right</Icon>
+                        </IconButton>
+                    </div>
+                    <div className='buttonContainer'>
+                        <Button className={'timeToggleButton'}
+                                variant={timeSpan === TimeSpan.month ? 'contained' : 'flat'}
+                                onClick={() => {
+                                    props.setTimeSpan(TimeSpan.month);
+                                    props.setStartDate(graphStartDateTime);
+                                }}
+                                size='small'
+                                color='primary'>
+                            Maand
+                        </Button>
+                        <Button className={'timeToggleButton'}
+                                variant={timeSpan === TimeSpan.week ? 'contained' : 'flat'}
+                                onClick={() => {
+                                    props.setTimeSpan(TimeSpan.week);
+                                    props.setStartDate(graphStartDateTime);
+                                }}
+                                size='small'
+                                color='primary'>
+                            Week
+                        </Button>
+                        <Button className={'timeToggleButton'}
+                                variant={timeSpan === TimeSpan.day ? 'contained' : 'flat'}
+                                onClick={() => {
+                                    props.setTimeSpan(TimeSpan.day);
+                                    props.setStartDate(graphStartDateTime);
+                                }}
+                                size='small'
+                                color='primary'>
+                            Dag
+                        </Button>
+                    </div>
+                </div>
                 <Grid
                     className={'GridContainer'}
                     container
@@ -84,8 +150,12 @@ export class Overzicht extends React.Component<{}, IState> {
     );
 
 }
-// const mapStateToProps = (state: any) => {
-//     const { theme } = state.theme;
-//     return { theme }
-// };
-export default Overzicht; // connect(mapStateToProps)(Overzicht);
+const mapStateToProps = (state: any) => {
+    const { selected } = state.data;
+    return { selected }
+};
+const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
+    setTimeSpan: (timeSpan: TimeSpan) => dispatch(actions.setTimeSpanForGraphs(timeSpan)),
+    setStartDate: (date: Date) => dispatch(actions.setStartDateForGraphs(date))
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Overzicht);

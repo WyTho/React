@@ -2,107 +2,118 @@ import * as React from 'react';
 import {ChartData, Line} from 'react-chartjs-2';
 import ChartCard from '../../../components/ChartCard/ChartCard'
 import {connect} from 'react-redux';
-import {Theme, Typography, Snackbar, Button} from '@material-ui/core';
+import {Theme} from '@material-ui/core';
 import * as actions from '../../../store/actions'
-import {GridLineOptions} from 'chart.js';
+import {getLabelsAndValuesForChart, TimeSpan} from '../../../utils/chartDataUtilities';
+import {beautifyDate} from '../../../utils/dateUtilities';
 
 interface IProps {
     theme: Theme,
     fetchData: () => void,
     loading: boolean,
     data: any,
-    error: boolean
+    error: boolean,
+    timeSpan: TimeSpan,
+    graphStartDateTime: Date,
+    currentDateTime: Date
 }
 
 class ChartForKlimaatbeheer extends React.Component<IProps, {}> {
     public render() {
-        const { props, props: { theme, loading, data, error } } = this;
-        // console.log('loading', loading);
-        console.log('data', data);
-        // console.log('error', error);
-        const type = 'day';
-        const labels: any[] = [];
-        const values: any[] = [];
+        const { props, props: { theme, loading, data, error, timeSpan, graphStartDateTime, currentDateTime } } = this;
+
+        let chartData: ChartData<any> = null;
+        let chartOptions: any = null;
+        let noDataForTimeSpanMessage = null as string;
         if (data) {
-            if (type === 'day') {
-                for (let i = 0; i < data.data.weeks[0].days[0].values.length; i++) {
-                    labels.push( new Date((data.data.weeks[0].days[0].timestamp + (i * 60 * 60)) * 1000) );
-                    values.push( +data.data.weeks[0].days[0].values[i].toFixed() );
-                }
-                console.log(labels)
-            }
-        }
 
-        const chartData: ChartData<any> = {
-            labels,
-            datasets: [
-                {
-                    data: values.map((value: any, i: number) => i + 4 <= values.length ? value : null ),
-                    label: 'Gemiddelde temperatuur',
-                    borderColor: theme.palette.primary.main,
-                    fill: true,
-                    backgroundColor: theme.palette.primary.light
+            const dataForChart = getLabelsAndValuesForChart(timeSpan, graphStartDateTime, data);
+            if (dataForChart.values.averageTemperature.length === 0) {
+                noDataForTimeSpanMessage =
+                    'Er is geen data over de gemiddelde temperatuur op ' +
+                    beautifyDate(graphStartDateTime, '{DATE}')
+            }
+            chartData = {
+                labels: dataForChart.labels,
+                datasets: [
+                    {
+                        data: dataForChart.values.averageTemperature,
+                        label: 'Gemiddelde temperatuur',
+                        borderColor: theme.palette.primary.main,
+                        fill: true,
+                        backgroundColor: theme.palette.primary.light,
+                        datalabels: {
+                            backgroundColor: theme.palette.primary.dark
+                        }
+                    }
+                ]
+            };
+
+            chartOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+                showLines : true,
+                scales : {
+                    yAxes : [{
+                        display: false,
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    xAxes : [{
+                        display: false,
+                        position: 'top',
+                        gridLines: {
+                            display: true
+                        },
+                        scaleLabel: {
+                            fontSize: 16,
+                            display: true,
+                            fontStyle: 'normal'
+                        }
+                    }]
                 },
-                {
-                    data: values.map((value: any, i: number) => i + 4 >= values.length ? value : null ),
-                    label: 'Voorspelde temperatuur',
-                    borderColor: theme.palette.primary.light,
-                    fill: false
-                }
-            ]
-        };
+                legend: {
+                    display: false,
+                },
+                elements : {
+                    line : {},
+                    point : {
+                        radius: 0,
+                        hitRadius: 20
+                    }
+                },
+                plugins: {
+                    datalabels: {
 
-        const chartOptions = {
-            maintainAspectRatio: false,
-            responsive: true,
-            showLines : true,
-            scales : {
-                yAxes : [{
-                    display: false,
-                    gridLines: {
-                        display: false
+                        borderRadius: 4,
+                        color: 'white',
+                        formatter: (value: number, context: any) => Math.round(value) + ' °C'
                     }
-                }],
-                xAxes : [{
-                    display: false,
-                    position: 'top',
-                    gridLines: {
-                        display: true
-                    },
-                    scaleLabel: {
-                        fontSize: 16,
-                        display: true,
-                        fontStyle: 'normal'
-                    }
-                }]
-            },
-            legend: {
-                display: false,
-            },
-            elements : {
-                line : {},
-                point : {
-                    radius: 0,
-                }
-            }
-        };
-        
+                },
+            };
+        }
         return (
             <ChartCard title={'Klimaatbeheer'}
                        loading={loading}
                        error={error}
+                       noDataForTimeSpanMessage={noDataForTimeSpanMessage}
                        chartData={chartData}
                        chartOptions={chartOptions}
                        onFetchData={props.fetchData}>
                 hello, world!
             </ChartCard>
         );
+
     }
 }
 const mapStateToProps = (state: any) => {
     const { theme } = state.theme;
-    const { loading, data, error } = state.data.temperature;
-    return { theme, loading, data, error }
+    const {
+        selected: { timeSpan, graphStartDateTime, currentDateTime },
+        temperature: { loading, data, error }
+    } = state.data;
+    return { theme, loading, data, error, timeSpan, graphStartDateTime, currentDateTime }
 };
 
 const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({

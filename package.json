@@ -26,6 +26,7 @@
     "@types/chart.js": "^2.7.37",
     "axios": "^0.18.0",
     "chart.js": "^2.7.2",
+    "chartjs-plugin-datalabels": "^0.4.0",
     "react": "^16.5.2",
     "react-chartjs-2": "^2.7.4",
     "react-dom": "^16.5.2",

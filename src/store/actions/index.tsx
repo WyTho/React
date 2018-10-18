@@ -2,6 +2,8 @@ export {
     toggleTheme,
 } from './theme';
 export {
-    setTimespanForGraphs,
+    setTimeSpanForGraphs,
+    setStartDateForGraphs,
+    setCurrentDate,
     fetchTemperature
 } from './data';

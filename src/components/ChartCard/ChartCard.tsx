@@ -10,6 +10,7 @@ interface IProps {
     elevation?: number,
     loading: boolean,
     error: boolean,
+    noDataForTimeSpanMessage?: string,
     chartData: ChartData,
     chartOptions: ChartOptions,
     onFetchData: () => void
@@ -26,7 +27,8 @@ const chartCard = (props: IProps) => {
         loading,
         error,
         chartData,
-        chartOptions
+        chartOptions,
+        noDataForTimeSpanMessage
     } = props;
     let content = (
         <div className='absoluteFlexContainer'>
@@ -56,6 +58,15 @@ const chartCard = (props: IProps) => {
                 <Button color='primary' onClick={props.onFetchData}>
                     Probeer het opnieuw
                 </Button>
+            </div>
+        );
+    }
+    if (noDataForTimeSpanMessage) {
+        content = (
+            <div className='absoluteFlexContainer'>
+                <Typography variant='headline'>
+                    { noDataForTimeSpanMessage }
+                </Typography>
             </div>
         );
     }

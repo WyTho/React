@@ -4,6 +4,36 @@
 
 .Overzicht {
 
+  div.titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    div.buttonContainer {
+      padding-bottom: 24px;
+      .timeToggleButton {
+        padding: 4px 0;
+        min-height: 0;
+        // &:first-child {
+        //   border-right: 0;
+        //   border-top-right-radius: 0;
+        //   border-bottom-right-radius: 0;
+        // }
+        // &:not(:last-child):not(:first-child) {
+        //   border-radius: 0;
+        // }
+        // &:last-child {
+        //   border-left: 0;
+        //   border-top-left-radius: 0;
+        //   border-bottom-left-radius: 0;
+        // }
+      }
+    }
+  }
+  /**/
+
+
+
+
   // TODO: remove
   .GridContainer {
     .GridItem {
