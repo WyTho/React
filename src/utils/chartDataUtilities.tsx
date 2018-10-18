@@ -1,7 +1,7 @@
 import {
     beautifyDate,
     cleanMilliSecondsAndSeconds,
-    getBeginningOfTheDay
+    getBeginningOfTheDay, getBeginningOfTheWeek
 } from './dateUtilities';
 
 export enum TimeSpan {
@@ -25,15 +25,10 @@ export const getLabelsAndValuesForChart = (timeSpan: TimeSpan, startDate: Date, 
         for (const week of data.data.weeks) {
             for (const day of week.days) {
                 if (day.timestamp * 1000 === getBeginningOfTheDay(startDate).getTime()) {
-                    // console.log('TODAY\'s week is', week);
-                    // console.log('TODAY\'s day is', day);
-                    // console.log('RIGHT NOW THE hour is', startDate.getHours());
-                    // console.log('RIGHT NOW THE minutes are', startDate.getMinutes());
-                    // console.log('Right now the closest hour is:', getClosestHour(startDate));
                     for (let i = 0; i < day.values.length; i++) {
                         const dateValue = new Date((day.timestamp + (i * 60 * 60)) * 1000);
-                        labels.push(beautifyDate(dateValue, '{DATE} om {TIME}'));
-                        values.averageTemperature.push( +day.values[i].toFixed() );
+                        labels.push(dateValue);
+                        values.averageTemperature.push( +day.values[i].toFixed(1) );
                     }
                 }
             }
@@ -43,17 +38,22 @@ export const getLabelsAndValuesForChart = (timeSpan: TimeSpan, startDate: Date, 
 
         for (const week of data.data.weeks) {
             for (const day of week.days) {
-
+                const dayDate = new Date(day.timestamp * 1000);
+                if (getBeginningOfTheWeek(startDate).getTime() === getBeginningOfTheWeek(dayDate).getTime()) {
+                    labels.push(new Date(day.timestamp * 1000));
+                    const total = day.values.reduce((sum: number, value: number) => sum + value, 0);
+                    values.averageTemperature.push((total / day.values.length).toFixed(1))
+                }
             }
         }
 
     } else {
 
-        for (const week of data.data.weeks) {
-            for (const day of week.days) {
-
-            }
-        }
+        // for (const week of data.data.weeks) {
+        //     for (const day of week.days) {
+        //
+        //     }
+        // }
 
     }
     return { labels, values };

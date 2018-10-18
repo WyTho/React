@@ -18,7 +18,7 @@ import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer
 import { connect } from 'react-redux';
 import {TimeSpan} from '../../utils/chartDataUtilities';
 import * as actions from '../../store/actions';
-import {getDisplayName, getNextDate, getPreviousDate} from '../../utils/dateUtilities';
+import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate} from '../../utils/dateUtilities';
 
 interface IState {
     modalOpened: boolean
@@ -51,7 +51,7 @@ export class Overzicht extends React.Component<IProps, IState> {
                         <IconButton onClick={() => props.setStartDate(getPreviousDate(timeSpan, graphStartDateTime))}>
                             <Icon>chevron_left</Icon>
                         </IconButton>
-                        <Button color='primary' onClick={() => props.setStartDate(new Date())}>
+                        <Button color='primary' onClick={() => props.setStartDate(getBeginningOfTheDay(new Date()))}>
                             { getDisplayName(timeSpan, graphStartDateTime) }
                         </Button>
                         <IconButton onClick={() => props.setStartDate(getNextDate(timeSpan, graphStartDateTime))}>
