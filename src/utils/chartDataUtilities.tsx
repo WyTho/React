@@ -1,7 +1,7 @@
 import {
     beautifyDate,
     cleanMilliSecondsAndSeconds,
-    getBeginningOfTheDay, getBeginningOfTheWeek
+    getBeginningOfTheDay, getBeginningOfTheMonth, getBeginningOfTheWeek
 } from './dateUtilities';
 
 export enum TimeSpan {
@@ -49,11 +49,16 @@ export const getLabelsAndValuesForChart = (timeSpan: TimeSpan, startDate: Date, 
 
     } else {
 
-        // for (const week of data.data.weeks) {
-        //     for (const day of week.days) {
-        //
-        //     }
-        // }
+        for (const week of data.data.weeks) {
+            for (const day of week.days) {
+                const dayDate = new Date(day.timestamp * 1000);
+                if (getBeginningOfTheMonth(startDate).getTime() === getBeginningOfTheMonth(dayDate).getTime()) {
+                    labels.push(new Date(day.timestamp * 1000));
+                    const total = day.values.reduce((sum: number, value: number) => sum + value, 0);
+                    values.averageTemperature.push((total / day.values.length).toFixed(1))
+                }
+            }
+        }
 
     }
     return { labels, values };
