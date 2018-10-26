@@ -8,12 +8,12 @@ import {
     getValuesForChart,
     getLabelsForChart,
     getCurrentValue,
-    createAnnotationsForTimeSpan,
+    createAnnotationsForTimeSpan, createGradientForChart,
 } from '../../../utils/chart';
 import {beautifyDate} from '../../../utils/date';
 import {TimeSpan} from '../../../utils/dateTypes';
-import {IAnnotation, ICharDataset} from '../../../utils/chartTypes';
-import {buildChartData, buildChartOptions} from './chartData';
+import {IAnnotation} from '../../../utils/chartTypes';
+import {buildChartOptions} from './chartData';
 
 interface IProps {
     theme: Theme,
@@ -56,28 +56,30 @@ class ChartForKlimaatbeheer extends React.Component<IProps, {}> {
                     'Er is geen temperatuurs data van ' + beautifyDate(selected.graphStartDateTime, '{DATE}')
             }
 
-            // configure the lines that should be shown in this graph
-            const chartDatasets: ICharDataset[] = [
-                {
-                    label: 'Gemiddelde temperatuur',
-                    values: averageTemperatureData,
-                    borderColor: theme.palette.primary.main,
-                    backgroundColor: theme.palette.primary.main,
-                    dataLabelBackgroundColor: theme.palette.primary.dark,
-                    clickHandler: (context: any) => {
-                        console.log(
-                            'label ', context.dataIndex, ' has been clicked!',
-                            context.dataset.data[context.dataIndex]
-                        );
-                    }
-                }
-            ];
-
-            // build chart datasets
-            chartData = buildChartData(
+            // build chart datasets (configure the lines that should be shown in this graph)
+            chartData = (canvas: any) => ({
                 labels,
-                chartDatasets
-            );
+                datasets: [
+                    {
+                        label: 'Gemiddelde temperatuur',
+                        data: averageTemperatureData,
+                        borderColor: theme.palette.primary.main,
+                        fill: true,
+                        backgroundColor: createGradientForChart(canvas, theme.palette.primary.main),
+                        datalabels: {
+                            backgroundColor: theme.palette.primary.dark,
+                            listeners: {
+                                click: (context: any) => {
+                                    console.log(
+                                        'label ', context.dataIndex, ' has been clicked!',
+                                        context.dataset.data[context.dataIndex]
+                                    );
+                                }
+                            }
+                        }
+                    }
+                ]
+            });
 
             // build the annotations above the chart
             const annotations: IAnnotation[] = createAnnotationsForTimeSpan(

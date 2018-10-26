@@ -1,26 +1,7 @@
-import {createChartOptions, createGradientForChart} from '../../../utils/chart';
+import {createChartOptions} from '../../../utils/chart';
 import {Theme} from '@material-ui/core';
 import {beautifyDate} from '../../../utils/date';
-import {IAnnotation, ICharDataset} from '../../../utils/chartTypes';
-
-export const buildChartData = (labels: any, chartDatasets: ICharDataset[]) => {
-    return (canvas: any) => ({
-        labels,
-        datasets: chartDatasets.map((dataset: ICharDataset) => ({
-            data: dataset.values,
-            label: dataset.label,
-            borderColor: dataset.borderColor,
-            fill: true,
-            backgroundColor: createGradientForChart(canvas, dataset.backgroundColor),
-            datalabels: {
-                backgroundColor: dataset.dataLabelBackgroundColor,
-                listeners: {
-                    click: dataset.clickHandler
-                }
-            }
-        }))
-    })
-};
+import {IAnnotation} from '../../../utils/chartTypes';
 
 export const buildChartOptions = (allValues: any, annotations: IAnnotation[], theme: Theme) => {
     const highestValue = allValues.reduce((higest: number, x: number) => x > higest ? x : higest, 0);

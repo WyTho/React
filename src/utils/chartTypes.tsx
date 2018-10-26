@@ -1,13 +1,4 @@
 
-export interface ICharDataset {
-    label: string,
-    values: any[],
-    borderColor: string,
-    backgroundColor: string,
-    dataLabelBackgroundColor: string,
-    clickHandler: (context: any) => any
-}
-
 /**
  * For /utils/chartData => createChartOptions()
  */
