@@ -5,16 +5,24 @@ import blue from '@material-ui/core/colors/blue';
 import teal from '@material-ui/core/colors/teal';
 import Actions from '../actionTypes';
 
-const lightTheme = createMuiTheme({
+const defaultTheme = {
     palette: {
         primary: teal,
         secondary: {
             main: '#ef6c00',
         },
     },
+    typography: {
+        useNextVariants: true
+    },
+};
+
+const lightTheme = createMuiTheme({
+    ...defaultTheme
 });
 
 const darkTheme = createMuiTheme({
+    ...defaultTheme,
     palette: {
         type: 'dark',
         primary: blue,

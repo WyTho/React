@@ -31,8 +31,47 @@
   }
   /**/
 
-
-
+  .ChartCard {
+    // div.row {
+    //   display: flex;
+    //   align-items: center;
+    //   justify-content: space-between;
+    // }
+    // div.column {
+    //   display: flex;
+    //   flex-direction: column;
+    // }
+    div.content {
+      // display: flex;
+      // justify-content: space-between;
+      // align-items: stretch;
+      // > div.section {
+      //   display: flex;
+      //   > div {
+      //     display: flex;
+      //     flex-direction: column;
+      //     &.verticalDivider {
+      //       margin: 0 12px;
+      //       border-left: 1px solid #ccc;
+      //     }
+      //   }
+      // }
+      .smallerText {
+        font-size: 70%;
+      }
+      .tinyText {
+        font-size: 60%;
+      }
+      .verticalDivider {
+        margin: 0 12px;
+        border-left: 1px solid #ccc;
+      }
+      .horizontalSpacing {
+        height: 100%;
+        width: 16px;
+      }
+    }
+  }
 
   // TODO: remove
   .GridContainer {

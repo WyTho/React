@@ -7,7 +7,7 @@ export class Community extends React.Component<{}, {}> {
 
         return (
             <div className='Community'>
-                <Typography variant='display2'>
+                <Typography variant='h3'>
                     Community
                 </Typography>
             </div>

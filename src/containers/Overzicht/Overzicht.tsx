@@ -13,12 +13,12 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
-import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
+import ChartForKlimaatbeheer2 from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 
 import { connect } from 'react-redux';
-import {TimeSpan} from '../../utils/chartDataUtilities';
 import * as actions from '../../store/actions';
-import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate} from '../../utils/dateUtilities';
+import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate} from '../../utils/date';
+import {TimeSpan} from '../../utils/dateTypes';
 
 interface IState {
     modalOpened: boolean
@@ -44,7 +44,7 @@ export class Overzicht extends React.Component<IProps, IState> {
         return (
             <div className='Overzicht'>
                 <div className={'titleContainer'}>
-                    <Typography variant='display2' gutterBottom>
+                    <Typography variant='h3' gutterBottom>
                         Overzicht
                     </Typography>
                     <div className='buttonContainer'>
@@ -60,7 +60,7 @@ export class Overzicht extends React.Component<IProps, IState> {
                     </div>
                     <div className='buttonContainer'>
                         <Button className={'timeToggleButton'}
-                                variant={timeSpan === TimeSpan.month ? 'contained' : 'flat'}
+                                variant={timeSpan === TimeSpan.month ? 'contained' : 'text'}
                                 onClick={() => {
                                     props.setTimeSpan(TimeSpan.month);
                                     props.setStartDate(graphStartDateTime);
@@ -70,7 +70,7 @@ export class Overzicht extends React.Component<IProps, IState> {
                             Maand
                         </Button>
                         <Button className={'timeToggleButton'}
-                                variant={timeSpan === TimeSpan.week ? 'contained' : 'flat'}
+                                variant={timeSpan === TimeSpan.week ? 'contained' : 'text'}
                                 onClick={() => {
                                     props.setTimeSpan(TimeSpan.week);
                                     props.setStartDate(graphStartDateTime);
@@ -80,7 +80,7 @@ export class Overzicht extends React.Component<IProps, IState> {
                             Week
                         </Button>
                         <Button className={'timeToggleButton'}
-                                variant={timeSpan === TimeSpan.day ? 'contained' : 'flat'}
+                                variant={timeSpan === TimeSpan.day ? 'contained' : 'text'}
                                 onClick={() => {
                                     props.setTimeSpan(TimeSpan.day);
                                     props.setStartDate(graphStartDateTime);
@@ -99,16 +99,16 @@ export class Overzicht extends React.Component<IProps, IState> {
                     alignItems='stretch'
                     spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer/>
+                        <ChartForKlimaatbeheer2/>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <ChartForKlimaatbeheer/>
+
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <ChartForKlimaatbeheer/>
+
                     </Grid>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer/>
+
                     </Grid>
 
                     <Grid className='Grid' item md={12} sm={12} xs={12}>

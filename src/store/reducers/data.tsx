@@ -1,20 +1,22 @@
 import Actions from '../actionTypes';
 import { updateObject } from '../utilities';
-import {TimeSpan} from '../../utils/chartDataUtilities';
+import {TimeSpan} from '../../utils/dateTypes';
 import {
     cleanMilliSecondsAndSeconds,
     getBeginningOfTheDay,
     getBeginningOfTheMonth,
-    getBeginningOfTheWeek
-} from '../../utils/dateUtilities';
+    getBeginningOfTheWeek,
+    getBeginningOfTheHour
+} from '../../utils/date';
 
 interface IState {
     selected: {
         timeSpan: TimeSpan,
-        graphStartDateTime: Date
-        currentDateTime: Date
+        graphStartDateTime: Date,
+        currentHourDateTime: Date
+        // currentDateTime: Date
     }
-    temperature: {
+    average_temperature: {
         loading: boolean,
         data: any,
         error: boolean
@@ -60,7 +62,7 @@ const setCurrentDate = (state: any) => {
 
 const fetchTemperatureStart = (state: any) => {
     return updateObject(state, {
-        temperature: updateObject(state.temperature, {
+        average_temperature: updateObject(state.average_temperature, {
             loading: true,
             error: false
         })
@@ -68,7 +70,7 @@ const fetchTemperatureStart = (state: any) => {
 };
 const fetchTemperatureSuccess = (state: any, action: any) => {
     return updateObject(state, {
-        temperature: updateObject(state.temperature, {
+        average_temperature: updateObject(state.average_temperature, {
             data: action.payload.data,
             loading: false
         })
@@ -77,7 +79,7 @@ const fetchTemperatureSuccess = (state: any, action: any) => {
 
 const fetchTemperatureFailed = (state: any) => {
     return updateObject(state, {
-        temperature: updateObject(state.temperature, {
+        average_temperature: updateObject(state.average_temperature, {
             error: true
         })
     });
@@ -87,9 +89,10 @@ const initialState = {
     selected: {
         timeSpan: TimeSpan.day,
         graphStartDateTime: getBeginningOfTheDay(new Date()),
-        currentDateTime: new Date()
+        currentHourDateTime: getBeginningOfTheHour(new Date())
+        // currentDateTime: new Date()
     },
-    temperature: {
+    average_temperature: {
         loading: true,
         data: null as any,
         error: false

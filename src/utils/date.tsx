@@ -1,4 +1,4 @@
-import { TimeSpan } from './chartDataUtilities';
+import {TimeSpan} from './dateTypes';
 
 export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
 
@@ -19,8 +19,6 @@ export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
         'Zaterdag'
     ];
 
-
-    // ;
     const beautify = (d: Date) => {
         let second = d.getSeconds().toString();
         if (second.length === 1) second = '0' + second;
@@ -69,12 +67,17 @@ export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
         .replace('{YEAR}', formatted.year)
 };
 
-export const getBeginningOfTheDay = (date: Date) => {
+export const getBeginningOfTheHour = (date: Date): Date => {
+    const beginDate = new Date(date.getTime());
+    beginDate.setHours(date.getHours(), 0, 0, 0);
+    return beginDate
+};
+export const getBeginningOfTheDay = (date: Date): Date => {
     const beginDate = new Date(date.getTime());
     beginDate.setHours(0, 0, 0, 0);
     return beginDate
 };
-export const getBeginningOfTheWeek = (date: Date) => {
+export const getBeginningOfTheWeek = (date: Date): Date => {
     const getMonday = (d: Date) => {
         d = new Date(d);
         const day = d.getDay();
@@ -83,26 +86,26 @@ export const getBeginningOfTheWeek = (date: Date) => {
     };
     return getMonday(date)
 };
-export const getEndOfTheWeek = (date: Date) => {
+export const getEndOfTheWeek = (date: Date): Date => {
     const copy = new Date(date.getTime());
     copy.setDate(date.getDate() - (date.getDay() - 1) + 6);
     return copy;
 };
-export const getBeginningOfTheMonth = (date: Date) => {
+export const getBeginningOfTheMonth = (date: Date): Date => {
     return new Date(date.getFullYear(), date.getMonth(), 1);
 };
-export const getEndOfTheMonth = (date: Date) => {
+export const getEndOfTheMonth = (date: Date): Date => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0);
 };
 
-export const getWeekNumber = (d: Date) => {
+export const getWeekNumber = (d: Date): number => {
     d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     return Math.ceil(( ( (d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
 };
 
-export const cleanMilliSecondsAndSeconds = (date: Date) => {
+export const cleanMilliSecondsAndSeconds = (date: Date): Date => {
     const dummyDate = new Date('July 1, 1999');
 
     // clean-up date (set the miliseconds & seconds to 0)
@@ -112,7 +115,7 @@ export const cleanMilliSecondsAndSeconds = (date: Date) => {
     return cleanedDate
 };
 
-export const getDisplayName = (timeSpan: TimeSpan, date: Date) => {
+export const getDisplayName = (timeSpan: TimeSpan, date: Date): string => {
     const now = new Date();
     const diff = getDiffrenceIn(timeSpan, now, date);
 
@@ -135,12 +138,12 @@ export const getDisplayName = (timeSpan: TimeSpan, date: Date) => {
 
 };
 
-export const getDiffrenceIn = (timeSpan: TimeSpan, date1: Date, date2: Date) => {
+export const getDiffrenceIn = (timeSpan: TimeSpan, date1: Date, date2: Date): number => {
     date1 = getBeginningOfTheDay(cleanMilliSecondsAndSeconds(date1));
     date2 = getBeginningOfTheDay(cleanMilliSecondsAndSeconds(date2));
     const timeDiff = date2.getTime() - date1.getTime();
 
-    let diff = -999;
+    let diff;
     if (timeSpan === TimeSpan.day) {
         diff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     } else if (timeSpan === TimeSpan.week) {
@@ -154,14 +157,14 @@ export const getDiffrenceIn = (timeSpan: TimeSpan, date1: Date, date2: Date) => 
     return diff
 };
 
-export const getPreviousDate = (timeSpan: TimeSpan, date: Date) => {
+export const getPreviousDate = (timeSpan: TimeSpan, date: Date): Date => {
     return getNextOrPreviousDate('previous', timeSpan, date)
 };
-export const getNextDate = (timeSpan: TimeSpan, date: Date) => {
+export const getNextDate = (timeSpan: TimeSpan, date: Date): Date => {
     return getNextOrPreviousDate('next', timeSpan, date)
 };
 
-const getNextOrPreviousDate = (type: string, timeSpan: TimeSpan, date: Date) => {
+const getNextOrPreviousDate = (type: string, timeSpan: TimeSpan, date: Date): Date => {
     date = cleanMilliSecondsAndSeconds(date);
     if (timeSpan === TimeSpan.day) {
         type === 'previous' ? date.setDate(date.getDate() - 1) : date.setDate(date.getDate() + 1)

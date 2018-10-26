@@ -138,7 +138,7 @@ class TopBar extends React.Component<IProps & WithStyles, IState> {
                             <Icon>menu</Icon>
                         </IconButton>
 
-                        <Typography variant='title' color='inherit' noWrap>
+                        <Typography variant='h6' color='inherit' noWrap>
                             {title}
                         </Typography>
 

@@ -7,7 +7,7 @@ export class Toezicht extends React.Component<{}, {}> {
 
         return (
             <div className='Toezicht'>
-                <Typography variant='display2'>
+                <Typography variant='h3'>
                     Toezicht
                 </Typography>
             </div>

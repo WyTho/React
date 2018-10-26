@@ -16,7 +16,8 @@ interface IProps {
     onFetchData: () => void
 }
 const defaults = {
-    elevation: 1
+    elevation: 1,
+    shouldRedraw: false
 };
 
 const chartCard = (props: IProps) => {
@@ -30,6 +31,7 @@ const chartCard = (props: IProps) => {
         chartOptions,
         noDataForTimeSpanMessage
     } = props;
+
     let content = (
         <div className='absoluteFlexContainer'>
             <Loading size={120} />
@@ -39,9 +41,7 @@ const chartCard = (props: IProps) => {
         content = (
             <>
                 <div className={'content'}>
-                    <Typography>
-                        {children}
-                    </Typography>
+                    {children}
                 </div>
                 <div className={'chartContainer'}>
                     <Line data={chartData} options={chartOptions}/>
@@ -52,7 +52,7 @@ const chartCard = (props: IProps) => {
     if (error) {
         content = (
             <div className='absoluteFlexContainer'>
-                <Typography variant='display1'>
+                <Typography variant='h4'>
                     Het laden van {title} is mislukt!
                 </Typography>
                 <Button color='primary' onClick={props.onFetchData}>
@@ -64,7 +64,7 @@ const chartCard = (props: IProps) => {
     if (noDataForTimeSpanMessage) {
         content = (
             <div className='absoluteFlexContainer'>
-                <Typography variant='headline'>
+                <Typography variant='overline'>
                     { noDataForTimeSpanMessage }
                 </Typography>
             </div>
@@ -73,7 +73,7 @@ const chartCard = (props: IProps) => {
     return (
         <Paper className='card ChartCard' elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}>
             <div className={'titleContainer'}>
-                <Typography variant='title'>
+                <Typography variant='h6'>
                     { title }
                 </Typography>
             </div>

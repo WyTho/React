@@ -7,7 +7,7 @@ export class Ruimtes extends React.Component<{}, {}> {
 
         return (
             <div className='Ruimtes'>
-                <Typography variant='display2'>
+                <Typography variant='h3'>
                     Ruimtes
                 </Typography>
             </div>

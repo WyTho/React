@@ -7,7 +7,7 @@ export class Planning extends React.Component<{}, {}> {
 
         return (
             <div className='Planning'>
-                <Typography variant='display2'>
+                <Typography variant='h3'>
                     Planning
                 </Typography>
             </div>
