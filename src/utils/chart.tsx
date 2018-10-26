@@ -18,49 +18,6 @@ export const createGradientForChart = (canvas: any, hexColor: string) => {
     return gradient
 };
 
-// export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date, data: any) => {
-//     const labels: any[] = [];
-//
-//     if (timeSpan === TimeSpan.day) {
-//
-//         for (const week of data.data.weeks) {
-//             for (const day of week.days) {
-//                 if (day.timestamp * 1000 === getBeginningOfTheDay(startDate).getTime()) {
-//                     for (let i = 0; i < day.values.length; i++) {
-//                         const dateValue = new Date((day.timestamp + (i * 60 * 60)) * 1000);
-//                         labels.push(dateValue);
-//                     }
-//                 }
-//             }
-//         }
-//
-//     } else if (timeSpan === TimeSpan.week) {
-//
-//         for (const week of data.data.weeks) {
-//             for (const day of week.days) {
-//                 const dayDate = new Date(day.timestamp * 1000);
-//                 if (getBeginningOfTheWeek(startDate).getTime() === getBeginningOfTheWeek(dayDate).getTime()) {
-//                     labels.push(new Date(day.timestamp * 1000));
-//                 }
-//             }
-//         }
-//
-//     } else {
-//
-//         for (const week of data.data.weeks) {
-//             for (const day of week.days) {
-//                 const dayDate = new Date(day.timestamp * 1000);
-//                 if (getBeginningOfTheMonth(startDate).getTime() === getBeginningOfTheMonth(dayDate).getTime()) {
-//                     labels.push(new Date(day.timestamp * 1000));
-//                 }
-//             }
-//         }
-//
-//     }
-//
-//     return labels
-// };
-
 export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date) => {
     const labels: any[] = [];
 
