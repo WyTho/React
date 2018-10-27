@@ -258,12 +258,7 @@ export const createChartOptions = (config: IChartOptionsConfig) => {
     }
 };
 
-export const createAnnotationsForTimeSpan = (
-    timeSpan: TimeSpan,
-    labels: any[],
-    currentHour: Date,
-    theme: Theme
-): IAnnotation[] => {
+export const createAnnotationsForTimeSpan = (timeSpan: TimeSpan, labels: any[], currentHour: Date, theme: Theme): IAnnotation[] => {
 
     const annotations: IAnnotation[] = [];
     const nowAnnotation = (value: any) => ({
@@ -301,14 +296,6 @@ export const createAnnotationsForTimeSpan = (
             annotations.push(nowAnnotation(now));
         }
 
-        // console.log(
-        //     'HERE! annotations calculated!', '\n',
-        //     ' |-- now:', now, '\n',
-        //     ' |-- currentHour:', currentHour, '\n',
-        //     ' |-- currentHour:', currentHour.getTime(), '\n',
-        //     ' |-- timesToAnnotate:', timesToAnnotate, '\n',
-        //     ' |-- annotations:', annotations, '\n',
-        // );
     } else if (timeSpan === TimeSpan.week) {
         const weekdaysAnnotation = (weekDay: any) => ({
             value: labels[weekDay.day - 1],
