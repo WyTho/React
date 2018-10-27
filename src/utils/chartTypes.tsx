@@ -1,11 +1,35 @@
 
-/**
- * For /utils/chartData => createChartOptions()
- */
-export enum DataLabelsDisplay {
-    All_EXCEPT_FIRST_AND_LAST = 'All_EXCEPT_FIRST_AND_LAST',
-    NONE = 'NONE'
+export enum TypeOf {
+    UNDEFINED = 'undefined',
+    NUMBER = 'number',
+    STRING = 'string',
+    OBJECT = 'object',
+    SYMBOL = 'symbol',
+    BOOLEAN = 'boolean',
+    BIG_INT = 'bigint',
+    FUNCTION = 'function'
 }
+
+/**
+ * The data from the Python backend had the following format
+ */
+export interface IData {
+    id: number
+    data_type: string
+    title: string
+    weeks: Array<{
+        days: Array<{
+            id: number
+            /**
+             * Timestamps from the backend are in ISO-format, this means milliseconds are excuded
+             * This is how you convert it to a Javascript date:    new Date(timestamp * 1000)
+             */
+            timestamp: number
+            values: any[]
+        }>
+    }>
+}
+
 export interface IAnnotation {
     type?: string,
     drawTime?: string,
@@ -41,8 +65,7 @@ export interface IChartOptionsConfig {
     datalabels?: {
         align?: string | ((context: any) => string),
         borderRadius?: number,
-        color?: string,
-        displayLabels?: DataLabelsDisplay
+        color?: string
     }
     reformat?: {
         datalabel?: (value: number, context: any) => string,

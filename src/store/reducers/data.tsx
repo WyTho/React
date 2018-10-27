@@ -71,7 +71,7 @@ const fetchTemperatureStart = (state: any) => {
 const fetchTemperatureSuccess = (state: any, action: any) => {
     return updateObject(state, {
         average_temperature: updateObject(state.average_temperature, {
-            data: action.payload.data,
+            data: action.payload.data.data,
             loading: false
         })
     });

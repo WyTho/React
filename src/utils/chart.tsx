@@ -4,7 +4,7 @@ import {
     getBeginningOfTheMonth,
     getBeginningOfTheWeek, getEndOfTheMonth
 } from './date';
-import {DataLabelsDisplay, IAnnotation, IChartOptionsConfig} from './chartTypes';
+import {IAnnotation, IChartOptionsConfig, IData, TypeOf} from './chartTypes';
 import {TimeSpan} from './dateTypes';
 import {hexToRgba} from './utils';
 import {Theme} from '@material-ui/core';
@@ -46,56 +46,81 @@ export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date) => {
     return labels
 };
 
-export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: any) => {
+export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: IData, typeofValues: TypeOf = TypeOf.NUMBER) => {
     let values: any[] = [];
+
+    let checkIfNeedsToBePushed: (day: any) => boolean;
+    let pushValue: (day: any) => void;
 
     if (timeSpan === TimeSpan.day) {
 
-        for (const week of data.data.weeks) {
-            for (const day of week.days) {
-                if (day.timestamp * 1000 === getBeginningOfTheDay(startDate).getTime()) {
-                    for (const value of day.values) {
-                        values.push( +value.toFixed(1) );
-                    }
-                }
-            }
-        }
+        checkIfNeedsToBePushed = (day: any) => day.timestamp * 1000 === getBeginningOfTheDay(startDate).getTime();
+        pushValue = (day: any) => pushAllHoursOfDay(day)
 
     } else if (timeSpan === TimeSpan.week) {
 
-        for (const week of data.data.weeks) {
-            for (const day of week.days) {
-                const dayDate = new Date(day.timestamp * 1000);
-                if (getBeginningOfTheWeek(startDate).getTime() === getBeginningOfTheWeek(dayDate).getTime()) {
-                    const total = day.values.reduce((sum: number, value: number) => sum + value, 0);
-                    values.push(+(total / day.values.length).toFixed(1))
-                }
-            }
-        }
+        checkIfNeedsToBePushed = (day: any) => {
+            const dayDate = new Date(day.timestamp * 1000);
+            return getBeginningOfTheWeek(startDate).getTime() === getBeginningOfTheWeek(dayDate).getTime()
+        };
+        pushValue = (day: any) => pushDay(day)
 
-    } else {
+    } else if (timeSpan === TimeSpan.month) {
 
-        for (const week of data.data.weeks) {
-            for (const day of week.days) {
-                const dayDate = new Date(day.timestamp * 1000);
-                if (getBeginningOfTheMonth(startDate).getTime() === getBeginningOfTheMonth(dayDate).getTime()) {
-                    const total = day.values.reduce((sum: number, value: number) => sum + value, 0);
-                    values.push(+(total / day.values.length).toFixed(1))
-                }
+        checkIfNeedsToBePushed = (day: any) => {
+            const dayDate = new Date(day.timestamp * 1000);
+            return getBeginningOfTheMonth(startDate).getTime() === getBeginningOfTheMonth(dayDate).getTime();
+        };
+        pushValue = (day: any) => pushDay(day)
+
+    }
+
+    for (const week of data.weeks) {
+        for (const day of week.days) {
+            if (checkIfNeedsToBePushed(day)) {
+                pushValue(day)
             }
         }
     }
 
-    // TODO: temp, until backend sends null data instead of 0
+    // TODO: TEMPORARY
+    /*  temp, until backend sends null data instead of 0  */
     values = values.filter(value => value || null);
+    /*  /temp  */
 
-    return values
+    // TODO: TEMPORARY
+    /*  temp, until backend sends complete month objects instead of starting in the middle  */
+    if (timeSpan === TimeSpan.month) {
+        const nr = getEndOfTheMonth(startDate).getDate() - values.length + 1;
+        const firstDateInDataset = new Date(data.weeks[0].days[0].timestamp * 1000).getDate();
+        if (nr === firstDateInDataset) {
+            for (let i = 0; i < nr; i++) values.unshift(0)
+        }
+    }
+    /*  /temp  */
+
+    return values;
+
+    // helper functions
+    function pushAllHoursOfDay(day: any) {
+        for (const value of day.values) {
+            if (typeofValues === TypeOf.NUMBER) {
+                values.push( +value.toFixed(1) );
+            }
+        }
+    }
+    function pushDay(day: any) {
+        if (typeofValues === TypeOf.NUMBER) {
+            const total = day.values.reduce((sum: number, value: number) => sum + value, 0);
+            values.push(+(total / day.values.length).toFixed(1))
+        }
+    }
 };
 
 export const getCurrentValue = (data: any): number => {
     const now = getBeginningOfTheHour(new Date());
 
-    for (const week of data.data.weeks) {
+    for (const week of data.weeks) {
         for (const day of week.days) {
             if (day.timestamp * 1000 === getBeginningOfTheDay(now).getTime()) {
                 return (day.values[now.getHours()] || 0).toFixed(1);
@@ -114,7 +139,7 @@ export const createChartOptions = (config: IChartOptionsConfig) => {
         tooltips: {},
         reformat: {},
         datalabels: {
-            displayLabels: DataLabelsDisplay.NONE
+            // displayLabels: DataLabelsDisplay.NONE
         },
         annotations: [],
         spacingBetweenAnnotationsAndData: 0,
@@ -213,17 +238,11 @@ export const createChartOptions = (config: IChartOptionsConfig) => {
             datalabels: {
                 display: (context: any) => {
 
-                    if (config.datalabels.displayLabels === DataLabelsDisplay.All_EXCEPT_FIRST_AND_LAST) {
+                    // don't show the first label
+                    if (context.dataIndex === 0) return false;
 
-                        // don't show the first label
-                        if (context.dataIndex === 0) return false;
-
-                        // don't show the last label
-                        if (context.dataIndex === context.dataset.data.length - 1) return false;
-
-                    } else if (config.datalabels.displayLabels === DataLabelsDisplay.NONE) {
-                        return false
-                    }
+                    // don't show the last label
+                    if (context.dataIndex === context.dataset.data.length - 1) return false;
                 },
                 align: config.datalabels.align || 'center',
                 formatter: config.reformat.datalabel || ((value: number) => value),

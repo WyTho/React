@@ -1,21 +1,15 @@
 import * as React from 'react';
-import {ChartData} from 'react-chartjs-2';
 import ChartCard from '../../../components/ChartCard/ChartCard'
 import {connect} from 'react-redux';
 import {Button, Grid, Theme, Typography} from '@material-ui/core';
 import * as actions from '../../../store/actions'
-import {
-    getValuesForChart,
-    getLabelsForChart,
-    getCurrentValue,
-    createAnnotationsForTimeSpan, createGradientForChart,
-} from '../../../utils/chart';
+import {getValuesForChart, getCurrentValue} from '../../../utils/chart';
 import {beautifyDate} from '../../../utils/date';
 import {TimeSpan} from '../../../utils/dateTypes';
-import {IAnnotation} from '../../../utils/chartTypes';
-import {buildChartOptions} from './chartData';
+import {IData} from '../../../utils/chartTypes';
+import configureChart from './chartConfiguration';
 
-interface IProps {
+export interface IChartForKlimaatBeheerProps {
     theme: Theme,
     fetchData: () => void,
     selected: {
@@ -25,29 +19,27 @@ interface IProps {
     }
     average_temperature: {
         loading: boolean,
-        data: any,
+        data: IData,
         error: boolean,
     }
 }
 
-class ChartForKlimaatbeheer extends React.Component<IProps, {}> {
+class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps, {}> {
     public render() {
         const { props, props: { theme, selected, average_temperature } } = this;
 
+        const chart = configureChart(props);
+
         let content = null;
-        let chartData: ChartData<any> = null;
-        let chartOptions: any = null;
         let noDataForTimeSpanMessage = null as string;
 
         const loading = average_temperature.loading;
         const error = average_temperature.error;
 
         if (average_temperature.data) {
-            const labels = getLabelsForChart(selected.timeSpan, selected.graphStartDateTime);
             const currentAverageTemperature = getCurrentValue(average_temperature.data);
 
-            const averageTemperatureData =
-                getValuesForChart(selected.timeSpan, selected.graphStartDateTime, average_temperature.data);
+            const averageTemperatureData = getValuesForChart(selected.timeSpan, selected.graphStartDateTime, average_temperature.data);
 
             const allValues = [...averageTemperatureData];
 
@@ -55,46 +47,6 @@ class ChartForKlimaatbeheer extends React.Component<IProps, {}> {
                 noDataForTimeSpanMessage =
                     'Er is geen temperatuurs data van ' + beautifyDate(selected.graphStartDateTime, '{DATE}')
             }
-
-            // build chart datasets (configure the lines that should be shown in this graph)
-            chartData = (canvas: any) => ({
-                labels,
-                datasets: [
-                    {
-                        label: 'Gemiddelde temperatuur',
-                        data: averageTemperatureData,
-                        borderColor: theme.palette.primary.main,
-                        fill: true,
-                        backgroundColor: createGradientForChart(canvas, theme.palette.primary.main),
-                        datalabels: {
-                            backgroundColor: theme.palette.primary.dark,
-                            listeners: {
-                                click: (context: any) => {
-                                    console.log(
-                                        'label ', context.dataIndex, ' has been clicked!',
-                                        context.dataset.data[context.dataIndex]
-                                    );
-                                }
-                            }
-                        }
-                    }
-                ]
-            });
-
-            // build the annotations above the chart
-            const annotations: IAnnotation[] = createAnnotationsForTimeSpan(
-                selected.timeSpan,
-                labels,
-                selected.currentHourDateTime,
-                theme
-            );
-
-            // build the chart configuration (options)
-            chartOptions = buildChartOptions(
-                allValues,
-                annotations,
-                theme
-            );
 
             // confige the diffrent UI parts of this graph-card
             const ui = {
@@ -210,8 +162,8 @@ class ChartForKlimaatbeheer extends React.Component<IProps, {}> {
                        loading={loading}
                        error={error}
                        noDataForTimeSpanMessage={noDataForTimeSpanMessage}
-                       chartData={chartData}
-                       chartOptions={chartOptions}
+                       chartData={chart.data}
+                       chartOptions={chart.options}
                        onFetchData={props.fetchData}>
                 {content}
             </ChartCard>
@@ -225,7 +177,7 @@ const mapStateToProps = (state: any) => {
     return { theme, selected, average_temperature }
 };
 
-const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
+const mapDispatchToProps = (dispatch: any): Partial<IChartForKlimaatBeheerProps> => ({
     fetchData: () => dispatch(actions.fetchTemperature())
 });
 
