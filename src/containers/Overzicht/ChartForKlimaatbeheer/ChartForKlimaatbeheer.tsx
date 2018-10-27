@@ -3,10 +3,10 @@ import ChartCard from '../../../components/ChartCard/ChartCard'
 import {connect} from 'react-redux';
 import {Button, Grid, Theme, Typography} from '@material-ui/core';
 import * as actions from '../../../store/actions'
-import {getValuesForChart, getCurrentValue} from '../../../utils/chart';
-import {beautifyDate} from '../../../utils/date';
-import {TimeSpan} from '../../../utils/dateTypes';
-import {IData} from '../../../utils/chartTypes';
+import {getValuesForChart, getCurrentValue} from '../../../utils/chart/chart';
+import {beautifyDate} from '../../../utils/date/date';
+import {TimeSpan} from '../../../utils/date/dateTypes';
+import {IData} from '../../../utils/chart/chartTypes';
 import configureChart from './ChartForKlimaatbeheer.config';
 
 export interface IChartForKlimaatBeheerProps {
@@ -41,11 +41,12 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
 
             const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, average_temperature.data);
 
-            const allValues = [...averageTemperatureData];
+            const allValues = [
+                ...averageTemperatureData
+            ];
 
-            if (allValues.length === 0) {
-                noDataForTimeSpanMessage =
-                    'Er is geen temperatuurs data van ' + beautifyDate(graphStartDateTime, '{DATE}')
+            if (!allValues.length) {
+                noDataForTimeSpanMessage = 'Er is geen temperatuurs data van ' + beautifyDate(graphStartDateTime, '{DATE}')
             }
 
             // confige the diffrent UI parts of this graph-card

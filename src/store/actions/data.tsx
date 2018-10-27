@@ -1,6 +1,6 @@
 import Actions from '../actionTypes';
 import axios from '../../config.axios';
-import {TimeSpan} from '../../utils/dateTypes';
+import {TimeSpan} from '../../utils/date/dateTypes';
 
 export const setTimeSpanForGraphs = (timeSpan: TimeSpan) => ({
     type: Actions.SET_TIMESPAN_FOR_GRAPHS,

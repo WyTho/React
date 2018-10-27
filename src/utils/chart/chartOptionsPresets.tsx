@@ -1,5 +1,5 @@
 import {IAnnotation, IChartOptions} from './chartTypes';
-import {mergeDeep} from './other';
+import {mergeDeep} from '../other';
 
 export const createChartOptions = (...partialOptions: IChartOptions[]): IChartOptions => {
     return mergeDeep({}, chartOptionsPresets.defaults(), ...partialOptions)

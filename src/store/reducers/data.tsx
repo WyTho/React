@@ -1,13 +1,13 @@
 import Actions from '../actionTypes';
 import { updateObject } from '../utilities';
-import {TimeSpan} from '../../utils/dateTypes';
+import {TimeSpan} from '../../utils/date/dateTypes';
 import {
     cleanMilliSecondsAndSeconds,
     getBeginningOfTheDay,
     getBeginningOfTheMonth,
     getBeginningOfTheWeek,
     getBeginningOfTheHour
-} from '../../utils/date';
+} from '../../utils/date/date';
 
 interface IState {
     selected: {

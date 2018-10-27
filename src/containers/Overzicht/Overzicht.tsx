@@ -12,13 +12,13 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
-import Modal from '../../UI/Modal/Modal';
+import Modal from '../../components/Modal/Modal';
 import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate} from '../../utils/date';
-import {TimeSpan} from '../../utils/dateTypes';
+import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate} from '../../utils/date/date';
+import {TimeSpan} from '../../utils/date/dateTypes';
 
 interface IState {
     modalOpened: boolean

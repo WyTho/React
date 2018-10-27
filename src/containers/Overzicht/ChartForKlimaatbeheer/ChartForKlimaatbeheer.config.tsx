@@ -3,13 +3,13 @@ import {
     createGradientForChart,
     getLabelsForChart,
     getValuesForChart
-} from '../../../utils/chart';
-import {beautifyDate} from '../../../utils/date';
-import {IAnnotation, IChartData} from '../../../utils/chartTypes';
+} from '../../../utils/chart/chart';
+import {beautifyDate} from '../../../utils/date/date';
+import {IAnnotation, IChartData} from '../../../utils/chart/chartTypes';
 import {IChartForKlimaatBeheerProps} from './ChartForKlimaatbeheer';
 import {ChartData} from 'react-chartjs-2';
 import {ChartOptions} from 'chart.js';
-import {createChartOptions, chartOptionsPresets} from '../../../utils/chartOptionsPresets';
+import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/chartOptionsPresets';
 
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, average_temperature } = props;
@@ -54,7 +54,7 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
         const getYAxisHeight = () => {
             const highestValue = allValues.reduce((higest: number, x: number) => x > higest ? x : higest, 0);
             const lowestValue = allValues.reduce((lowest: number, x: number) => x < lowest ? x : lowest, highestValue);
-            return ((highestValue - lowestValue) / 2) + 3;
+            return Math.floor(highestValue + ((highestValue - lowestValue) / 2) + 3);
         };
 
         const annotations: IAnnotation[] = createAnnotationsForTimeSpan(timeSpan, labels, currentHourDateTime, theme, getYAxisHeight());

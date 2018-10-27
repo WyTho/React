@@ -3,12 +3,12 @@ import {
     getBeginningOfTheHour,
     getBeginningOfTheMonth,
     getBeginningOfTheWeek, getEndOfTheMonth
-} from './date';
+} from '../date/date';
 import {IAnnotation, IData} from './chartTypes';
-import {TimeSpan} from './dateTypes';
-import {hexToRgba} from './other';
+import {TimeSpan} from '../date/dateTypes';
+import {hexToRgba} from '../other';
 import {Theme} from '@material-ui/core';
-import {TypeOf} from './otherTypes';
+import {TypeOf} from '../otherTypes';
 
 export const createGradientForChart = (canvas: any, hexColor: string) => {
     const ctx = canvas.getContext('2d');
