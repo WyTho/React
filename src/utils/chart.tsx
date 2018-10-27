@@ -4,10 +4,11 @@ import {
     getBeginningOfTheMonth,
     getBeginningOfTheWeek, getEndOfTheMonth
 } from './date';
-import {IAnnotation, IChartOptionsConfig, IData, TypeOf} from './chartTypes';
+import {IAnnotation, IChartOptions, IData} from './chartTypes';
 import {TimeSpan} from './dateTypes';
-import {hexToRgba} from './utils';
+import {hexToRgba, mergeDeep} from './other';
 import {Theme} from '@material-ui/core';
+import {TypeOf} from './otherTypes';
 
 export const createGradientForChart = (canvas: any, hexColor: string) => {
     const ctx = canvas.getContext('2d');
@@ -131,107 +132,176 @@ export const getCurrentValue = (data: any): number => {
     return null
 };
 
-export const createChartOptions = (config: IChartOptionsConfig) => {
-    config = {
+export const createAnnotationsForTimeSpan = (
+    timeSpan: TimeSpan,
+    labels: any[],
+    currentHour: Date,
+    theme: Theme,
+    yAxesHeight: number = 0
+): IAnnotation[] => {
 
-        // defaults
-        display: {},
-        tooltips: {},
-        reformat: {},
-        datalabels: {
-            // displayLabels: DataLabelsDisplay.NONE
-        },
-        annotations: [],
-        spacingBetweenAnnotationsAndData: 0,
+    const annotations: IAnnotation[] = [];
+    annotations.push(createInvisibleHeightAnnotation());
 
-        // overwrites
-        ...config
-    };
+    const beginningOfTheDayLabel = labels.find((label: Date) => label.getTime() === getBeginningOfTheDay(currentHour).getTime());
 
-    const annotationsArray: any = [];
-    if (config.spacingBetweenAnnotationsAndData) {
-        config.annotations.push({
+    if (timeSpan === TimeSpan.day) {
+
+        let timesToAnnotate = [6, 12, 18];
+        timesToAnnotate = timesToAnnotate.filter((x: number) => currentHour.getHours() !== x);
+        timesToAnnotate.forEach((hour: number) => annotations.push(createHourAnnotation(hour)));
+
+        const now = labels.find((label: Date) => label.getTime() === currentHour.getTime());
+        if (now) {
+            annotations.push(createNowAnnotation(now));
+        }
+
+    } else if (timeSpan === TimeSpan.week) {
+
+        let weekdaysToAnnotate = [
+            { day: 2, name: 'Di' },
+            { day: 3, name: 'Wo' },
+            { day: 4, name: 'Do' },
+            { day: 5, name: 'Vr' },
+            { day: 6, name: 'Za' }
+        ];
+        if (beginningOfTheDayLabel) {
+            weekdaysToAnnotate = weekdaysToAnnotate.filter((weekDay: any) => (currentHour.getDay() !== weekDay.day));
+            annotations.push(createNowAnnotation(beginningOfTheDayLabel));
+        }
+        weekdaysToAnnotate.forEach((weekDay: any) => annotations.push(createWeekdayAnnotation(weekDay)));
+
+    } else if (timeSpan === TimeSpan.month) {
+        if (beginningOfTheDayLabel) {
+            annotations.push(createNowAnnotation(beginningOfTheDayLabel));
+        }
+    }
+
+    return addMissingValuesForAnnotations(annotations);
+
+    function createInvisibleHeightAnnotation() {
+        return {
             mode: 'horizontal',
             scaleID: 'y-axis-0',
-            value: config.spacingBetweenAnnotationsAndData,
+            value: yAxesHeight,
 
             borderWidth: 0,
             borderColor: 'transparent'
-        });
+        }
     }
-
-    config.annotations.forEach((annotation: IAnnotation) => {
-        let labelProps = {};
-        if (annotation.label) {
-            labelProps = {
-                label: {
-                    enabled: true,
-                    backgroundColor: annotation.label.backgroundColor || 'grey',
-                    position: annotation.label.position || 'top',
-                    content: annotation.label.content || '12:00'
-                }
+    function createNowAnnotation(value: any) {
+        return {
+            drawTime: 'afterDatasetsDraw',
+            value,
+            borderColor: theme.palette.secondary.main,
+            borderWidth: 2,
+            borderDash: [3, 3],
+            label: {
+                backgroundColor: theme.palette.secondary.main,
+                content: 'Nu'
             }
         }
-        annotationsArray.push({
-            type: annotation.type || 'line',
-            drawTime: annotation.drawTime || 'beforeDatasetsDraw',
-            mode: annotation.mode || 'vertical',
-            scaleID: annotation.scaleID || 'x-axis-0',
-            value: annotation.value || 'no value defined',
-            borderColor: annotation.borderColor || 'grey',
-            borderWidth: annotation.borderWidth || 1,
-            borderDash: annotation.borderDash || [0, 0],
-            ...labelProps
-        })
-    });
+    }
+    function createHourAnnotation(hour: number) {
+        return {
+            value: labels[hour],
+            borderDash: [8, 8],
+            borderColor: '#888',
+            label: {
+                backgroundColor: '#888',
+                content: hour + ':00'
+            }
+        }
+    }
+    function createWeekdayAnnotation(weekDay: {day: number, name: string}) {
+        return {
+            value: labels[weekDay.day - 1],
+            borderDash: [8, 8],
+            borderColor: '#888',
+            label: {
+                backgroundColor: '#888',
+                content: weekDay.name
+            }
+        }
+    }
+    function addMissingValuesForAnnotations(incompleteAnnotations: IAnnotation[]) {
+        const fullAnnotations: IAnnotation[] = [];
+        incompleteAnnotations.forEach((annotation: IAnnotation) => {
+            let labelProps = {};
+            if (annotation.label) {
+                labelProps = {
+                    label: {
+                        enabled: true,
+                        backgroundColor: annotation.label.backgroundColor || 'grey',
+                        position: annotation.label.position || 'top',
+                        content: annotation.label.content || '12:00'
+                    }
+                }
+            }
+            fullAnnotations.push({
+                type: annotation.type || 'line',
+                drawTime: annotation.drawTime || 'beforeDatasetsDraw',
+                mode: annotation.mode || 'vertical',
+                scaleID: annotation.scaleID || 'x-axis-0',
+                value: annotation.value || 'no value defined',
+                borderColor: annotation.borderColor || 'grey',
+                borderWidth: annotation.borderWidth || 1,
+                borderDash: annotation.borderDash || [0, 0],
+                ...labelProps
+            })
+        });
+        return fullAnnotations
+    }
+};
 
+export const createChartOptions = (...partialOptions: IChartOptions[]): IChartOptions => {
+    return mergeDeep({}, getDefaultChartOptions(), ...partialOptions)
+};
+
+const getDefaultChartOptions = (): IChartOptions => {
     return {
         maintainAspectRatio: false,
         responsive: true,
         showLines : true,
         legend: {
-            display: !!config.display.legend
+            display: false
         },
         elements : {
             line : {},
             point : {
-                radius: config.display.points ? 5 : 0,
+                radius: 0,
                 hitRadius: 20
             }
         },
         scales: {
             yAxes : [{
-                display: !!config.display.scaleX,
+                display: false,
                 gridLines: {
-                    display: !!config.display.gridlinesX
+                    display: false
                 },
                 ticks: {
-                    beginAtZero: !!config.beginAtZero
+                    beginAtZero: true
                 }
             }],
             xAxes : [{
-                display: !!config.display.scaleY,
+                display: false,
                 gridLines: {
-                    display: !!config.display.gridlinesY
+                    display: false
                 }
             }]
         },
         tooltips: {
-            caretPadding: config.tooltips.caretPadding || 0,
-            displayColors: !!config.tooltips.displayColors,
-            backgroundColor: config.tooltips.backgroundColor || 'orange',
-            borderColor: config.tooltips.borderColor || 'blue',
-            borderWidth: 1,
-            color: config.tooltips.color || 'green',
+            caretPadding: 0,
+            displayColors: false,
             bodySpacing: 4,
             callbacks: {
-                title: config.reformat.tooltipTitle,
-                label: config.reformat.tooltipContent
+                title: (tooltipItems: any[], dataAndLabels: any) => dataAndLabels.labels[tooltipItems[0].index],
+                label: (value: number) => value
             }
         },
 
         annotation: {
-            annotations: annotationsArray
+            annotations: []
         },
 
         plugins: {
@@ -244,11 +314,10 @@ export const createChartOptions = (config: IChartOptionsConfig) => {
                     // don't show the last label
                     if (context.dataIndex === context.dataset.data.length - 1) return false;
                 },
-                align: config.datalabels.align || 'center',
-                formatter: config.reformat.datalabel || ((value: number) => value),
-                borderRadius:
-                    typeof config.datalabels.borderRadius === 'undefined' ? 4 : config.datalabels.borderRadius,
-                color: config.datalabels.color || 'white',
+                align: 'center',
+                formatter: ((value: number) => value),
+                borderRadius: 4,
+                color: 'white',
                 opacity: (context: any) => {
                     if (context.active) return 1;
                     return 0.001;
@@ -256,76 +325,4 @@ export const createChartOptions = (config: IChartOptionsConfig) => {
             }
         }
     }
-};
-
-export const createAnnotationsForTimeSpan = (timeSpan: TimeSpan, labels: any[], currentHour: Date, theme: Theme): IAnnotation[] => {
-
-    const annotations: IAnnotation[] = [];
-    const nowAnnotation = (value: any) => ({
-        drawTime: 'afterDatasetsDraw',
-        value,
-        borderColor: theme.palette.secondary.main,
-        borderWidth: 2,
-        borderDash: [3, 3],
-        label: {
-            backgroundColor: theme.palette.secondary.main,
-            content: 'Nu'
-        }
-    });
-
-    const beginningOfTheDayLabel =
-        labels.find((label: Date) => label.getTime() === getBeginningOfTheDay(currentHour).getTime());
-
-    if (timeSpan === TimeSpan.day) {
-        const timeAnnotation = (hour: number) => ({
-            value: labels[hour],
-            borderDash: [8, 8],
-            borderColor: '#888',
-            label: {
-                backgroundColor: '#888',
-                content: hour + ':00'
-            }
-        });
-
-        let timesToAnnotate = [6, 12, 18];
-        timesToAnnotate = timesToAnnotate.filter((x: number) => currentHour.getHours() !== x);
-        timesToAnnotate.forEach((x: number) => annotations.push(timeAnnotation(x)));
-
-        const now = labels.find((label: Date) => label.getTime() === currentHour.getTime());
-        if (now) {
-            annotations.push(nowAnnotation(now));
-        }
-
-    } else if (timeSpan === TimeSpan.week) {
-        const weekdaysAnnotation = (weekDay: any) => ({
-            value: labels[weekDay.day - 1],
-            borderDash: [8, 8],
-            borderColor: '#888',
-            label: {
-                backgroundColor: '#888',
-                content: weekDay.name
-            }
-        });
-
-        let weekdaysToAnnotate = [
-            { day: 2, name: 'Di' },
-            { day: 3, name: 'Wo' },
-            { day: 4, name: 'Do' },
-            { day: 5, name: 'Vr' },
-            { day: 6, name: 'Za' }
-        ];
-
-        if (beginningOfTheDayLabel) {
-            weekdaysToAnnotate = weekdaysToAnnotate.filter((weekDay: any) => (currentHour.getDay() !== weekDay.day));
-            annotations.push(nowAnnotation(beginningOfTheDayLabel));
-        }
-        weekdaysToAnnotate.forEach((weekDay: any) => annotations.push(weekdaysAnnotation(weekDay)));
-
-    } else if (timeSpan === TimeSpan.month) {
-        if (beginningOfTheDayLabel) {
-            annotations.push(nowAnnotation(beginningOfTheDayLabel));
-        }
-    }
-
-    return annotations;
 };

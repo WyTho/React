@@ -1,6 +1,7 @@
 // allows this chart-plugin (for chart.js) to be used globally
 import 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-annotation';
+import 'chartjs-plugin-style';
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

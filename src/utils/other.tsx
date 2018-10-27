@@ -19,3 +19,26 @@ export const hexToRgba = (hex: string, alpha: number = 1) => {
     console.warn('Invalid hex or alpha value given! normal HEX value was returned', 'hex:', hex, 'alpha:', alpha);
     return hex
 };
+
+export const mergeDeep = (target: any, ...sources: any): any => {
+    if (!sources.length) return target;
+    const source = sources.shift();
+
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (source.hasOwnProperty(key)) {
+                if (isObject(source[key])) {
+                    if (!target[key]) Object.assign(target, { [key]: {} });
+                    mergeDeep(target[key], source[key]);
+                } else {
+                    Object.assign(target, { [key]: source[key] });
+                }
+            }
+        }
+    }
+
+    return mergeDeep(target, ...sources);
+    function isObject(item: any) {
+        return (item && typeof item === 'object' && !Array.isArray(item));
+    }
+};
