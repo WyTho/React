@@ -13,7 +13,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../UI/Modal/Modal';
-import ChartForKlimaatbeheer2 from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
+import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
@@ -99,7 +99,7 @@ export class Overzicht extends React.Component<IProps, IState> {
                     alignItems='stretch'
                     spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer2/>
+                        <ChartForKlimaatbeheer/>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
 

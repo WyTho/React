@@ -7,7 +7,7 @@ import {getValuesForChart, getCurrentValue} from '../../../utils/chart';
 import {beautifyDate} from '../../../utils/date';
 import {TimeSpan} from '../../../utils/dateTypes';
 import {IData} from '../../../utils/chartTypes';
-import configureChart from './chartConfiguration';
+import configureChart from './ChartForKlimaatbeheer.config';
 
 export interface IChartForKlimaatBeheerProps {
     theme: Theme,
@@ -26,7 +26,7 @@ export interface IChartForKlimaatBeheerProps {
 
 class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps, {}> {
     public render() {
-        const { props, props: { theme, selected, average_temperature } } = this;
+        const { props, props: { theme, selected: { timeSpan, graphStartDateTime }, average_temperature } } = this;
 
         const chart = configureChart(props);
 
@@ -39,13 +39,13 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
         if (average_temperature.data) {
             const currentAverageTemperature = getCurrentValue(average_temperature.data);
 
-            const averageTemperatureData = getValuesForChart(selected.timeSpan, selected.graphStartDateTime, average_temperature.data);
+            const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, average_temperature.data);
 
             const allValues = [...averageTemperatureData];
 
             if (allValues.length === 0) {
                 noDataForTimeSpanMessage =
-                    'Er is geen temperatuurs data van ' + beautifyDate(selected.graphStartDateTime, '{DATE}')
+                    'Er is geen temperatuurs data van ' + beautifyDate(graphStartDateTime, '{DATE}')
             }
 
             // confige the diffrent UI parts of this graph-card

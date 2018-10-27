@@ -4,9 +4,9 @@ import {
     getBeginningOfTheMonth,
     getBeginningOfTheWeek, getEndOfTheMonth
 } from './date';
-import {IAnnotation, IChartOptions, IData} from './chartTypes';
+import {IAnnotation, IData} from './chartTypes';
 import {TimeSpan} from './dateTypes';
-import {hexToRgba, mergeDeep} from './other';
+import {hexToRgba} from './other';
 import {Theme} from '@material-ui/core';
 import {TypeOf} from './otherTypes';
 
@@ -251,78 +251,5 @@ export const createAnnotationsForTimeSpan = (
             })
         });
         return fullAnnotations
-    }
-};
-
-export const createChartOptions = (...partialOptions: IChartOptions[]): IChartOptions => {
-    return mergeDeep({}, getDefaultChartOptions(), ...partialOptions)
-};
-
-const getDefaultChartOptions = (): IChartOptions => {
-    return {
-        maintainAspectRatio: false,
-        responsive: true,
-        showLines : true,
-        legend: {
-            display: false
-        },
-        elements : {
-            line : {},
-            point : {
-                radius: 0,
-                hitRadius: 20
-            }
-        },
-        scales: {
-            yAxes : [{
-                display: false,
-                gridLines: {
-                    display: false
-                },
-                ticks: {
-                    beginAtZero: true
-                }
-            }],
-            xAxes : [{
-                display: false,
-                gridLines: {
-                    display: false
-                }
-            }]
-        },
-        tooltips: {
-            caretPadding: 0,
-            displayColors: false,
-            bodySpacing: 4,
-            callbacks: {
-                title: (tooltipItems: any[], dataAndLabels: any) => dataAndLabels.labels[tooltipItems[0].index],
-                label: (value: number) => value
-            }
-        },
-
-        annotation: {
-            annotations: []
-        },
-
-        plugins: {
-            datalabels: {
-                display: (context: any) => {
-
-                    // don't show the first label
-                    if (context.dataIndex === 0) return false;
-
-                    // don't show the last label
-                    if (context.dataIndex === context.dataset.data.length - 1) return false;
-                },
-                align: 'center',
-                formatter: ((value: number) => value),
-                borderRadius: 4,
-                color: 'white',
-                opacity: (context: any) => {
-                    if (context.active) return 1;
-                    return 0.001;
-                }
-            }
-        }
     }
 };

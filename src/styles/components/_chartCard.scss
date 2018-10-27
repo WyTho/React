@@ -35,4 +35,19 @@ $spacing: 20px;
     left: 0;
     right: 0;
   }
+
+  .smallerText {
+    font-size: 70%;
+  }
+  .tinyText {
+    font-size: 60%;
+  }
+  .verticalDivider {
+    margin: 0 12px;
+    border-left: 1px solid #ccc;
+  }
+  .horizontalSpacing {
+    height: 100%;
+    width: 16px;
+  }
 }

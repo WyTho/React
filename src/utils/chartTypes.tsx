@@ -9,8 +9,8 @@ export interface IData {
         days: Array<{
             id: number
             /**
-             * Timestamps from the backend are in ISO-format, this means milliseconds are excuded
-             * This is how you convert it to a Javascript date:    new Date(timestamp * 1numbernumbernumber)
+             * Timestamps from the backend are in ISO-format, this means milliseconds are excluded
+             * This is how you convert it to a Javascript date:    new Date(timestamp * 1000)
              */
             timestamp: number
             values: any[]
@@ -50,8 +50,8 @@ export interface IChartOptions {
         }
     },
     scales?: {
-        yAxes?: IChartAxis[],
-        xAxes?: IChartAxis[]
+        yAxes?: IChartOptionsAxis[],
+        xAxes?: IChartOptionsAxis[]
     },
     tooltips?: {
         caretPadding?: number,
@@ -65,18 +65,22 @@ export interface IChartOptions {
             title?: (tooltipItems: any[], dataAndLabels: any) => any,
             label?: (value: any, context: any) => any
         }
-    } & IChartTooltipStyle,
+    } & IChartOptionsTooltipStyle,
 
     // plugins
     annotation?: {
         annotations?: IAnnotation[]
     }
     plugins?: {
-        datalabels?: IChartDatalabels
+        datalabels?: IChartOptionsDatalabels
     }
 }
+export interface IChartData {
+    labels: any[],
+    datasets: IChartDataset[]
+}
 
-interface IChartAxis {
+interface IChartOptionsAxis {
     display?: boolean,
     gridLines?: {
         display?: boolean
@@ -86,7 +90,7 @@ interface IChartAxis {
     }
 }
 
-interface IChartDatalabels {
+interface IChartOptionsDatalabels {
     display?: boolean | ((context: any) => boolean),
     align?: string,
     formatter?: ((value: any, context?: any) => any),
@@ -95,7 +99,7 @@ interface IChartDatalabels {
     opacity?: (context: any) => number
 }
 
-interface IChartTooltipStyle {
+interface IChartOptionsTooltipStyle {
     bevelWidth?: number,
     bevelHighlightColor?: string,
     bevelShadowColor?: string,
@@ -107,4 +111,21 @@ interface IChartTooltipStyle {
     innerGlowColor?: string,
     outerGlowWidth?: number,
     outerGlowColor?: string,
+}
+
+// TODO: add all possible chart dataset options
+interface IChartDataset {
+    label?: string,
+    data?: any[],
+    borderColor?: string,
+    fill?: boolean,
+    backgroundColor?: string,
+    datalabels?: IChartDatasetDatalabels
+}
+
+interface IChartDatasetDatalabels {
+    backgroundColor?: string,
+    listeners?: {
+        click?: (context: any) => any
+    }
 }
