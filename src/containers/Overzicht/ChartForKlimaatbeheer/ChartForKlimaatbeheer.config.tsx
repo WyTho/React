@@ -5,17 +5,16 @@ import {
     getValuesForChart
 } from '../../../utils/chart/chart';
 import {beautifyDate} from '../../../utils/date/date';
-import {IAnnotation, IChartData} from '../../../utils/chart/chartTypes';
+import {IAnnotation, IChartData, IChartOptions} from '../../../utils/chart/chartTypes';
 import {IChartForKlimaatBeheerProps} from './ChartForKlimaatbeheer';
-import {ChartData} from 'react-chartjs-2';
-import {ChartOptions} from 'chart.js';
+import {ChartDataFunction} from 'react-chartjs-2';
 import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/chartOptionsPresets';
 
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, average_temperature } = props;
 
-    let data: ChartData<any> = null;
-    let options: ChartOptions = null;
+    let data: ChartDataFunction<IChartData> = null;
+    let options: IChartOptions = null;
 
     if (average_temperature.data) {
         const labels = getLabelsForChart(timeSpan, graphStartDateTime);
@@ -23,7 +22,7 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
         const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, average_temperature.data);
 
         // build chart datasets (configure the lines that should be shown in this graph)
-        data = (canvas: any): IChartData => ({
+        data = (canvas: HTMLElement): IChartData => ({
             labels,
             datasets: [
                 {
@@ -37,8 +36,7 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
                         listeners: {
                             click: (context: any) => {
                                 console.log(
-                                    'label ', context.dataIndex, ' has been clicked!',
-                                    context.dataset.data[context.dataIndex]
+                                    'label ', context.dataIndex, ' has been clicked!', context.dataset.data[context.dataIndex]
                                 );
                             }
                         }

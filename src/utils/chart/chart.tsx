@@ -19,7 +19,7 @@ export const createGradientForChart = (canvas: any, hexColor: string) => {
     return gradient
 };
 
-export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date) => {
+export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date): string[] => {
     const labels: any[] = [];
 
     let amountOfLabels: number = 0;

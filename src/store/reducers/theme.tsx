@@ -37,7 +37,7 @@ interface IState {
     theme: Theme
 }
 
-const toggleTheme = ( oldState: IState) => {
+const toggleTheme = (oldState: IState) => {
     let theme: Theme = lightTheme;
     const darkThemeActive: boolean = !oldState.darkThemeActive;
     if (darkThemeActive) theme = darkTheme;

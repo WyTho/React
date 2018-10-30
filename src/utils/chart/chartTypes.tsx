@@ -1,6 +1,8 @@
 /**
  * The data from the Python backend had the following format
  */
+import {ChartDataSets, ChartOptions, ChartTooltipOptions} from 'chart.js';
+
 export interface IData {
     id: number
     data_type: string
@@ -18,6 +20,26 @@ export interface IData {
     }>
 }
 
+/**
+ * ChartJS
+ */
+export interface IChartOptions extends ChartOptions {
+    tooltips?: ChartTooltipOptions & IChartOptionsTooltipStyle,
+    annotation?: {
+        annotations?: IAnnotation[]
+    }
+    plugins?: {
+        datalabels?: IChartOptionsDatalabels
+    }
+}
+export interface IChartData {
+    labels: Array<string | string[]>,
+    datasets: Array<ChartDataSets & IChartDatasetDatalabels>
+}
+
+/**
+ * Annotations plugin for ChartJS
+ */
 export interface IAnnotation {
     type?: string,
     drawTime?: string,
@@ -34,62 +56,9 @@ export interface IAnnotation {
     }
 }
 
-// TODO: add all possible chart options
-export interface IChartOptions {
-    maintainAspectRatio?: boolean,
-    responsive?: boolean,
-    showLines?: boolean,
-    legend?: {
-        display?: boolean
-    },
-    elements?: {
-        line?: {},
-        point?: {
-            radius?: number,
-            hitRadius?: number
-        }
-    },
-    scales?: {
-        yAxes?: IChartOptionsAxis[],
-        xAxes?: IChartOptionsAxis[]
-    },
-    tooltips?: {
-        caretPadding?: number,
-        displayColors?: boolean,
-        backgroundColor?: string,
-        borderColor?: string,
-        borderWidth?: number,
-        color?: string,
-        bodySpacing?: number,
-        callbacks?: {
-            title?: (tooltipItems: any[], dataAndLabels: any) => any,
-            label?: (value: any, context: any) => any
-        }
-    } & IChartOptionsTooltipStyle,
-
-    // plugins
-    annotation?: {
-        annotations?: IAnnotation[]
-    }
-    plugins?: {
-        datalabels?: IChartOptionsDatalabels
-    }
-}
-export interface IChartData {
-    labels: any[],
-    datasets: IChartDataset[]
-}
-
-interface IChartOptionsAxis {
-    display?: boolean,
-    gridLines?: {
-        display?: boolean
-    },
-    ticks?: {
-        beginAtZero?: boolean
-    }
-}
-
+/**
+ * Datalabels plugin for ChartJS
+ */
 interface IChartOptionsDatalabels {
     display?: boolean | ((context: any) => boolean),
     align?: string,
@@ -98,7 +67,18 @@ interface IChartOptionsDatalabels {
     color?: string,
     opacity?: (context: any) => number
 }
+interface IChartDatasetDatalabels {
+    datalabels?: {
+        backgroundColor?: string,
+        listeners?: {
+            click?: (context: any) => any
+        }
+    }
+}
 
+/**
+ * More styles plugin for ChartJS
+ */
 interface IChartOptionsTooltipStyle {
     bevelWidth?: number,
     bevelHighlightColor?: string,
@@ -111,21 +91,4 @@ interface IChartOptionsTooltipStyle {
     innerGlowColor?: string,
     outerGlowWidth?: number,
     outerGlowColor?: string,
-}
-
-// TODO: add all possible chart dataset options
-interface IChartDataset {
-    label?: string,
-    data?: any[],
-    borderColor?: string,
-    fill?: boolean,
-    backgroundColor?: string,
-    datalabels?: IChartDatasetDatalabels
-}
-
-interface IChartDatasetDatalabels {
-    backgroundColor?: string,
-    listeners?: {
-        click?: (context: any) => any
-    }
 }
