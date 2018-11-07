@@ -5,5 +5,6 @@ export {
     setTimeSpanForGraphs,
     setStartDateForGraphs,
     setCurrentDate,
-    fetchTemperature
+    fetchData,
+    fetchDataInRange
 } from './data';

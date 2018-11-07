@@ -6,7 +6,7 @@ import {
 } from '../date/date';
 import {IAnnotation, IData} from './chartTypes';
 import {TimeSpan} from '../date/dateTypes';
-import {hexToRgba} from '../other';
+import {hexToRgba, isNumber} from '../other';
 import {Theme} from '@material-ui/core';
 import {TypeOf} from '../otherTypes';
 
@@ -35,7 +35,7 @@ export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date): string[]
         startTime = getBeginningOfTheWeek(startDate).getTime();
         addTime = 24 * 60 * 60 * 1000;
     } else if (timeSpan === TimeSpan.month) {
-        amountOfLabels = getEndOfTheMonth(startDate).getDate() + 1;
+        amountOfLabels = getEndOfTheMonth(startDate).getDate();
         startTime = getBeginningOfTheMonth(startDate).getTime();
         addTime = 24 * 60 * 60 * 1000;
     }
@@ -48,7 +48,7 @@ export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date): string[]
 };
 
 export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: IData, typeofValues: TypeOf = TypeOf.NUMBER) => {
-    let values: any[] = [];
+    const values: any[] = [];
 
     let checkIfNeedsToBePushed: (day: any) => boolean;
     let pushValue: (day: any) => void;
@@ -84,36 +84,26 @@ export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: IDa
         }
     }
 
-    // TODO: TEMPORARY
-    /*  temp, until backend sends null data instead of 0  */
-    values = values.filter(value => value || null);
-    /*  /temp  */
-
-    // TODO: TEMPORARY
-    /*  temp, until backend sends complete month objects instead of starting in the middle  */
-    if (timeSpan === TimeSpan.month) {
-        const nr = getEndOfTheMonth(startDate).getDate() - values.length + 1;
-        const firstDateInDataset = new Date(data.weeks[0].days[0].timestamp * 1000).getDate();
-        if (nr === firstDateInDataset) {
-            for (let i = 0; i < nr; i++) values.unshift(0)
-        }
-    }
-    /*  /temp  */
-
     return values;
 
     // helper functions
     function pushAllHoursOfDay(day: any) {
         for (const value of day.values) {
             if (typeofValues === TypeOf.NUMBER) {
-                values.push( +value.toFixed(1) );
+                values.push(isNumber(value) ? +value.toFixed(1) : null );
             }
         }
     }
     function pushDay(day: any) {
         if (typeofValues === TypeOf.NUMBER) {
-            const total = day.values.reduce((sum: number, value: number) => sum + value, 0);
-            values.push(+(total / day.values.length).toFixed(1))
+            const average = day.values.reduce((store: any, value: number, index: number) => {
+                if (value !== null) {
+                    store.total += value;
+                    store.avg = store.total / index + 1;
+                }
+                return store
+            }, { total: 0, average: null }).avg;
+            values.push(isNumber(average) ? +average.toFixed(1) : null)
         }
     }
 };
@@ -172,9 +162,13 @@ export const createAnnotationsForTimeSpan = (
         weekdaysToAnnotate.forEach((weekDay: any) => annotations.push(createWeekdayAnnotation(weekDay)));
 
     } else if (timeSpan === TimeSpan.month) {
+
+        let datesToAnnotate = [5, 10, 15, 20, 25];
         if (beginningOfTheDayLabel) {
+            datesToAnnotate = datesToAnnotate.filter((day: number) => (currentHour.getDate() !== day));
             annotations.push(createNowAnnotation(beginningOfTheDayLabel));
         }
+        datesToAnnotate.forEach((day: number) => annotations.push(createMonthDateAnnotation(day)));
     }
 
     return addMissingValuesForAnnotations(annotations);
@@ -189,7 +183,7 @@ export const createAnnotationsForTimeSpan = (
             borderColor: 'transparent'
         }
     }
-    function createNowAnnotation(value: any) {
+    function createNowAnnotation(value: any): IAnnotation {
         return {
             drawTime: 'afterDatasetsDraw',
             value,
@@ -202,7 +196,7 @@ export const createAnnotationsForTimeSpan = (
             }
         }
     }
-    function createHourAnnotation(hour: number) {
+    function createHourAnnotation(hour: number): IAnnotation {
         return {
             value: labels[hour],
             borderDash: [8, 8],
@@ -213,7 +207,7 @@ export const createAnnotationsForTimeSpan = (
             }
         }
     }
-    function createWeekdayAnnotation(weekDay: {day: number, name: string}) {
+    function createWeekdayAnnotation(weekDay: {day: number, name: string}): IAnnotation {
         return {
             value: labels[weekDay.day - 1],
             borderDash: [8, 8],
@@ -221,6 +215,17 @@ export const createAnnotationsForTimeSpan = (
             label: {
                 backgroundColor: '#888',
                 content: weekDay.name
+            }
+        }
+    }
+    function createMonthDateAnnotation(day: number): IAnnotation {
+        return {
+            value: labels[day - 1],
+            borderDash: [8, 8],
+            borderColor: '#888',
+            label: {
+                backgroundColor: '#888',
+                content: day.toString()
             }
         }
     }

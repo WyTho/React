@@ -1,4 +1,9 @@
 import {TimeSpan} from './dateTypes';
+export interface IDateRange {
+    fromDate: Date,
+    toDate: Date
+}
+export const epochTimestamp = (date: Date) => +(date.getTime().toString().slice(0, -3));
 
 export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
 
@@ -174,4 +179,21 @@ const getNextOrPreviousDate = (type: string, timeSpan: TimeSpan, date: Date): Da
         type === 'previous' ? date.setMonth(date.getMonth() - 1) : date.setMonth(date.getMonth() + 1)
     }
     return date
+};
+
+export const getDateRangeOfTwoMonthsAround = (centerDate: Date): IDateRange => {
+    const fromDate = getBeginningOfTheWeek(getBeginningOfTheDay(subtractDays(new Date(centerDate.getTime()), 60)));
+    const toDate = getEndOfTheWeek(getBeginningOfTheDay(addDays(new Date(centerDate.getTime()), 60)));
+    return { fromDate, toDate }
+};
+
+export const addDays = (date: Date, days: number) => {
+    const copy = new Date(date.getTime());
+    copy.setDate(copy.getDate() + days);
+    return copy;
+};
+export const subtractDays = (date: Date, days: number) => {
+    const copy = new Date(date.getTime());
+    copy.setDate(copy.getDate() - days);
+    return copy;
 };

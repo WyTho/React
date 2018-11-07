@@ -15,10 +15,6 @@ interface IProps {
 
 export class App extends React.Component<IProps, {}> {
 
-    public componentDidMount() {
-        this.props.onFetchTemperature();
-    }
-
     public render() {
         const { props, props: { theme, darkThemeActive } } = this;
 
@@ -46,8 +42,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
-    toggleThemeHandler: () => dispatch(actions.toggleTheme()),
-    onFetchTemperature: () => dispatch(actions.fetchTemperature())
+    toggleThemeHandler: () => dispatch(actions.toggleTheme())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

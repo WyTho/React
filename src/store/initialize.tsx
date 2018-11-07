@@ -1,6 +1,6 @@
 import { combineReducers, compose, createStore } from 'redux';
-import themeReducer from './reducers/theme';
-import dataReducer from './reducers/data';
+import themeReducer from './reducers/theme/index';
+import dataReducer from './reducers/data/index';
 import middlewares from './middlewares';
 
 const rootReducer = combineReducers({

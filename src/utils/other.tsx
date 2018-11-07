@@ -42,3 +42,4 @@ export const mergeDeep = (target: any, ...sources: any): any => {
         return (item && typeof item === 'object' && !Array.isArray(item));
     }
 };
+export const isNumber = (n: any) => !isNaN(parseFloat(n)) && isFinite(n);

@@ -7,19 +7,19 @@ import {
 import {beautifyDate} from '../../../utils/date/date';
 import {IAnnotation, IChartData, IChartOptions} from '../../../utils/chart/chartTypes';
 import {IChartForKlimaatBeheerProps} from './ChartForKlimaatbeheer';
-import {ChartDataFunction} from 'react-chartjs-2';
+import {ChartData} from 'react-chartjs-2';
 import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/chartOptionsPresets';
 
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
-    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, average_temperature } = props;
+    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, AVERAGE_TEMPERATURE } = props;
 
-    let data: ChartDataFunction<IChartData> = null;
+    let data: ChartData<any> = null;
     let options: IChartOptions = null;
 
-    if (average_temperature.data) {
+    if (AVERAGE_TEMPERATURE.data) {
         const labels = getLabelsForChart(timeSpan, graphStartDateTime);
 
-        const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, average_temperature.data);
+        const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, AVERAGE_TEMPERATURE.data);
 
         // build chart datasets (configure the lines that should be shown in this graph)
         data = (canvas: HTMLElement): IChartData => ({

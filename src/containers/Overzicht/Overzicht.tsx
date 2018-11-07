@@ -14,11 +14,11 @@ import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../components/Modal/Modal';
 import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
-
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate} from '../../utils/date/date';
+import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
+import {DataSet, getMissingDataRange} from '../../utils/data/data';
 
 interface IState {
     modalOpened: boolean
@@ -30,13 +30,18 @@ interface IProps {
         currentDateTime: Date
     },
     setTimeSpan: (timeSpan: TimeSpan) => void,
-    setStartDate: (date: Date) => void
+    setStartDate: (date: Date) => void,
+    fetchData: (typeOfData: DataSet, centerDate?: Date) => void,
 }
 
 export class Overzicht extends React.Component<IProps, IState> {
     public state = {
         modalOpened: false
     };
+
+    public componentDidMount() {
+        this.props.fetchData(DataSet.AVERAGE_TEMPERATURE, this.props.selected.graphStartDateTime);
+    }
 
     public render() {
         const { props, props: { selected: { timeSpan, graphStartDateTime } } } = this;
@@ -99,7 +104,7 @@ export class Overzicht extends React.Component<IProps, IState> {
                     alignItems='stretch'
                     spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer/>
+                        <ChartForKlimaatbeheer fetchData={props.fetchData}/>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
 
@@ -156,6 +161,15 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
     setTimeSpan: (timeSpan: TimeSpan) => dispatch(actions.setTimeSpanForGraphs(timeSpan)),
-    setStartDate: (date: Date) => dispatch(actions.setStartDateForGraphs(date))
+    setStartDate: (date: Date) => {
+        dispatch(actions.setCurrentDate());
+        dispatch(actions.setStartDateForGraphs(date));
+        const missingData: null | IDateRange = getMissingDataRange(DataSet.AVERAGE_TEMPERATURE, date);
+        if (missingData) {
+            dispatch(actions.fetchDataInRange(DataSet.AVERAGE_TEMPERATURE, missingData.fromDate, missingData.toDate));
+        }
+    },
+    fetchData: (typeOfData: DataSet, centerDate?: Date) => dispatch(actions.fetchData(typeOfData, centerDate))
 });
+
 export default connect(mapStateToProps, mapDispatchToProps)(Overzicht);
