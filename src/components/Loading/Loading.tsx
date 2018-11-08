@@ -2,27 +2,30 @@ import * as React from 'react';
 import { CircularProgress, LinearProgress } from '@material-ui/core';
 
 interface IProps {
-    type?: string,
-    color?: any,
+    type?: string
+    color?: any
     size?: number
+    style?: any
+    className?: any
+    thickness?: number
+    value?: number,
+    variant?: any
 }
 
 const defaults = {
     type: 'spinner',
-    color: 'primary',
-    size: 50
+    color: 'primary'
 };
 
 const loading = (props: IProps) => {
-    let { type, color, size } = props;
+    let { type, color } = props;
 
-    type = type ? type : defaults.type;
+    type  = type  ? type  : defaults.type;
     color = color ? color : defaults.color;
-    size = size ? size : defaults.size;
 
     switch (type) {
-        case 'spinner': return <CircularProgress color={ color } size={size} />;
-        case 'bar': return <LinearProgress />;
+        case 'spinner': return <CircularProgress {...props} />;
+        case 'bar': return <LinearProgress {...props} />;
     }
 
 };

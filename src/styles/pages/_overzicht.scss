@@ -9,6 +9,16 @@
     justify-content: space-between;
     align-items: center;
     div.buttonContainer {
+      display: flex;
+      div.circularButtonWrapper{
+        position: relative;
+        .circularButtonLoader {
+          position: absolute;
+          top: -6px;
+          left: -6px;
+          z-index: 1;
+        }
+      }
       padding-bottom: 24px;
       .timeToggleButton {
         padding: 4px 0;

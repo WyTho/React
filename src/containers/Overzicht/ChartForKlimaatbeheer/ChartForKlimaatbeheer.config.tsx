@@ -14,6 +14,12 @@ import {DataSet} from '../../../utils/data/data';
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, dataset } = props;
 
+    const chartColors = {
+        light: theme.palette.type === 'light' ? theme.palette.primary.light : theme.palette.secondary.light,
+        main:  theme.palette.type === 'light' ? theme.palette.primary.main  : theme.palette.secondary.main,
+        dark:  theme.palette.type === 'light' ? theme.palette.primary.dark  : theme.palette.secondary.dark
+    };
+
     let data: ChartData<any> = null;
     let options: IChartOptions = null;
 
@@ -29,11 +35,11 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
                 {
                     label: 'Gemiddelde temperatuur',
                     data: averageTemperatureData,
-                    borderColor: theme.palette.primary.main,
+                    borderColor: chartColors.main,
                     fill: true,
-                    backgroundColor: createGradientForChart(canvas, theme.palette.primary.main),
+                    backgroundColor: createGradientForChart(canvas, chartColors.main),
                     datalabels: {
-                        backgroundColor: theme.palette.primary.dark,
+                        backgroundColor: chartColors.dark,
                         listeners: {
                             click: (context: any) => {
                                 console.log(
@@ -70,8 +76,8 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
             // overwrite some settings for this chart
             {
                 tooltips: {
-                    backgroundColor: theme.palette.primary.dark,
-                    borderColor: theme.palette.primary.light,
+                    backgroundColor: chartColors.dark,
+                    borderColor: chartColors.light,
                     callbacks: {
                         title: (tooltipItems: any[], dataAndLabels: any) => {
                             const date = dataAndLabels.labels[tooltipItems[0].index];

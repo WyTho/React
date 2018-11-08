@@ -20,6 +20,7 @@ import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDat
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {DataSet, getAllDatasets, getMissingDataRange} from '../../utils/data/data';
 import ChartForWaterUsage from './ChartForWaterUsage/ChartForWaterUsage';
+import Loading from '../../components/Loading/Loading';
 
 interface IState {
     modalOpened: boolean
@@ -29,6 +30,15 @@ interface IProps {
         timeSpan: TimeSpan,
         graphStartDateTime: Date
         currentDateTime: Date
+    },
+    loading: {
+        initial: boolean,
+        partial: boolean
+    },
+    error: {
+        status: boolean,
+        error: Error
+        message: string
     },
     setTimeSpan: (timeSpan: TimeSpan) => void,
     setStartDate: (date: Date) => void,
@@ -45,7 +55,10 @@ export class Overzicht extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const { props, props: { selected: { timeSpan, graphStartDateTime } } } = this;
+        const { props, props: { selected: { timeSpan, graphStartDateTime }, loading, error } } = this;
+
+        const isLoading = loading.initial || loading.partial;
+        const hasError = error.status;
 
         return (
             <div className='Overzicht'>
@@ -54,15 +67,28 @@ export class Overzicht extends React.Component<IProps, IState> {
                         Overzicht
                     </Typography>
                     <div className='buttonContainer'>
-                        <IconButton onClick={() => props.setStartDate(getPreviousDate(timeSpan, graphStartDateTime))}>
-                            <Icon>chevron_left</Icon>
-                        </IconButton>
-                        <Button color='primary' onClick={() => props.setStartDate(getBeginningOfTheDay(new Date()))}>
+
+                        <div className={'circularButtonWrapper'}>
+                            <IconButton onClick={() => props.setStartDate(getPreviousDate(timeSpan, graphStartDateTime))}
+                                        disabled={isLoading || hasError}>
+                                <Icon>chevron_left</Icon>
+                            </IconButton>
+                            { isLoading ? <Loading type='spinner' size={60} className='circularButtonLoader' thickness={0.2} /> : null }
+                        </div>
+
+                        <Button color='primary' onClick={() => props.setStartDate(getBeginningOfTheDay(new Date()))}
+                                disabled={isLoading || hasError}>
                             { getDisplayName(timeSpan, graphStartDateTime) }
                         </Button>
-                        <IconButton onClick={() => props.setStartDate(getNextDate(timeSpan, graphStartDateTime))}>
-                            <Icon>chevron_right</Icon>
-                        </IconButton>
+
+                        <div className={'circularButtonWrapper'}>
+                            <IconButton onClick={() => props.setStartDate(getNextDate(timeSpan, graphStartDateTime))}
+                                        disabled={isLoading || hasError}>
+                                <Icon>chevron_right</Icon>
+                            </IconButton>
+                            { isLoading ? <Loading type='spinner' size={60} className='circularButtonLoader' thickness={0.2} /> : null }
+                        </div>
+
                     </div>
                     <div className='buttonContainer'>
                         <Button className={'timeToggleButton'}
@@ -157,8 +183,8 @@ export class Overzicht extends React.Component<IProps, IState> {
 
 }
 const mapStateToProps = (state: any) => {
-    const { selected } = state.data;
-    return { selected }
+    const { selected, loading, error } = state.data;
+    return { selected, loading, error }
 };
 const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
     setTimeSpan: (timeSpan: TimeSpan) => dispatch(actions.setTimeSpanForGraphs(timeSpan)),

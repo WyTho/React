@@ -111,6 +111,10 @@ export default {
 
     fetchDataFailed: (state: IDataReducerState, action: any) => {
         return updateObject(state, {
+            loading: updateObject(state.loading, {
+                initial: false,
+                partial: false
+            }),
             error: updateObject(state.error, {
                 status: true,
                 error: action.payload.error,

@@ -14,6 +14,12 @@ import {DataSet} from '../../../utils/data/data';
 const configureChart = (props: IChartForWaterUsageProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, dataset } = props;
 
+    const chartColors = {
+        light: theme.palette.type === 'light' ? '#6c74ff' : theme.palette.primary.light,
+        main:  theme.palette.type === 'light' ? '#4C4CFF' : theme.palette.primary.main,
+        dark:  theme.palette.type === 'light' ? '#3131a2' : theme.palette.primary.dark
+    };
+
     let data: ChartData<any> = null;
     let options: IChartOptions = null;
 
@@ -29,11 +35,11 @@ const configureChart = (props: IChartForWaterUsageProps) => {
                 {
                     label: 'Gemiddelde temperatuur',
                     data: averageTemperatureData,
-                    borderColor: '#4C4CFF',
+                    borderColor: chartColors.main,
                     fill: true,
-                    backgroundColor: createGradientForChart(canvas, '#4C4CFF'),
+                    backgroundColor: createGradientForChart(canvas, chartColors.main),
                     datalabels: {
-                        backgroundColor: '#4C4CFF',
+                        backgroundColor: chartColors.dark,
                         listeners: {
                             click: (context: any) => {
                                 console.log(
@@ -70,8 +76,8 @@ const configureChart = (props: IChartForWaterUsageProps) => {
             // overwrite some settings for this chart
             {
                 tooltips: {
-                    backgroundColor: theme.palette.primary.dark,
-                    borderColor: theme.palette.primary.light,
+                    backgroundColor: chartColors.dark,
+                    borderColor: chartColors.light,
                     callbacks: {
                         title: (tooltipItems: any[], dataAndLabels: any) => {
                             const date = dataAndLabels.labels[tooltipItems[0].index];
