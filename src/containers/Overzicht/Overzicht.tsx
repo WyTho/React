@@ -19,6 +19,7 @@ import * as actions from '../../store/actions';
 import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {DataSet, getAllDatasets, getMissingDataRange} from '../../utils/data/data';
+import ChartForWaterUsage from './ChartForWaterUsage/ChartForWaterUsage';
 
 interface IState {
     modalOpened: boolean
@@ -107,7 +108,7 @@ export class Overzicht extends React.Component<IProps, IState> {
                         <ChartForKlimaatbeheer fetchData={props.fetchData}/>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-
+                        <ChartForWaterUsage fetchData={props.fetchData}/>
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
 
