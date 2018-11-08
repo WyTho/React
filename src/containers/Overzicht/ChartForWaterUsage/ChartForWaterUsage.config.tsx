@@ -23,7 +23,7 @@ const configureChart = (props: IChartForWaterUsageProps) => {
     let data: ChartData<any> = null;
     let options: IChartOptions = null;
 
-    if (dataset[DataSet.AVERAGE_TEMPERATURE]) {
+    if (dataset[DataSet.AVERAGE_WATER_USAGE]) {
         const labels = getLabelsForChart(timeSpan, graphStartDateTime);
 
         const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_WATER_USAGE]);
