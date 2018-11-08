@@ -10,43 +10,47 @@ import configureChart from './ChartForKlimaatbeheer.config';
 import {DataSet} from '../../../utils/data/data';
 
 export interface IChartForKlimaatBeheerProps {
-    theme: Theme,
-    fetchData: (typeOfData: DataSet, centerDate?: Date) => void,
+    theme: Theme
+    fetchData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
     selected: {
-        timeSpan: TimeSpan,
-        graphStartDateTime: Date,
-        currentHourDateTime: Date,
+        timeSpan: TimeSpan
+        graphStartDateTime: Date
+        currentHourDateTime: Date
     }
-    AVERAGE_TEMPERATURE: {
-        loading: boolean,
-        data: IData,
-        error: boolean,
+    loading: {
+        initial: boolean
+        partial: boolean
+    }
+    error: {
+        status: boolean
+        error: Error
+        message: string
+    }
+    dataset: {
+        [index in DataSet]: IData
     }
 }
 
 class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps, {}> {
     public render() {
-        const { props, props: { theme, selected: { timeSpan, graphStartDateTime }, AVERAGE_TEMPERATURE } } = this;
+        const { props, props: { theme, selected: { timeSpan, graphStartDateTime }, loading, error, dataset } } = this;
 
         const chart = configureChart(props);
 
         let content = null;
         let noDataForTimeSpanMessage = null as string;
 
-        const loading = AVERAGE_TEMPERATURE.loading;
-        const error = AVERAGE_TEMPERATURE.error;
+        if (dataset[DataSet.AVERAGE_TEMPERATURE]) {
+            const currentAverageTemperature = getCurrentValue(dataset[DataSet.AVERAGE_TEMPERATURE]);
 
-        if (AVERAGE_TEMPERATURE.data) {
-            const currentAverageTemperature = getCurrentValue(AVERAGE_TEMPERATURE.data);
-
-            const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, AVERAGE_TEMPERATURE.data);
+            const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_TEMPERATURE]);
 
             const allValues = [
                 ...averageTemperatureData
             ];
 
             if (!allValues.length) {
-                noDataForTimeSpanMessage = 'Er is geen temperatuurs data van ' + beautifyDate(graphStartDateTime, '{DATE}')
+                noDataForTimeSpanMessage = 'Er is geen temperatuurs data van ' + beautifyDate(graphStartDateTime, '{DATE}');
             }
 
             // confige the diffrent UI parts of this graph-card
@@ -160,12 +164,12 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
 
         return (
             <ChartCard title={'Klimaatbeheer'}
-                       loading={loading}
+                       loading={loading.initial}
                        error={error}
                        noDataForTimeSpanMessage={noDataForTimeSpanMessage}
-                       chartData={chart.data}
-                       chartOptions={chart.options}
-                       onFetchData={() => props.fetchData(DataSet.AVERAGE_TEMPERATURE, graphStartDateTime)}>
+                       chartData={chart.data || {}}
+                       chartOptions={chart.options || {}}
+                       onFetchData={() => props.fetchData([DataSet.AVERAGE_TEMPERATURE], graphStartDateTime, true)}>
                 {content}
             </ChartCard>
         );
@@ -174,9 +178,9 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
 }
 const mapStateToProps = (state: any) => {
     const { theme } = state.theme;
-    const { selected, AVERAGE_TEMPERATURE } = state.data;
+    const { selected, loading, error, dataset } = state.data;
 
-    return { theme, selected, AVERAGE_TEMPERATURE }
+    return { theme, selected, loading, error, dataset }
 };
 
 export default connect(mapStateToProps)(ChartForKlimaatbeheer);
