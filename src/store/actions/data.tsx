@@ -17,54 +17,54 @@ export const setCurrentDate = () => ({
     type: Actions.SET_CURRENT_DATE
 });
 
-export const fetchDataStart = (typeOfData: DataSet) => ({
+export const fetchDataStart = (initialLoad: boolean) => ({
     type: Actions.FETCH_DATA_START,
-    payload: { typeOfData }
+    payload: { initialLoad }
 });
 
-export const fetchDataSuccess = (typeOfData: DataSet, data: any) => ({
+export const fetchDataSuccess = (typesOfData: DataSet[], data: any[]) => ({
     type: Actions.FETCH_DATA_SUCCESS,
-    payload: { typeOfData, data }
+    payload: { typesOfData, data }
 });
 
-export const fetchDataFailed = (typeOfData: DataSet, error: any) => ({
+export const fetchDataFailed = (error: any) => ({
     type: Actions.FETCH_DATA_FAILED,
-    payload: { typeOfData, error }
+    payload: { error }
 });
 
-// TODO: handle multiple DataSet[]
-export const fetchData = (typeOfData: DataSet, centerDate?: Date) => {
-    if (centerDate) {
-        const fromDate = getDateRangeOfTwoMonthsAround(centerDate).fromDate;
-        const toDate = getDateRangeOfTwoMonthsAround(centerDate).toDate;
-        return fetchDataDispatcher(typeOfData, epochTimestamp(fromDate), epochTimestamp(toDate))
-    } else {
-        return fetchDataDispatcher(typeOfData)
-    }
+export const fetchData = (typesOfData: DataSet[], centerDate: Date, initialLoad: boolean) => {
+    const fromDate = getDateRangeOfTwoMonthsAround(centerDate).fromDate;
+    const toDate = getDateRangeOfTwoMonthsAround(centerDate).toDate;
+    return fetchDataDispatcher(typesOfData, epochTimestamp(fromDate), epochTimestamp(toDate), initialLoad)
 };
 
-// TODO: handle multiple DataSet[]
-export const fetchDataInRange = (typeOfData: DataSet, startDate?: Date, endDate?: Date) => {
-    return fetchDataDispatcher(typeOfData, epochTimestamp(startDate), epochTimestamp(endDate))
+export const fetchDataInRange = (typesOfData: DataSet[], startDate: Date, endDate: Date) => {
+    return fetchDataDispatcher(typesOfData, epochTimestamp(startDate), epochTimestamp(endDate), false)
 };
 
 const fetchDataDispatcher = (
-    typeOfData: DataSet,
-    startingDateEpochTimestamp?: string | number,
-    endingDateEpochTimestamp?: string | number
+    typesOfData: DataSet[],
+    startingDateEpochTimestamp: string | number,
+    endingDateEpochTimestamp: string | number,
+    initialLoad: boolean,
 ) => {
-    let url = '/api/graph/' + typeOfData;
+    let urls: string[] = typesOfData.map(typeOfData => '/api/graph/' + typeOfData);
     if (startingDateEpochTimestamp && endingDateEpochTimestamp) {
-        url += '?starting_date_timestamp=' + startingDateEpochTimestamp + '&ending_date_timestamp=' + endingDateEpochTimestamp;
+        urls = urls.map(url =>
+            url + '?starting_date_timestamp=' + startingDateEpochTimestamp + '&ending_date_timestamp=' + endingDateEpochTimestamp
+        );
     }
 
-    console.log(url);
+    console.log(urls);
 
     return (dispatch: any) => {
-        console.log('dispatching fetchDataStart!');
-        dispatch(fetchDataStart(typeOfData));
-        axios.get(url)
-            .then((res: any) => dispatch(fetchDataSuccess(typeOfData, res)))
-            .catch((err: any) => dispatch(fetchDataFailed(typeOfData, err)));
+        dispatch(fetchDataStart(initialLoad));
+
+        const promises = urls.map(url => axios.get(url));
+
+        Promise.all(promises)
+            .then((res: any) => dispatch(fetchDataSuccess(typesOfData, res)))
+            .catch((err: Error) => dispatch(fetchDataFailed(err)));
+
     };
 };
