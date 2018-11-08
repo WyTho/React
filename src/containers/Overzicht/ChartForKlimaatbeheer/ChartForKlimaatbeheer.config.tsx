@@ -9,17 +9,18 @@ import {IAnnotation, IChartData, IChartOptions} from '../../../utils/chart/chart
 import {IChartForKlimaatBeheerProps} from './ChartForKlimaatbeheer';
 import {ChartData} from 'react-chartjs-2';
 import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/chartOptionsPresets';
+import {DataSet} from '../../../utils/data/data';
 
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
-    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, AVERAGE_TEMPERATURE } = props;
+    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, dataset } = props;
 
     let data: ChartData<any> = null;
     let options: IChartOptions = null;
 
-    if (AVERAGE_TEMPERATURE.data) {
+    if (dataset[DataSet.AVERAGE_TEMPERATURE]) {
         const labels = getLabelsForChart(timeSpan, graphStartDateTime);
 
-        const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, AVERAGE_TEMPERATURE.data);
+        const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_TEMPERATURE]);
 
         // build chart datasets (configure the lines that should be shown in this graph)
         data = (canvas: HTMLElement): IChartData => ({

@@ -2,53 +2,49 @@ import Actions from '../../actionTypes';
 import {TimeSpan} from '../../../utils/date/dateTypes';
 import {getBeginningOfTheDay, getBeginningOfTheHour} from '../../../utils/date/date';
 import functions from './functions';
+import {DataSet, getAllDatasets} from '../../../utils/data/data';
+import {IData} from '../../../utils/chart/chartTypes';
 
 export interface IDataReducerState {
     selected: {
-        timeSpan: TimeSpan,
-        graphStartDateTime: Date,
+        timeSpan: TimeSpan
+        graphStartDateTime: Date
         currentHourDateTime: Date
     },
-
-    // TODO: restructure
-    // loading: {
-    //     initial: boolean,
-    //     partial: boolean
-    // },
-    // error: boolean,
-    // data: {
-    //     AVERAGE_TEMPERATURE: any
-    // }
-
-    AVERAGE_TEMPERATURE: {
-        loading: boolean,
-        data: any,
-        error: boolean
+    loading: {
+        initial: boolean
+        partial: boolean
+    },
+    error: {
+        status: boolean
+        error: Error
+        message: string
+    },
+    dataset: {
+        [index in DataSet]: IData
     }
 }
 
+console.log('here');
 const initialState: IDataReducerState = {
     selected: {
         timeSpan: TimeSpan.day,
         graphStartDateTime: getBeginningOfTheDay(new Date()),
         currentHourDateTime: getBeginningOfTheHour(new Date())
     },
-
-    // TODO: restructure
-    // loading: {
-    //     initial: false,
-    //     partial: false
-    // },
-    // error: false,
-    // data: {
-    //     AVERAGE_TEMPERATURE: null as any
-    // }
-
-    AVERAGE_TEMPERATURE: {
-        loading: true,
-        data: null as any,
-        error: false
-    }
+    loading: {
+        initial: false,
+        partial: false
+    },
+    error: {
+        status: false,
+        error: null as Error,
+        message: null as string
+    },
+    dataset: getAllDatasets().reduce((o: any, dataset: DataSet) => {
+        o[dataset] = null as IData;
+        return o
+    }, {})
 };
 
 const REDUCER = ( state: IDataReducerState = initialState, action: any ) => {

@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
-import {DataSet, getMissingDataRange} from '../../utils/data/data';
+import {DataSet, getAllDatasets, getMissingDataRange} from '../../utils/data/data';
 
 interface IState {
     modalOpened: boolean
@@ -31,7 +31,7 @@ interface IProps {
     },
     setTimeSpan: (timeSpan: TimeSpan) => void,
     setStartDate: (date: Date) => void,
-    fetchData: (typeOfData: DataSet, centerDate?: Date) => void,
+    fetchData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void,
 }
 
 export class Overzicht extends React.Component<IProps, IState> {
@@ -40,7 +40,7 @@ export class Overzicht extends React.Component<IProps, IState> {
     };
 
     public componentDidMount() {
-        this.props.fetchData(DataSet.AVERAGE_TEMPERATURE, this.props.selected.graphStartDateTime);
+        this.props.fetchData(getAllDatasets(), this.props.selected.graphStartDateTime, true);
     }
 
     public render() {
@@ -164,12 +164,12 @@ const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
     setStartDate: (date: Date) => {
         dispatch(actions.setCurrentDate());
         dispatch(actions.setStartDateForGraphs(date));
-        const missingData: null | IDateRange = getMissingDataRange(DataSet.AVERAGE_TEMPERATURE, date);
+        const missingData: null | IDateRange = getMissingDataRange(date);
         if (missingData) {
-            dispatch(actions.fetchDataInRange(DataSet.AVERAGE_TEMPERATURE, missingData.fromDate, missingData.toDate));
+            dispatch(actions.fetchDataInRange(getAllDatasets(), missingData.fromDate, missingData.toDate));
         }
     },
-    fetchData: (typeOfData: DataSet, centerDate?: Date) => dispatch(actions.fetchData(typeOfData, centerDate))
+    fetchData: (typeOfData: DataSet[], centerDate: Date, initial: boolean) => dispatch(actions.fetchData(typeOfData, centerDate, initial))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Overzicht);

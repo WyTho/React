@@ -33,10 +33,10 @@ export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
         if (hour.length === 1) hour = '0' + hour;
         const weekDay = weekNames[d.getDay()];
         const day = d.getDate().toString();
-        const monthNr = d.getMonth();
-        const month = monthNames[monthNr];
+        const monthIndex = d.getMonth();
+        const month = monthNames[monthIndex];
         const year = d.getFullYear().toString();
-        const dateAsString = day + '/' + (monthNr + 1) + '/' + year;
+        const dateAsString = day + '/' + (monthIndex + 1) + '/' + year;
         const time = hour + ':' + minute;
         const weekNr = getWeekNumber(d);
         return {
@@ -45,7 +45,8 @@ export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
             hour,
             weekDay,
             day,
-            monthNr: monthNr.toString(),
+            monthIndex: monthIndex.toString(),
+            monthNr: (monthIndex + 1).toString(),
             weekNr: weekNr.toString(),
             month,
             year,
@@ -60,6 +61,7 @@ export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
         .replace('{LAST_WEEK_DATE}', beautify(getEndOfTheWeek(date)).dateAsString)
         .replace('{LAST_MONTH_DATE}', beautify(getEndOfTheMonth(date)).dateAsString)
         .replace('{WEEK_NR}', formatted.weekNr)
+        .replace('{MONTH_INDEX}', formatted.monthIndex)
         .replace('{MONTH_NR}', formatted.monthNr)
         .replace('{DATE}', formatted.dateAsString)
         .replace('{TIME}', formatted.time)

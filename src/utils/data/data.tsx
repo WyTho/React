@@ -8,23 +8,29 @@ import {
 import {IData} from '../chart/chartTypes';
 
 export enum DataSet {
-    AVERAGE_TEMPERATURE = 'AVERAGE_TEMPERATURE'
+    AVERAGE_TEMPERATURE = 'AVERAGE_TEMPERATURE',
+    AVERAGE_WATER_USAGE = 'AVERAGE_WATER_USAGE',
 }
 
-// TODO: handle multiple DataSet[]
-export const getMissingDataRange = (type: DataSet, centerDate: Date): null | IDateRange => {
+export const getAllDatasets = (): DataSet[] => {
+    return Object.keys(DataSet) as DataSet[];
+};
+
+export const getMissingDataRange = (centerDate: Date): null | IDateRange => {
     const { fromDate, toDate } = getDateRangeOfTwoMonthsAround(centerDate);
     const neededFromTimestamp = epochTimestamp(fromDate);
     const neededToTimestamp = epochTimestamp(toDate);
 
-    const data: IData = store.getState().data[DataSet.AVERAGE_TEMPERATURE].data;
+    const datasets = store.getState().data.dataset;
+
+    // TODO: check all datasets if data is missing instead of just the first
+    const data: IData = datasets[getAllDatasets()[0]];
 
     if (data) {
         const firstTimestampInDataset = data.weeks[0].days[0].timestamp;
         const lastTimestampInDataset = data.weeks[data.weeks.length - 1].days[6].timestamp;
 
-        // TODO: change to subtract only 1 day if backend bug is fixed
-        const firstDate = subtractDays(new Date(firstTimestampInDataset * 1000), 8);
+        const firstDate = subtractDays(new Date(firstTimestampInDataset * 1000), 1);
 
         const lastDate = addDays(new Date(lastTimestampInDataset * 1000), 1);
 

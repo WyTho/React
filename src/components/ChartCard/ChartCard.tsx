@@ -9,7 +9,11 @@ interface IProps {
     title: string,
     elevation?: number,
     loading: boolean,
-    error: boolean,
+    error: {
+        status: boolean,
+        error: Error
+        message: string
+    },
     noDataForTimeSpanMessage?: string,
     chartData: ChartData,
     chartOptions: ChartOptions,
@@ -49,7 +53,7 @@ const chartCard = (props: IProps) => {
             </>
         );
     }
-    if (error) {
+    if (error.status) {
         content = (
             <div className='absoluteFlexContainer'>
                 <Typography variant='h4'>
