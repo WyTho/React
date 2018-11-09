@@ -1,6 +1,6 @@
 # IntelliJ Editor
 .idea/*
-react-dashboard.iml
+*.iml
 
 # NodeJS
 node_modules/*
