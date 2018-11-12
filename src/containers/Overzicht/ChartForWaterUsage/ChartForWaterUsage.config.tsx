@@ -1,3 +1,4 @@
+
 import {
     createAnnotationsForTimeSpan,
     createGradientForChart,
@@ -12,13 +13,16 @@ import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/char
 import {DataSet} from '../../../utils/data/data';
 
 const configureChart = (props: IChartForWaterUsageProps) => {
-    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, dataset } = props;
+    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openModal, dataset } = props;
 
     const chartColors = {
         light: theme.palette.type === 'light' ? '#6c74ff' : theme.palette.primary.light,
         main:  theme.palette.type === 'light' ? '#4C4CFF' : theme.palette.primary.main,
         dark:  theme.palette.type === 'light' ? '#3131a2' : theme.palette.primary.dark
     };
+
+    const chartTitle = 'Gemiddeld water verbruik';
+    const valueReFormatter = (value: string | number) => value + ' Liter';
 
     let data: ChartData<any> = null;
     let options: IChartOptions = null;
@@ -33,7 +37,7 @@ const configureChart = (props: IChartForWaterUsageProps) => {
             labels,
             datasets: [
                 {
-                    label: 'Gemiddelde temperatuur',
+                    label: chartTitle,
                     data: averageTemperatureData,
                     borderColor: chartColors.main,
                     fill: true,
@@ -42,9 +46,11 @@ const configureChart = (props: IChartForWaterUsageProps) => {
                         backgroundColor: chartColors.dark,
                         listeners: {
                             click: (context: any) => {
-                                console.log(
-                                    'label ', context.dataIndex, ' has been clicked!', context.dataset.data[context.dataIndex]
-                                );
+                                openModal(
+                                    chartTitle,
+                                    new Date(labels[context.dataIndex]),
+                                    valueReFormatter(context.dataset.data[context.dataIndex])
+                                )
                             }
                         }
                     }
@@ -84,12 +90,12 @@ const configureChart = (props: IChartForWaterUsageProps) => {
                             return beautifyDate(date, '{WEEK_DAY}, {DATE} om {TIME}');
                         },
                         label: (tooltipItem: any, dataAndLabels: any) =>
-                            dataAndLabels.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel + ' L'
+                            dataAndLabels.datasets[tooltipItem.datasetIndex].label + ': ' + valueReFormatter(tooltipItem.yLabel)
                     }
                 },
                 plugins: {
                     datalabels: {
-                        formatter: (value: number) => value + ' L',
+                        formatter: (value: number) => valueReFormatter(value),
                     }
                 }
             }

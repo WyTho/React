@@ -1,7 +1,7 @@
 import * as React from 'react';
 import ChartCard from '../../../components/ChartCard/ChartCard'
 import {connect} from 'react-redux';
-import {Button, Grid, Theme, Typography} from '@material-ui/core';
+import {Grid, Theme, Typography} from '@material-ui/core';
 import {getValuesForChart, getCurrentValue} from '../../../utils/chart/chart';
 import {beautifyDate} from '../../../utils/date/date';
 import {TimeSpan} from '../../../utils/date/dateTypes';
@@ -12,6 +12,7 @@ import {DataSet} from '../../../utils/data/data';
 export interface IChartForWaterUsageProps {
     theme: Theme
     fetchData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
+    openModal: (title: string, date: Date, value: number | string) => void
     selected: {
         timeSpan: TimeSpan
         graphStartDateTime: Date
@@ -33,7 +34,7 @@ export interface IChartForWaterUsageProps {
 
 class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
     public render() {
-        const { props, props: { theme, selected: { timeSpan, graphStartDateTime }, loading, error, dataset } } = this;
+        const { props, props: { selected: { timeSpan, graphStartDateTime }, loading, error, dataset } } = this;
 
         const chart = configureChart(props);
 

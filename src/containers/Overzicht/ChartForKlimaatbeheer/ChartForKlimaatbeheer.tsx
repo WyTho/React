@@ -12,11 +12,12 @@ import {DataSet} from '../../../utils/data/data';
 export interface IChartForKlimaatBeheerProps {
     theme: Theme
     fetchData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
+    openModal: (title: string, date: Date, value: number | string) => void
     selected: {
         timeSpan: TimeSpan
         graphStartDateTime: Date
         currentHourDateTime: Date
-    }
+    },
     loading: {
         initial: boolean
         partial: boolean

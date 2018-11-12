@@ -1,29 +1,28 @@
 import {
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    Avatar,
     Typography,
     Grid,
     Button,
     Icon,
     IconButton
 } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
 import * as React from 'react';
 import Modal from '../../components/Modal/Modal';
 import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-import {getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
+import {beautifyDate, getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {DataSet, getAllDatasets, getMissingDataRange} from '../../utils/data/data';
 import ChartForWaterUsage from './ChartForWaterUsage/ChartForWaterUsage';
 import Loading from '../../components/Loading/Loading';
 
 interface IState {
-    modalOpened: boolean
+    modalOpened: boolean,
+    modalData: {
+        title: string,
+        date: Date,
+        value: number | string
+    }
 }
 interface IProps {
     selected: {
@@ -47,7 +46,12 @@ interface IProps {
 
 export class Overzicht extends React.Component<IProps, IState> {
     public state = {
-        modalOpened: false
+        modalOpened: false,
+        modalData: {
+            title: null as string,
+            date: null as Date,
+            value: null as number | string
+        }
     };
 
     public componentDidMount() {
@@ -131,10 +135,10 @@ export class Overzicht extends React.Component<IProps, IState> {
                     alignItems='stretch'
                     spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer fetchData={props.fetchData}/>
+                        <ChartForKlimaatbeheer fetchData={props.fetchData} openModal={this.openModalHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <ChartForWaterUsage fetchData={props.fetchData}/>
+                        <ChartForWaterUsage fetchData={props.fetchData} openModal={this.openModalHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
 
@@ -143,43 +147,47 @@ export class Overzicht extends React.Component<IProps, IState> {
 
                     </Grid>
 
-                    <Grid className='Grid' item md={12} sm={12} xs={12}>
-                        <button style={{ height: '100%', width: '100%' }}
-                                onClick={this.openModalHandler}>
-                            Open Modal
-                        </button>
-                    </Grid>
-
                 </Grid>
                 {this.modalJSX()}
             </div>
         )
     }
 
-    private openModalHandler = () => {
-        this.setState({ modalOpened: true } )
+    private openModalHandler = (title: string, date: Date, value: number) => {
+        this.setState({
+            modalOpened: true,
+            modalData: {
+                title,
+                date,
+                value
+            }
+        })
     };
 
-    private modalJSX = () => (
-        <Modal title={'Hello planet!'}
-               opened={this.state.modalOpened}
-               onClosed={() => this.setState({ modalOpened: false } )}>
-            <div>
-                <List>
-
-                    <ListItem button>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <AddIcon />
-                            </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary='add nothing' />
-                    </ListItem>
-
-                </List>
-            </div>
-        </Modal>
-    );
+    private modalJSX = () => {
+        const { modalOpened, modalData: { title, date, value } } = this.state;
+        return (
+            <Modal title={title ? title : 'Loading...'}
+                   opened={modalOpened}
+                   onClosed={() => this.setState({
+                       modalOpened: false,
+                       modalData: {
+                           title: null as string,
+                           date: null as Date,
+                           value: null as number | string
+                       }
+                   } )}>
+                <div style={{ margin: 24 }}>
+                    <Typography variant='overline'>
+                        {date ? beautifyDate(date, `De ${title.toLowerCase()} op {WEEK_DAY} {DAY} {MONTH} {YEAR} om {TIME} is`) : null}
+                    </Typography>
+                    <Typography variant='h3'>
+                        {value ? value : null}
+                    </Typography>
+                </div>
+            </Modal>
+        );
+    }
 
 }
 const mapStateToProps = (state: any) => {

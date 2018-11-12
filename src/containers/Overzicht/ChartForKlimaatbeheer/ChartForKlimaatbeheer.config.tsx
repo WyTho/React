@@ -12,13 +12,16 @@ import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/char
 import {DataSet} from '../../../utils/data/data';
 
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
-    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, dataset } = props;
+    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openModal, dataset } = props;
 
     const chartColors = {
         light: theme.palette.type === 'light' ? theme.palette.primary.light : theme.palette.secondary.light,
         main:  theme.palette.type === 'light' ? theme.palette.primary.main  : theme.palette.secondary.main,
         dark:  theme.palette.type === 'light' ? theme.palette.primary.dark  : theme.palette.secondary.dark
     };
+
+    const chartTitle = 'Gemiddelde temperatuur';
+    const valueReFormatter = (value: string | number) => value + ' °C';
 
     let data: ChartData<any> = null;
     let options: IChartOptions = null;
@@ -33,7 +36,7 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
             labels,
             datasets: [
                 {
-                    label: 'Gemiddelde temperatuur',
+                    label: chartTitle,
                     data: averageTemperatureData,
                     borderColor: chartColors.main,
                     fill: true,
@@ -42,9 +45,11 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
                         backgroundColor: chartColors.dark,
                         listeners: {
                             click: (context: any) => {
-                                console.log(
-                                    'label ', context.dataIndex, ' has been clicked!', context.dataset.data[context.dataIndex]
-                                );
+                                openModal(
+                                    chartTitle,
+                                    new Date(labels[context.dataIndex]),
+                                    valueReFormatter(context.dataset.data[context.dataIndex])
+                                )
                             }
                         }
                     }
@@ -84,12 +89,12 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
                             return beautifyDate(date, '{WEEK_DAY}, {DATE} om {TIME}');
                         },
                         label: (tooltipItem: any, dataAndLabels: any) =>
-                            dataAndLabels.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel + ' °C'
+                            dataAndLabels.datasets[tooltipItem.datasetIndex].label + ': ' + valueReFormatter(tooltipItem.yLabel)
                     }
                 },
                 plugins: {
                     datalabels: {
-                        formatter: (value: number) => value + ' °C',
+                        formatter: (value: number) => valueReFormatter(value),
                     }
                 }
             }
