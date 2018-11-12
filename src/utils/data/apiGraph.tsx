@@ -3,9 +3,10 @@ import {
     addDays,
     epochTimestamp,
     getDateRangeOfTwoMonthsAround,
-    IDateRange, subtractDays
+    IDateRange,
+    subtractDays
 } from '../date/date';
-import {IData} from '../chart/chartTypes';
+import {IApiGraph} from './dataTypes';
 
 export enum DataSet {
     AVERAGE_TEMPERATURE = 'AVERAGE_TEMPERATURE',
@@ -24,7 +25,7 @@ export const getMissingDataRange = (centerDate: Date): null | IDateRange => {
     const datasets = store.getState().data.dataset;
 
     // TODO: check all datasets if data is missing instead of just the first
-    const data: IData = datasets[getAllDatasets()[0]];
+    const data: IApiGraph = datasets[getAllDatasets()[0]];
 
     if (data) {
         const firstTimestampInDataset = data.weeks[0].days[0].timestamp;

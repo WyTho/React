@@ -2,8 +2,8 @@ import Actions from '../../actionTypes';
 import {TimeSpan} from '../../../utils/date/dateTypes';
 import {getBeginningOfTheDay, getBeginningOfTheHour} from '../../../utils/date/date';
 import functions from './functions';
-import {DataSet, getAllDatasets} from '../../../utils/data/data';
-import {IData} from '../../../utils/chart/chartTypes';
+import {DataSet, getAllDatasets} from '../../../utils/data/apiGraph';
+import {IApiGraph, IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IDataReducerState {
     selected: {
@@ -11,9 +11,11 @@ export interface IDataReducerState {
         graphStartDateTime: Date
         currentHourDateTime: Date
     },
+    items: IApiItem[]
     loading: {
         initial: boolean
         partial: boolean
+        items: boolean
     },
     error: {
         status: boolean
@@ -21,20 +23,21 @@ export interface IDataReducerState {
         message: string
     },
     dataset: {
-        [index in DataSet]: IData
+        [index in DataSet]: IApiGraph
     }
 }
 
-console.log('here');
 const initialState: IDataReducerState = {
     selected: {
         timeSpan: TimeSpan.day,
         graphStartDateTime: getBeginningOfTheDay(new Date()),
         currentHourDateTime: getBeginningOfTheHour(new Date())
     },
+    items: null as IApiItem[],
     loading: {
         initial: false,
-        partial: false
+        partial: false,
+        items: false
     },
     error: {
         status: false,
@@ -42,19 +45,25 @@ const initialState: IDataReducerState = {
         message: null as string
     },
     dataset: getAllDatasets().reduce((o: any, dataset: DataSet) => {
-        o[dataset] = null as IData;
+        o[dataset] = null as IApiGraph;
         return o
     }, {})
 };
 
 const REDUCER = ( state: IDataReducerState = initialState, action: any ) => {
     switch ( action.type ) {
-        case Actions.SET_TIMESPAN_FOR_GRAPHS:   return functions.setTimespanForGraphs(state, action);
-        case Actions.SET_START_DATE_FOR_GRAPHS: return functions.setStartDateForGraphs(state, action);
-        case Actions.SET_CURRENT_DATE:          return functions.setCurrentDate(state);
-        case Actions.FETCH_DATA_START:          return functions.fetchDataStart(state, action);
-        case Actions.FETCH_DATA_SUCCESS:        return functions.fetchDataSuccess(state, action);
-        case Actions.FETCH_DATA_FAILED:         return functions.fetchDataFailed(state, action);
+        case Actions.SET_TIMESPAN_FOR_GRAPHS:      return functions.setTimespanForGraphs(state, action);
+        case Actions.SET_START_DATE_FOR_GRAPHS:    return functions.setStartDateForGraphs(state, action);
+        case Actions.SET_CURRENT_DATE:             return functions.setCurrentDate(state);
+
+        case Actions.FETCH_API_GRAPH_DATA_START:   return functions.fetchApiGraphDataStart(state, action);
+        case Actions.FETCH_API_GRAPH_DATA_SUCCESS: return functions.fetchApiGraphDataSuccess(state, action);
+
+        case Actions.FETCH_API_ITEMS_DATA_START:    return functions.fetchApiItemsDataStart(state);
+        case Actions.FETCH_API_ITEMS_DATA_SUCCESS:  return functions.fetchApiItemsDataSuccess(state, action);
+
+        case Actions.FETCH_API_DATA_FAILED:  return functions.fetchApiGraphDataFailed(state, action);
+
         default: return state;
     }
 };

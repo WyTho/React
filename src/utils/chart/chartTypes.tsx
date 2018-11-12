@@ -1,24 +1,4 @@
-/**
- * The data from the Python backend had the following format
- */
 import {ChartDataSets, ChartOptions, ChartTooltipOptions} from 'chart.js';
-
-export interface IData {
-    id: number
-    data_type: string
-    title: string
-    weeks: Array<{
-        days: Array<{
-            id: number
-            /**
-             * Timestamps from the backend are in ISO-format, this means milliseconds are excluded
-             * This is how you convert it to a Javascript date:    new Date(timestamp * 1000)
-             */
-            timestamp: number
-            values: any[]
-        }>
-    }>
-}
 
 /**
  * ChartJS

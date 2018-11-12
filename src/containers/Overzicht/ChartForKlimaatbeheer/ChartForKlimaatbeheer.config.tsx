@@ -9,7 +9,7 @@ import {IAnnotation, IChartData, IChartOptions} from '../../../utils/chart/chart
 import {IChartForKlimaatBeheerProps} from './ChartForKlimaatbeheer';
 import {ChartData} from 'react-chartjs-2';
 import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/chartOptionsPresets';
-import {DataSet} from '../../../utils/data/data';
+import {DataSet} from '../../../utils/data/apiGraph';
 
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openModal, dataset } = props;

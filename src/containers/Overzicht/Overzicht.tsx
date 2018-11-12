@@ -12,36 +12,38 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import {beautifyDate, getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
-import {DataSet, getAllDatasets, getMissingDataRange} from '../../utils/data/data';
+import {DataSet, getAllDatasets, getMissingDataRange} from '../../utils/data/apiGraph';
 import ChartForWaterUsage from './ChartForWaterUsage/ChartForWaterUsage';
 import Loading from '../../components/Loading/Loading';
+import StatusForLights from './StatusForLights/StatusForLights';
 
 interface IState {
-    modalOpened: boolean,
+    modalOpened: boolean
     modalData: {
-        title: string,
-        date: Date,
+        title: string
+        date: Date
         value: number | string
     }
 }
 interface IProps {
     selected: {
-        timeSpan: TimeSpan,
+        timeSpan: TimeSpan
         graphStartDateTime: Date
         currentDateTime: Date
     },
     loading: {
-        initial: boolean,
+        initial: boolean
         partial: boolean
     },
     error: {
-        status: boolean,
+        status: boolean
         error: Error
         message: string
     },
-    setTimeSpan: (timeSpan: TimeSpan) => void,
-    setStartDate: (date: Date) => void,
-    fetchData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void,
+    setTimeSpan: (timeSpan: TimeSpan) => void
+    setStartDate: (date: Date) => void
+    fetchApiGraphData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
+    fetchApiItemsData: () => void
 }
 
 export class Overzicht extends React.Component<IProps, IState> {
@@ -55,7 +57,8 @@ export class Overzicht extends React.Component<IProps, IState> {
     };
 
     public componentDidMount() {
-        this.props.fetchData(getAllDatasets(), this.props.selected.graphStartDateTime, true);
+        this.props.fetchApiGraphData(getAllDatasets(), this.props.selected.graphStartDateTime, true);
+        this.props.fetchApiItemsData()
     }
 
     public render() {
@@ -135,16 +138,19 @@ export class Overzicht extends React.Component<IProps, IState> {
                     alignItems='stretch'
                     spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer fetchData={props.fetchData} openModal={this.openModalHandler} />
+                        <ChartForKlimaatbeheer fetchApiGraphData={props.fetchApiGraphData} openModal={this.openModalHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <ChartForWaterUsage fetchData={props.fetchData} openModal={this.openModalHandler} />
+                        <ChartForWaterUsage fetchApiGraphData={props.fetchApiGraphData} openModal={this.openModalHandler} />
                     </Grid>
-                    <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-
+                    <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
+                        <StatusForLights fetchApiItemsData={props.fetchApiItemsData} openModal={this.openModalHandler} />
                     </Grid>
-                    <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-
+                    <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
+3
+                    </Grid>
+                    <Grid className={'GridItem'} item md={6} sm={12} xs={12}>
+6
                     </Grid>
 
                 </Grid>
@@ -204,7 +210,9 @@ const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
             dispatch(actions.fetchDataInRange(getAllDatasets(), missingData.fromDate, missingData.toDate));
         }
     },
-    fetchData: (typeOfData: DataSet[], centerDate: Date, initial: boolean) => dispatch(actions.fetchData(typeOfData, centerDate, initial))
+    fetchApiGraphData: (typeOfData: DataSet[], centerDate: Date, initial: boolean) =>
+        dispatch(actions.fetchApiGraphData(typeOfData, centerDate, initial)),
+    fetchApiItemsData: () => dispatch(actions.fetchApiItemsData())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Overzicht);

@@ -1,6 +1,5 @@
 import {TimeSpan} from '../../../utils/date/dateTypes';
 import {
-    beautifyDate,
     cleanMilliSecondsAndSeconds,
     getBeginningOfTheDay,
     getBeginningOfTheMonth,
@@ -8,9 +7,9 @@ import {
 } from '../../../utils/date/date';
 import {updateObject} from '../../utilities';
 import {IDataReducerState} from './index';
-import {DataSet} from '../../../utils/data/data';
+import {DataSet} from '../../../utils/data/apiGraph';
 import merge from 'deepmerge';
-import {IData} from '../../../utils/chart/chartTypes';
+import {IApiGraph} from '../../../utils/data/dataTypes';
 
 export default {
     setTimespanForGraphs: (state: IDataReducerState, action: any) => {
@@ -44,7 +43,7 @@ export default {
         });
     },
 
-    fetchDataStart: (state: IDataReducerState, action: any) => {
+    fetchApiGraphDataStart: (state: IDataReducerState, action: any) => {
         const initialLoad: DataSet = action.payload.initialLoad;
 
         return updateObject(state, {
@@ -58,7 +57,7 @@ export default {
             })
         });
     },
-    fetchDataSuccess: (state: IDataReducerState, action: any) => {
+    fetchApiGraphDataSuccess: (state: IDataReducerState, action: any) => {
         const typesOfData: DataSet[] = action.payload.typesOfData;
 
         const datasets: any = {};
@@ -67,36 +66,23 @@ export default {
             const existingData = state.dataset[typeOfData];
             const newData = action.payload.data[index].data;
 
-            let data: IData;
+            let data: IApiGraph;
             if (existingData) {
                 let mergeOrder: any[];
 
                 // TODO: add extra check for finding duplicates when getting new data? (this shouldn't happen, but just to be sure)
-
-                if (newData.weeks[0].days[0].timestamp > existingData.weeks[existingData.weeks.length - 1].days[6].timestamp) {
-                    console.log('new data must come after existing data');
+                const existingDataMustComeAfterNewData =
+                    newData.weeks[0].days[0].timestamp > existingData.weeks[existingData.weeks.length - 1].days[6].timestamp;
+                if (existingDataMustComeAfterNewData) {
                     mergeOrder = [existingData, newData]
                 } else {
-                    console.log('existing data must come after new data');
                     mergeOrder = [newData, existingData]
                 }
-                data = merge.all(mergeOrder) as IData;
+                data = merge.all(mergeOrder) as IApiGraph;
             } else {
                 data = newData
             }
             datasets[typeOfData] = data;
-
-            /* DEBUG */
-            console.log(
-                'Amount of weeks in Redux store for',
-                typeOfData,
-                data.weeks.length,
-                data.weeks.map((week: any) =>
-                    beautifyDate(new Date(week.days[0].timestamp * 1000), '{DAY}/{MONTH_NR}') +
-                    ' - ' +
-                    beautifyDate(new Date(week.days[6].timestamp * 1000), '{DAY}/{MONTH_NR}')
-                ));
-            /* /DEBUG */
         });
 
         return updateObject(state, {
@@ -109,11 +95,25 @@ export default {
 
     },
 
-    fetchDataFailed: (state: IDataReducerState, action: any) => {
+    fetchApiItemsDataStart: (state: IDataReducerState) => {
+        return updateObject(state, {
+            loading: updateObject(state.loading, { items: true })
+        });
+    },
+
+    fetchApiItemsDataSuccess: (state: IDataReducerState, action: any) => {
+        return updateObject(state, {
+            loading: updateObject(state.loading, { items: false }),
+            items: action.payload.data.data.items
+        });
+    },
+
+    fetchApiGraphDataFailed: (state: IDataReducerState, action: any) => {
         return updateObject(state, {
             loading: updateObject(state.loading, {
                 initial: false,
-                partial: false
+                partial: false,
+                items: false
             }),
             error: updateObject(state.error, {
                 status: true,
@@ -122,4 +122,5 @@ export default {
             })
         });
     }
+
 };

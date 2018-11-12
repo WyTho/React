@@ -2,27 +2,13 @@
 // This file contains all styles related to the ChartCard component.
 // -----------------------------------------------------------------------------
 $spacing: 20px;
-.ChartCard {
+.InformationCard {
   position: relative;
   overflow: hidden;
   div.titleContainer {
     display: flex;
     justify-content: space-between;
     padding: $spacing $spacing 0;
-  }
-  div.absoluteFlexContainer {
-    padding: $spacing;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    > * {
-      text-align: center;
-    }
   }
   div.content {
     padding: $spacing;
@@ -32,19 +18,5 @@ $spacing: 20px;
   }
   .tinyText {
     font-size: 60%;
-  }
-  div.chartContainer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  .verticalDivider {
-    margin: 0 12px;
-    border-left: 1px solid #ccc;
-  }
-  .horizontalSpacing {
-    height: 100%;
-    width: 16px;
   }
 }

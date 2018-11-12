@@ -22,7 +22,9 @@
   'layout/navbar';
 
 // 5. Components
-@import 'components/chartCard';
+@import
+  'components/chartCard',
+  'components/informationCard';
 
 // 6. Page-specific styles
 @import

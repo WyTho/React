@@ -5,6 +5,7 @@ export {
     setTimeSpanForGraphs,
     setStartDateForGraphs,
     setCurrentDate,
-    fetchData,
+    fetchApiGraphData,
+    fetchApiItemsData,
     fetchDataInRange
 } from './data';

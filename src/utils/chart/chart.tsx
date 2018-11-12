@@ -4,7 +4,8 @@ import {
     getBeginningOfTheMonth,
     getBeginningOfTheWeek, getEndOfTheMonth
 } from '../date/date';
-import {IAnnotation, IData} from './chartTypes';
+import {IApiGraph} from '../data/dataTypes';
+import {IAnnotation} from './chartTypes';
 import {TimeSpan} from '../date/dateTypes';
 import {hexToRgba, isNumber} from '../other';
 import {Theme} from '@material-ui/core';
@@ -47,7 +48,7 @@ export const getLabelsForChart = (timeSpan: TimeSpan, startDate: Date): string[]
     return labels
 };
 
-export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: IData, typeofValues: TypeOf = TypeOf.NUMBER) => {
+export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: IApiGraph, typeofValues: TypeOf = TypeOf.NUMBER) => {
     const values: any[] = [];
 
     let checkIfNeedsToBePushed: (day: any) => boolean;

@@ -5,13 +5,13 @@ import {Button, Grid, Theme, Typography} from '@material-ui/core';
 import {getValuesForChart, getCurrentValue} from '../../../utils/chart/chart';
 import {beautifyDate} from '../../../utils/date/date';
 import {TimeSpan} from '../../../utils/date/dateTypes';
-import {IData} from '../../../utils/chart/chartTypes';
+import {IApiGraph} from '../../../utils/data/dataTypes';
 import configureChart from './ChartForKlimaatbeheer.config';
-import {DataSet} from '../../../utils/data/data';
+import {DataSet} from '../../../utils/data/apiGraph';
 
 export interface IChartForKlimaatBeheerProps {
     theme: Theme
-    fetchData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
+    fetchApiGraphData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
     openModal: (title: string, date: Date, value: number | string) => void
     selected: {
         timeSpan: TimeSpan
@@ -28,7 +28,7 @@ export interface IChartForKlimaatBeheerProps {
         message: string
     }
     dataset: {
-        [index in DataSet]: IData
+        [index in DataSet]: IApiGraph
     }
 }
 
@@ -170,7 +170,7 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
                        noDataForTimeSpanMessage={noDataForTimeSpanMessage}
                        chartData={chart.data || {}}
                        chartOptions={chart.options || {}}
-                       onFetchData={() => props.fetchData([DataSet.AVERAGE_TEMPERATURE], graphStartDateTime, true)}>
+                       onFetchData={() => props.fetchApiGraphData([DataSet.AVERAGE_TEMPERATURE], graphStartDateTime, true)}>
                 {content}
             </ChartCard>
         );
