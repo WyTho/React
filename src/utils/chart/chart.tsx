@@ -110,8 +110,9 @@ export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: IAp
 };
 
 export const getCurrentValue = (data: any): number => {
-    const now = getBeginningOfTheHour(new Date());
+    if (!data) return null;
 
+    const now = getBeginningOfTheHour(new Date());
     for (const week of data.weeks) {
         for (const day of week.days) {
             if (day.timestamp * 1000 === getBeginningOfTheDay(now).getTime()) {
