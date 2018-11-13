@@ -6,7 +6,7 @@ $spacing: 20px;
 $default-dashboard-card-height: 150px;
 
 .DashboardCard {
-  padding-bottom: $default-dashboard-card-height;
+  min-height: $default-dashboard-card-height;
   height: 100%;
   position: relative;
   overflow: hidden;
