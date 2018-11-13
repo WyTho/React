@@ -22,11 +22,7 @@ export interface IChartForKlimaatBeheerProps {
         initial: boolean
         partial: boolean
     }
-    error: {
-        status: boolean
-        error: Error
-        message: string
-    }
+    error: boolean
     dataset: {
         [index in DataSet]: IApiGraph
     }
@@ -181,7 +177,7 @@ const mapStateToProps = (state: any) => {
     const { theme } = state.theme;
     const { selected, loading, error, dataset } = state.data;
 
-    return { theme, selected, loading, error, dataset }
+    return { theme, selected, loading, error: error.status, dataset }
 };
 
 export default connect(mapStateToProps)(ChartForKlimaatbeheer);

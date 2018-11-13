@@ -1,38 +1,10 @@
 // -----------------------------------------------------------------------------
 // This file contains all styles related to the ChartCard component.
 // -----------------------------------------------------------------------------
-$spacing: 20px;
+
+$chart-height: 150px;
 .ChartCard {
-  position: relative;
-  overflow: hidden;
-  div.titleContainer {
-    display: flex;
-    justify-content: space-between;
-    padding: $spacing $spacing 0;
-  }
-  div.absoluteFlexContainer {
-    padding: $spacing;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    > * {
-      text-align: center;
-    }
-  }
-  div.content {
-    padding: $spacing;
-  }
-  .smallerText {
-    font-size: 70%;
-  }
-  .tinyText {
-    font-size: 60%;
-  }
+  padding-bottom: $chart-height;
   div.chartContainer {
     position: absolute;
     bottom: 0;

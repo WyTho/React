@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Grid, Icon, Paper, Theme, Typography} from '@material-ui/core';
+import {Grid, Icon, Theme, Typography} from '@material-ui/core';
 import {IApiItem} from '../../../utils/data/dataTypes';
+import InformationCard from '../../../components/InformationCard/InformationCard';
 
 export interface IStatusForLightsProps {
     theme: Theme
@@ -14,11 +15,8 @@ export interface IStatusForLightsProps {
 class StatusForLights extends React.Component<IStatusForLightsProps, {}> {
     public render() {
         const { props, props: { items, loading } } = this;
-        const title = 'Lampen in huis';
 
-        let content = <span>Loading...</span>;
-
-        if (!loading && !items) content = <span>Error... <button onClick={props.fetchApiItemsData}>Try Again</button></span>;
+        let content = null;
 
         if (!loading && items) {
 
@@ -63,16 +61,12 @@ class StatusForLights extends React.Component<IStatusForLightsProps, {}> {
         }
 
         return (
-            <Paper className='card InformationCard' elevation={1}>
-                <div className={'titleContainer'}>
-                    <Typography variant='h6'>
-                        { title }
-                    </Typography>
-                </div>
-                <div className={'content'}>
-                    { content }
-                </div>
-            </Paper>
+            <InformationCard title={'Lampen in huis'}
+                             loading={loading}
+                             error={!loading && !items}
+                             onFetchData={props.fetchApiItemsData} >
+                { content }
+            </InformationCard>
         );
 
     }

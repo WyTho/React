@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { Button, Paper, Typography } from '@material-ui/core';
-import { ChartData, ChartOptions } from 'chart.js';
-import { Line } from 'react-chartjs-2';
 import Loading from '../../components/Loading/Loading'
 
 interface IProps {
@@ -10,9 +8,6 @@ interface IProps {
     elevation?: number,
     loading: boolean,
     error: boolean,
-    noDataForTimeSpanMessage?: string,
-    chartData: ChartData,
-    chartOptions: ChartOptions,
     onFetchData: () => void
 }
 const defaults = {
@@ -20,17 +15,8 @@ const defaults = {
     shouldRedraw: false
 };
 
-const chartCard = (props: IProps) => {
-    const {
-        children,
-        title,
-        elevation,
-        loading,
-        error,
-        chartData,
-        chartOptions,
-        noDataForTimeSpanMessage
-    } = props;
+const informationCard = (props: IProps) => {
+    const { children, title, elevation, loading, error } = props;
 
     let content = (
         <div className='absoluteFlexContainer'>
@@ -42,9 +28,6 @@ const chartCard = (props: IProps) => {
             <>
                 <div className={'content'}>
                     {children}
-                </div>
-                <div className={'chartContainer'}>
-                    <Line data={chartData} options={chartOptions}/>
                 </div>
             </>
         );
@@ -61,17 +44,8 @@ const chartCard = (props: IProps) => {
             </div>
         );
     }
-    if (noDataForTimeSpanMessage) {
-        content = (
-            <div className='absoluteFlexContainer'>
-                <Typography variant='overline'>
-                    { noDataForTimeSpanMessage }
-                </Typography>
-            </div>
-        );
-    }
     return (
-        <Paper className='card DashboardCard ChartCard' elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}>
+        <Paper className='card DashboardCard' elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}>
             <div className={'titleContainer'}>
                 <Typography variant='h6'>
                     { title }
@@ -82,4 +56,4 @@ const chartCard = (props: IProps) => {
     )
 };
 
-export default chartCard;
+export default informationCard;
