@@ -32,6 +32,8 @@ class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
     public render() {
         const { props, props: { selected: { timeSpan, graphStartDateTime }, loading, error, dataset } } = this;
 
+        const title = 'Water verbruik';
+
         const chart = configureChart(props);
 
         let content = null;
@@ -65,10 +67,10 @@ class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
         }
 
         return (
-            <ChartCard title={'Water verbruik'}
+            <ChartCard title={title}
                        loading={loading.initial}
-                       error={error}
-                       noDataForTimeSpanMessage={noDataForTimeSpanMessage}
+                       errorMessage={error ? `Het laden van ${title.toLowerCase()} is mislukt!` : null}
+                       noDataMessage={noDataForTimeSpanMessage}
                        chartData={chart.data || {}}
                        chartOptions={chart.options || {}}
                        onFetchData={() => props.fetchApiGraphData(graphStartDateTime)}>

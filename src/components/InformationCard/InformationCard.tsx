@@ -7,7 +7,8 @@ interface IProps {
     title: string,
     elevation?: number,
     loading: boolean,
-    error: boolean,
+    errorMessage?: string
+    noDataMessage?: string
     onFetchData: () => void
 }
 const defaults = {
@@ -16,7 +17,7 @@ const defaults = {
 };
 
 const informationCard = (props: IProps) => {
-    const { children, title, elevation, loading, error } = props;
+    const { children, title, elevation, loading, errorMessage, noDataMessage } = props;
 
     let content = (
         <div className='absoluteFlexContainer'>
@@ -32,11 +33,20 @@ const informationCard = (props: IProps) => {
             </>
         );
     }
-    if (error) {
+    if (noDataMessage) {
         content = (
             <div className='absoluteFlexContainer'>
                 <Typography variant='overline'>
-                    Het laden van {title} is mislukt!
+                    { noDataMessage }
+                </Typography>
+            </div>
+        );
+    }
+    if (errorMessage) {
+        content = (
+            <div className='absoluteFlexContainer'>
+                <Typography variant='overline'>
+                    {errorMessage}
                 </Typography>
                 <Button color='primary' onClick={props.onFetchData}>
                     Probeer het opnieuw

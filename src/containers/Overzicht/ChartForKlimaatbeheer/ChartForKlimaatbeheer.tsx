@@ -32,6 +32,8 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
     public render() {
         const { props, props: { theme, selected: { timeSpan, graphStartDateTime }, loading, error, dataset } } = this;
 
+        const title = 'Klimaatbeheer';
+
         const chart = configureChart(props);
 
         let content = null;
@@ -160,10 +162,10 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
         }
 
         return (
-            <ChartCard title={'Klimaatbeheer'}
+            <ChartCard title={title}
                        loading={loading.initial}
-                       error={error}
-                       noDataForTimeSpanMessage={noDataForTimeSpanMessage}
+                       errorMessage={error ? `Het laden van ${title.toLowerCase()} is mislukt!` : null}
+                       noDataMessage={noDataForTimeSpanMessage}
                        chartData={chart.data || {}}
                        chartOptions={chart.options || {}}
                        onFetchData={() => props.fetchApiGraphData(graphStartDateTime)}>

@@ -16,6 +16,8 @@ class StatusForLights extends React.Component<IStatusForLightsProps, {}> {
     public render() {
         const { props, props: { items, loading } } = this;
 
+        const title = 'Lampen in huis';
+
         let content = null;
 
         if (!loading && items) {
@@ -61,9 +63,9 @@ class StatusForLights extends React.Component<IStatusForLightsProps, {}> {
         }
 
         return (
-            <InformationCard title={'Lampen in huis'}
+            <InformationCard title={title}
                              loading={loading}
-                             error={!loading && !items}
+                             errorMessage={!loading && !items ?  `Het laden van ${title.toLowerCase()} is mislukt!` : null}
                              onFetchData={props.fetchApiItemsData} >
                 { content }
             </InformationCard>
