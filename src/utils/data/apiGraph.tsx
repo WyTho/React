@@ -14,7 +14,7 @@ export enum DataSet {
 }
 
 export const getAllDatasets = (): DataSet[] => {
-    return Object.keys(DataSet) as DataSet[];
+    return Object.keys(DataSet).map(k => DataSet[k as any]) as DataSet[];
 };
 
 export const getMissingDataRange = (centerDate: Date): null | IDateRange => {

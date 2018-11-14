@@ -11,7 +11,7 @@ import {DataSet} from '../../../utils/data/apiGraph';
 
 export interface IChartForKlimaatBeheerProps {
     theme: Theme
-    fetchApiGraphData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
+    fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
     openModal: (title: string, date: Date, value: number | string) => void
     selected: {
         timeSpan: TimeSpan
@@ -166,7 +166,7 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
                        noDataForTimeSpanMessage={noDataForTimeSpanMessage}
                        chartData={chart.data || {}}
                        chartOptions={chart.options || {}}
-                       onFetchData={() => props.fetchApiGraphData([DataSet.AVERAGE_TEMPERATURE], graphStartDateTime, true)}>
+                       onFetchData={() => props.fetchApiGraphData(graphStartDateTime)}>
                 {content}
             </ChartCard>
         );

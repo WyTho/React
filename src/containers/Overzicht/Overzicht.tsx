@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import {beautifyDate, getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
-import {DataSet, getAllDatasets, getMissingDataRange} from '../../utils/data/apiGraph';
+import {DataSet, getMissingDataRange} from '../../utils/data/apiGraph';
 import ChartForWaterUsage from './ChartForWaterUsage/ChartForWaterUsage';
 import Loading from '../../components/Loading/Loading';
 import StatusForLights from './StatusForLights/StatusForLights';
@@ -42,7 +42,7 @@ interface IProps {
     },
     setTimeSpan: (timeSpan: TimeSpan) => void
     setStartDate: (date: Date) => void
-    fetchApiGraphData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
+    fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
     fetchApiItemsData: () => void
 }
 
@@ -57,8 +57,10 @@ export class Overzicht extends React.Component<IProps, IState> {
     };
 
     public componentDidMount() {
-        this.props.fetchApiGraphData(getAllDatasets(), this.props.selected.graphStartDateTime, true);
-        this.props.fetchApiItemsData()
+        if (this.props.loading.initial) {
+            this.props.fetchApiGraphData(this.props.selected.graphStartDateTime);
+            this.props.fetchApiItemsData()
+        }
     }
 
     public render() {
@@ -207,11 +209,11 @@ const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
         dispatch(actions.setStartDateForGraphs(date));
         const missingData: null | IDateRange = getMissingDataRange(date);
         if (missingData) {
-            dispatch(actions.fetchDataInRange(getAllDatasets(), missingData.fromDate, missingData.toDate));
+            dispatch(actions.fetchDataInRange(missingData.fromDate, missingData.toDate));
         }
     },
-    fetchApiGraphData: (typeOfData: DataSet[], centerDate: Date, initial: boolean) =>
-        dispatch(actions.fetchApiGraphData(typeOfData, centerDate, initial)),
+    fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) =>
+        dispatch(actions.fetchApiGraphData(centerDate, typeOfData)),
     fetchApiItemsData: () => dispatch(actions.fetchApiItemsData())
 });
 

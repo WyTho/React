@@ -43,13 +43,11 @@ export default {
         });
     },
 
-    fetchApiGraphDataStart: (state: IDataReducerState, action: any) => {
-        const initialLoad: DataSet = action.payload.initialLoad;
+    fetchApiGraphDataStart: (state: IDataReducerState) => {
 
         return updateObject(state, {
             loading: updateObject(state.loading, {
-                initial: initialLoad,
-                partial: !initialLoad,
+                partial: true,
             }),
             error: updateObject(state.error, {
                 status: false,
@@ -71,6 +69,7 @@ export default {
                 let mergeOrder: any[];
 
                 // TODO: add extra check for finding duplicates when getting new data? (this shouldn't happen, but just to be sure)
+
                 const existingDataMustComeAfterNewData =
                     newData.weeks[0].days[0].timestamp > existingData.weeks[existingData.weeks.length - 1].days[6].timestamp;
                 if (existingDataMustComeAfterNewData) {

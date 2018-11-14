@@ -35,7 +35,7 @@ const initialState: IDataReducerState = {
     },
     items: null as IApiItem[],
     loading: {
-        initial: false,
+        initial: true,
         partial: false,
         items: false
     },
@@ -56,13 +56,13 @@ const REDUCER = ( state: IDataReducerState = initialState, action: any ) => {
         case Actions.SET_START_DATE_FOR_GRAPHS:    return functions.setStartDateForGraphs(state, action);
         case Actions.SET_CURRENT_DATE:             return functions.setCurrentDate(state);
 
-        case Actions.FETCH_API_GRAPH_DATA_START:   return functions.fetchApiGraphDataStart(state, action);
+        case Actions.FETCH_API_GRAPH_DATA_START:   return functions.fetchApiGraphDataStart(state);
         case Actions.FETCH_API_GRAPH_DATA_SUCCESS: return functions.fetchApiGraphDataSuccess(state, action);
 
-        case Actions.FETCH_API_ITEMS_DATA_START:    return functions.fetchApiItemsDataStart(state);
-        case Actions.FETCH_API_ITEMS_DATA_SUCCESS:  return functions.fetchApiItemsDataSuccess(state, action);
+        case Actions.FETCH_API_ITEMS_DATA_START:   return functions.fetchApiItemsDataStart(state);
+        case Actions.FETCH_API_ITEMS_DATA_SUCCESS: return functions.fetchApiItemsDataSuccess(state, action);
 
-        case Actions.FETCH_API_DATA_FAILED:  return functions.fetchApiGraphDataFailed(state, action);
+        case Actions.FETCH_API_DATA_FAILED:        return functions.fetchApiGraphDataFailed(state, action);
 
         default: return state;
     }

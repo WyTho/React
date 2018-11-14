@@ -2,7 +2,7 @@ import Actions from '../actionTypes';
 import axios from '../../config.axios';
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {epochTimestamp, getDateRangeOfTwoMonthsAround} from '../../utils/date/date';
-import {DataSet} from '../../utils/data/apiGraph';
+import {DataSet, getAllDatasets} from '../../utils/data/apiGraph';
 
 export const setTimeSpanForGraphs = (timeSpan: TimeSpan) => ({
     type: Actions.SET_TIMESPAN_FOR_GRAPHS,
@@ -17,9 +17,8 @@ export const setCurrentDate = () => ({
     type: Actions.SET_CURRENT_DATE
 });
 
-export const fetchApiGraphDataStart = (initialLoad: boolean) => ({
-    type: Actions.FETCH_API_GRAPH_DATA_START,
-    payload: { initialLoad }
+export const fetchApiGraphDataStart = () => ({
+    type: Actions.FETCH_API_GRAPH_DATA_START
 });
 
 export const fetchApiGraphDataSuccess = (typesOfData: DataSet[], data: any[]) => ({
@@ -41,10 +40,10 @@ export const fetchApiDataFailed = (error: any) => ({
     payload: { error }
 });
 
-export const fetchApiGraphData = (typesOfData: DataSet[], centerDate: Date, initialLoad: boolean) => {
+export const fetchApiGraphData = (centerDate: Date, typesOfData?: DataSet[]) => {
     const fromDate = getDateRangeOfTwoMonthsAround(centerDate).fromDate;
     const toDate = getDateRangeOfTwoMonthsAround(centerDate).toDate;
-    return fetchApiGraphDataDispatcher(typesOfData, epochTimestamp(fromDate), epochTimestamp(toDate), initialLoad)
+    return fetchApiGraphDataDispatcher(epochTimestamp(fromDate), epochTimestamp(toDate), typesOfData)
 };
 export const fetchApiItemsData = () => {
     const url: string = '/api/item';
@@ -60,15 +59,14 @@ export const fetchApiItemsData = () => {
     };
 };
 
-export const fetchDataInRange = (typesOfData: DataSet[], startDate: Date, endDate: Date) => {
-    return fetchApiGraphDataDispatcher(typesOfData, epochTimestamp(startDate), epochTimestamp(endDate), false)
+export const fetchDataInRange = (startDate: Date, endDate: Date, typesOfData?: DataSet[]) => {
+    return fetchApiGraphDataDispatcher(epochTimestamp(startDate), epochTimestamp(endDate), typesOfData)
 };
 
 const fetchApiGraphDataDispatcher = (
-    typesOfData: DataSet[],
     startingDateEpochTimestamp: string | number,
     endingDateEpochTimestamp: string | number,
-    initialLoad: boolean,
+    typesOfData: DataSet[] = getAllDatasets(),
 ) => {
     let urls: string[] = typesOfData.map(typeOfData => '/api/graph/' + typeOfData);
     if (startingDateEpochTimestamp && endingDateEpochTimestamp) {
@@ -81,7 +79,7 @@ const fetchApiGraphDataDispatcher = (
     urls.forEach(url => console.log('[GET]', url));
 
     return (dispatch: any) => {
-        dispatch(fetchApiGraphDataStart(initialLoad));
+        dispatch(fetchApiGraphDataStart());
         const promises = urls.map(url => axios.get(url));
         Promise.all(promises)
             .then((res: any) => dispatch(fetchApiGraphDataSuccess(typesOfData, res)))

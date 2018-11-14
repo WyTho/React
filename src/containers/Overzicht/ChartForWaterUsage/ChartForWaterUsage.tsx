@@ -11,7 +11,7 @@ import {DataSet} from '../../../utils/data/apiGraph';
 
 export interface IChartForWaterUsageProps {
     theme: Theme
-    fetchApiGraphData: (typeOfData: DataSet[], centerDate: Date, initialLoad: boolean) => void
+    fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
     openModal: (title: string, date: Date, value: number | string) => void
     selected: {
         timeSpan: TimeSpan
@@ -40,10 +40,10 @@ class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
         if (dataset[DataSet.AVERAGE_TEMPERATURE]) {
             const currentAverageWaterUsage = getCurrentValue(dataset[DataSet.AVERAGE_WATER_USAGE]);
 
-            const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_TEMPERATURE]);
+            const averageWaterUsageData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_WATER_USAGE]);
 
             const allValues = [
-                ...averageTemperatureData
+                ...averageWaterUsageData
             ];
 
             if (!allValues.length) {
@@ -71,7 +71,7 @@ class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
                        noDataForTimeSpanMessage={noDataForTimeSpanMessage}
                        chartData={chart.data || {}}
                        chartOptions={chart.options || {}}
-                       onFetchData={() => props.fetchApiGraphData([DataSet.AVERAGE_TEMPERATURE], graphStartDateTime, true)}>
+                       onFetchData={() => props.fetchApiGraphData(graphStartDateTime)}>
                 {content}
             </ChartCard>
         );
