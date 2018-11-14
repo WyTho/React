@@ -61,23 +61,34 @@ export default {
         const datasets: any = {};
 
         typesOfData.forEach((typeOfData, index: number) => {
-            const existingData = state.dataset[typeOfData];
-            const newData = action.payload.data[index].data;
+            const existingData: IApiGraph = state.dataset[typeOfData];
+            const newData: IApiGraph = action.payload.data[index].data;
 
             let data: IApiGraph;
             if (existingData) {
                 let mergeOrder: any[];
 
-                // TODO: add extra check for finding duplicates when getting new data? (this shouldn't happen, but just to be sure)
+                const existingDataIds = existingData.weeks.reduce((arr, week) => [...arr, ...week.days.map(day => day.id)], []);
+                const newDataIds = newData.weeks.reduce((arr, week) => [...arr, ...week.days.map(day => day.id)], []);
+                const duplicateIds = existingDataIds.filter(id => newDataIds.indexOf(id) !== -1);
 
-                const existingDataMustComeAfterNewData =
-                    newData.weeks[0].days[0].timestamp > existingData.weeks[existingData.weeks.length - 1].days[6].timestamp;
-                if (existingDataMustComeAfterNewData) {
-                    mergeOrder = [existingData, newData]
-                } else {
-                    mergeOrder = [newData, existingData]
+                // Filter out the duplicate data
+                if (duplicateIds) {
+                    newData.weeks = newData.weeks.filter(week => duplicateIds.indexOf(week.days[0].id) === -1)
                 }
-                data = merge.all(mergeOrder) as IApiGraph;
+
+                if (newData.weeks.length) {
+                    const existingDataMustComeAfterNewData =
+                        newData.weeks[0].days[0].timestamp > existingData.weeks[existingData.weeks.length - 1].days[6].timestamp;
+                    if (existingDataMustComeAfterNewData) {
+                        mergeOrder = [existingData, newData]
+                    } else {
+                        mergeOrder = [newData, existingData]
+                    }
+                    data = merge.all(mergeOrder) as IApiGraph;
+                } else {
+                    data = existingData
+                }
             } else {
                 data = newData
             }
