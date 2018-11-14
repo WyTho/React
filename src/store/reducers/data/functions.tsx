@@ -110,7 +110,6 @@ export default {
     fetchApiGraphDataFailed: (state: IDataReducerState, action: any) => {
         return updateObject(state, {
             loading: updateObject(state.loading, {
-                initial: false,
                 partial: false,
                 items: false
             }),

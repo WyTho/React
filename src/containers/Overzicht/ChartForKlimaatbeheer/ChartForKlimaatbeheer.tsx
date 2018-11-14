@@ -36,6 +36,11 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
 
         const chart = configureChart(props);
 
+        console.log(error);
+        console.log(loading);
+        console.log(chart);
+        console.log();
+
         let content = null;
         let noDataForTimeSpanMessage = null as string;
 
