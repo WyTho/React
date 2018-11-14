@@ -3,7 +3,7 @@ import {
     createAnnotationsForTimeSpan,
     createGradientForChart,
     getLabelsForChart,
-    getValuesForChart
+    getValuesForChart, getYAxisHeight
 } from '../../../utils/chart/chart';
 import {beautifyDate} from '../../../utils/date/date';
 import {IAnnotation, IChartData, IChartOptions} from '../../../utils/chart/chartTypes';
@@ -62,13 +62,14 @@ const configureChart = (props: IChartForWaterUsageProps) => {
         const allValues = [
             ...averageTemperatureData
         ];
-        const getYAxisHeight = () => {
-            const highestValue = allValues.reduce((higest: number, x: number) => x > higest ? x : higest, 0);
-            const lowestValue = allValues.reduce((lowest: number, x: number) => x < lowest ? x : lowest, highestValue);
-            return Math.floor(highestValue + ((highestValue - lowestValue) / 2) + 3);
-        };
 
-        const annotations: IAnnotation[] = createAnnotationsForTimeSpan(timeSpan, labels, currentHourDateTime, theme, getYAxisHeight());
+        const annotations: IAnnotation[] = createAnnotationsForTimeSpan(
+            timeSpan,
+            labels,
+            currentHourDateTime,
+            theme,
+            getYAxisHeight(allValues)
+        );
 
         // build the chart configuration (options)
         options = createChartOptions(

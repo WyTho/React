@@ -124,6 +124,12 @@ export const getCurrentValue = (data: any): number => {
     return null
 };
 
+export const getYAxisHeight = (allValues: any[]) => {
+    const highestValue = allValues.reduce((higest: number, x: number) => x > higest ? x : higest, 0);
+    const lowestValue = allValues.reduce((lowest: number, x: number) => x < lowest ? x : lowest, highestValue);
+    return Math.floor(highestValue + ((highestValue - lowestValue) / 2) + 3);
+};
+
 export const createAnnotationsForTimeSpan = (
     timeSpan: TimeSpan,
     labels: any[],
