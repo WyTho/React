@@ -48,7 +48,7 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
                 ...averageTemperatureData
             ];
 
-            if (!allValues.length) {
+            if (!allValues.filter(v => v !== null).length) {
                 noDataForTimeSpanMessage = 'Er is geen temperatuurs data van ' + beautifyDate(graphStartDateTime, '{DATE}');
             }
 

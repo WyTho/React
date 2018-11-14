@@ -48,7 +48,7 @@ class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
                 ...averageWaterUsageData
             ];
 
-            if (!allValues.length) {
+            if (!allValues.filter(v => v !== null).length) {
                 noDataForTimeSpanMessage = 'Er is geen temperatuurs data van ' + beautifyDate(graphStartDateTime, '{DATE}');
             }
 
