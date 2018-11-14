@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Grid, Icon, Theme, Typography} from '@material-ui/core';
-import {IApiItem} from '../../../utils/data/dataTypes';
-import InformationCard from '../../../components/InformationCard/InformationCard';
+import {IApiItem} from '../../../../utils/data/dataTypes';
+import InformationCard from '../../../../components/InformationCard/InformationCard';
 
 export interface IStatusForLightsProps {
     theme: Theme

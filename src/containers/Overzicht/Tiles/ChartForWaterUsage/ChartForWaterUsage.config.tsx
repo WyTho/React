@@ -1,35 +1,36 @@
+
 import {
     createAnnotationsForTimeSpan,
     createGradientForChart,
     getLabelsForChart,
     getValuesForChart, getYAxisHeight
-} from '../../../utils/chart/chart';
-import {beautifyDate} from '../../../utils/date/date';
-import {IAnnotation, IChartData, IChartOptions} from '../../../utils/chart/chartTypes';
-import {IChartForKlimaatBeheerProps} from './ChartForKlimaatbeheer';
+} from '../../../../utils/chart/chart';
+import {beautifyDate} from '../../../../utils/date/date';
+import {IAnnotation, IChartData, IChartOptions} from '../../../../utils/chart/chartTypes';
+import {IChartForWaterUsageProps} from './ChartForWaterUsage';
 import {ChartData} from 'react-chartjs-2';
-import {createChartOptions, chartOptionsPresets} from '../../../utils/chart/chartOptionsPresets';
-import {DataSet} from '../../../utils/data/apiGraph';
+import {createChartOptions, chartOptionsPresets} from '../../../../utils/chart/chartOptionsPresets';
+import {DataSet} from '../../../../utils/data/apiGraph';
 
-const configureChart = (props: IChartForKlimaatBeheerProps) => {
+const configureChart = (props: IChartForWaterUsageProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openModal, dataset } = props;
 
     const chartColors = {
-        light: theme.palette.type === 'light' ? theme.palette.primary.light : theme.palette.secondary.light,
-        main:  theme.palette.type === 'light' ? theme.palette.primary.main  : theme.palette.secondary.main,
-        dark:  theme.palette.type === 'light' ? theme.palette.primary.dark  : theme.palette.secondary.dark
+        light: theme.palette.type === 'light' ? '#6c74ff' : theme.palette.primary.light,
+        main:  theme.palette.type === 'light' ? '#4C4CFF' : theme.palette.primary.main,
+        dark:  theme.palette.type === 'light' ? '#3131a2' : theme.palette.primary.dark
     };
 
-    const chartTitle = 'Gemiddelde temperatuur';
-    const valueReFormatter = (value: string | number) => value + ' °C';
+    const chartTitle = 'Gemiddeld water verbruik';
+    const valueReFormatter = (value: string | number) => value + ' Liter';
 
     let data: ChartData<any> = null;
     let options: IChartOptions = null;
 
-    if (dataset[DataSet.AVERAGE_TEMPERATURE]) {
+    if (dataset[DataSet.AVERAGE_WATER_USAGE]) {
         const labels = getLabelsForChart(timeSpan, graphStartDateTime);
 
-        const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_TEMPERATURE]);
+        const averageTemperatureData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_WATER_USAGE]);
 
         // build chart datasets (configure the lines that should be shown in this graph)
         data = (canvas: HTMLElement): IChartData => ({

@@ -19,6 +19,31 @@ $breakpoints: (
   'extra-large': 1280px,
 ) !default;
 
+/// Mixins for media queries, can be used like this:
+/// @include mq-min(medium) {
+///   .main    { width: 60%; }
+///   .sidebar { width: 40%; }
+/// }
+@mixin mq-min($mq-breakpoint, $mq-breakpoints: $breakpoints) {
+  @if map-has-key($mq-breakpoints, $mq-breakpoint) {
+    $mq-breakpoint: map-get($mq-breakpoints, $mq-breakpoint);
+  }
+  @media screen and (min-width: #{$mq-breakpoint}) {
+    @content;
+  }
+}
+
+@mixin mq-max($mq-breakpoint, $mq-breakpoints: $breakpoints) {
+  @if map-has-key($mq-breakpoints, $mq-breakpoint) {
+    $mq-breakpoint: map-get($mq-breakpoints, $mq-breakpoint);
+  }
+  @media screen and (max-width: #{$mq-breakpoint}) {
+    @content;
+  }
+}
+
+
+
 
 /// Relative or absolute URL where all assets are served from
 /// @type String

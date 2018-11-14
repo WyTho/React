@@ -1,8 +1,10 @@
 import {TimeSpan} from './dateTypes';
+
 export interface IDateRange {
     fromDate: Date,
     toDate: Date
 }
+
 export const epochTimestamp = (date: Date) => +(date.getTime().toString().slice(0, -3));
 
 export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
@@ -122,27 +124,45 @@ export const cleanMilliSecondsAndSeconds = (date: Date): Date => {
     return cleanedDate
 };
 
-export const getDisplayName = (timeSpan: TimeSpan, date: Date): string => {
+export const chartIsAtCurrentTimespan = (timeSpan: TimeSpan, date: Date): boolean => {
     const now = new Date();
     const diff = getDiffrenceIn(timeSpan, now, date);
+    return diff === 0
+};
 
+export const getCurrentTimespanDisplayName = (timeSpan: TimeSpan): string => {
     if (timeSpan === TimeSpan.day) {
-        if (diff === 0) return beautifyDate(date, 'Vandaag ({DATE})');
-        else if (diff === 1) return beautifyDate(date, 'Morgen ({DATE})');
-        else if (diff === -1) return beautifyDate(date, 'Gister ({DATE})');
-        else return beautifyDate(date, '{WEEK_DAY} ({DATE})');
+        return 'Vandaag'
     } else if (timeSpan === TimeSpan.week) {
-        if (diff === 0) return beautifyDate(date, 'Deze week (Week {WEEK_NR}, {DATE} - {LAST_WEEK_DATE})');
-        else if (diff === 1) return beautifyDate(date, 'Volgende week (Week {WEEK_NR}, {DATE} - {LAST_WEEK_DATE})');
-        else if (diff === -1) return beautifyDate(date, 'Vorige week (Week {WEEK_NR}, {DATE} - {LAST_WEEK_DATE})');
-        else return beautifyDate(date, 'Week {WEEK_NR} ({DATE} - {LAST_WEEK_DATE})');
+        return 'Deze week'
     } else {
-        if (diff === 0) return beautifyDate(date, 'Deze maand ({MONTH})');
-        else if (diff === 1) return beautifyDate(date, 'Volgende maand ({MONTH})');
-        else if (diff === -1) return beautifyDate(date, 'Vorige maand ({MONTH})');
-        else return beautifyDate(date, '{MONTH} {YEAR}');
+        return 'Deze maand'
     }
+};
 
+export const getTimespanTooltip = (timeSpan: TimeSpan) => {
+    if (timeSpan === TimeSpan.day) {
+        return 'dag'
+    } else if (timeSpan === TimeSpan.week) {
+        return 'week'
+    } else {
+        return 'maand'
+    }
+};
+
+export const getCurrentTimespanDisplayDate = (timeSpan: TimeSpan): string => {
+    const now = new Date();
+    return getDisplayDateForTimespan(timeSpan, now)
+};
+
+export const getDisplayDateForTimespan = (timeSpan: TimeSpan, date: Date): string => {
+    if (timeSpan === TimeSpan.day) {
+        return beautifyDate(date, '{DATE}');
+    } else if (timeSpan === TimeSpan.week) {
+        return beautifyDate(date, 'Week {WEEK_NR}, {DATE} - {LAST_WEEK_DATE}');
+    } else {
+        return beautifyDate(date, '{MONTH}');
+    }
 };
 
 export const getDiffrenceIn = (timeSpan: TimeSpan, date1: Date, date2: Date): number => {

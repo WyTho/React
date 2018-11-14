@@ -1,13 +1,13 @@
 import * as React from 'react';
-import ChartCard from '../../../components/ChartCard/ChartCard'
+import ChartCard from '../../../../components/ChartCard/ChartCard'
 import {connect} from 'react-redux';
-import {Button, Grid, Theme, Typography} from '@material-ui/core';
-import {getValuesForChart, getCurrentValue} from '../../../utils/chart/chart';
-import {beautifyDate} from '../../../utils/date/date';
-import {TimeSpan} from '../../../utils/date/dateTypes';
-import {IApiGraph} from '../../../utils/data/dataTypes';
+import {Grid, Theme, Typography} from '@material-ui/core';
+import {getValuesForChart, getCurrentValue} from '../../../../utils/chart/chart';
+import {beautifyDate} from '../../../../utils/date/date';
+import {TimeSpan} from '../../../../utils/date/dateTypes';
+import {IApiGraph} from '../../../../utils/data/dataTypes';
 import configureChart from './ChartForKlimaatbeheer.config';
-import {DataSet} from '../../../utils/data/apiGraph';
+import {DataSet} from '../../../../utils/data/apiGraph';
 
 export interface IChartForKlimaatBeheerProps {
     theme: Theme
@@ -90,19 +90,6 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
                         </Grid>
                     </>
                 ),
-                planning: (
-                    <>
-                        <Typography variant='overline' className='smallerText'>
-                            Temperatuurs planning
-                        </Typography>
-                        <Button variant='outlined'
-                                color='primary'
-                                size='small'
-                                style={{ margin: theme.spacing.unit }}>
-                            Instellen
-                        </Button>
-                    </>
-                ),
                 currentTemperature: (
                     <>
                         <Typography variant='overline' className='smallerText'>
@@ -132,12 +119,6 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
                             <Grid item>
                                 <Grid container direction='column'>
                                     {ui.powerUsage}
-                                </Grid>
-                            </Grid>
-                            {ui.divider}
-                            <Grid item>
-                                <Grid container direction='column' justify='space-between'>
-                                    {ui.planning}
                                 </Grid>
                             </Grid>
                         </Grid>

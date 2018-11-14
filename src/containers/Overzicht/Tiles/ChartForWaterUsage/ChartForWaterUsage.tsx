@@ -1,13 +1,13 @@
 import * as React from 'react';
-import ChartCard from '../../../components/ChartCard/ChartCard'
+import ChartCard from '../../../../components/ChartCard/ChartCard'
 import {connect} from 'react-redux';
 import {Grid, Theme, Typography} from '@material-ui/core';
-import {getValuesForChart, getCurrentValue} from '../../../utils/chart/chart';
-import {beautifyDate} from '../../../utils/date/date';
-import {TimeSpan} from '../../../utils/date/dateTypes';
-import {IApiGraph} from '../../../utils/data/dataTypes';
+import {getValuesForChart, getCurrentValue} from '../../../../utils/chart/chart';
+import {beautifyDate} from '../../../../utils/date/date';
+import {TimeSpan} from '../../../../utils/date/dateTypes';
+import {IApiGraph} from '../../../../utils/data/dataTypes';
 import configureChart from './ChartForWaterUsage.config';
-import {DataSet} from '../../../utils/data/apiGraph';
+import {DataSet} from '../../../../utils/data/apiGraph';
 
 export interface IChartForWaterUsageProps {
     theme: Theme

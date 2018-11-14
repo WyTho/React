@@ -1,21 +1,24 @@
 import {
     Typography,
-    Grid,
-    Button,
-    Icon,
-    IconButton
+    Grid
 } from '@material-ui/core';
 import * as React from 'react';
 import Modal from '../../components/Modal/Modal';
-import ChartForKlimaatbeheer from './ChartForKlimaatbeheer/ChartForKlimaatbeheer'
+import ChartForKlimaatbeheer from './Tiles/ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
-import {beautifyDate, getBeginningOfTheDay, getDisplayName, getNextDate, getPreviousDate, IDateRange} from '../../utils/date/date';
+import {
+    beautifyDate,
+    getDisplayDateForTimespan,
+    IDateRange,
+} from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {DataSet, getMissingDataRange} from '../../utils/data/apiGraph';
-import ChartForWaterUsage from './ChartForWaterUsage/ChartForWaterUsage';
+import ChartForWaterUsage from './Tiles/ChartForWaterUsage/ChartForWaterUsage';
 import Loading from '../../components/Loading/Loading';
-import StatusForLights from './StatusForLights/StatusForLights';
+import StatusForLights from './Tiles/StatusForLights/StatusForLights';
+import TimeButtons from './Navigation/TimeButtons/TimeButtons';
+import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
 
 interface IState {
     modalOpened: boolean
@@ -25,7 +28,7 @@ interface IState {
         value: number | string
     }
 }
-interface IProps {
+export interface IOverzichtProps {
     selected: {
         timeSpan: TimeSpan
         graphStartDateTime: Date
@@ -46,7 +49,7 @@ interface IProps {
     fetchApiItemsData: () => void
 }
 
-export class Overzicht extends React.Component<IProps, IState> {
+export class Overzicht extends React.Component<IOverzichtProps, IState> {
     public state = {
         modalOpened: false,
         modalData: {
@@ -64,72 +67,28 @@ export class Overzicht extends React.Component<IProps, IState> {
     }
 
     public render() {
-        const { props, props: { selected: { timeSpan, graphStartDateTime }, loading, error } } = this;
+        const { props, props: { selected: { timeSpan, graphStartDateTime }, loading } } = this;
 
         const isLoading = loading.initial || loading.partial;
-        const hasError = error.status;
 
         return (
             <div className='Overzicht'>
                 <div className={'titleContainer'}>
-                    <Typography variant='h3' gutterBottom>
-                        Overzicht
-                    </Typography>
-                    <div className='buttonContainer'>
-
-                        <div className={'circularButtonWrapper'}>
-                            <IconButton onClick={() => props.setStartDate(getPreviousDate(timeSpan, graphStartDateTime))}
-                                        disabled={isLoading || hasError}>
-                                <Icon>chevron_left</Icon>
-                            </IconButton>
-                            { isLoading ? <Loading type='spinner' size={60} className='circularButtonLoader' thickness={0.2} /> : null }
+                    <div className='titleAndTimeNavigation'>
+                        <Typography variant='h3' gutterBottom>
+                            Overzicht
+                        </Typography>
+                        <div>
+                            <TimeButtons {...props}/>
                         </div>
-
-                        <Button color='primary' onClick={() => props.setStartDate(getBeginningOfTheDay(new Date()))}
-                                disabled={isLoading || hasError}>
-                            { getDisplayName(timeSpan, graphStartDateTime) }
-                        </Button>
-
-                        <div className={'circularButtonWrapper'}>
-                            <IconButton onClick={() => props.setStartDate(getNextDate(timeSpan, graphStartDateTime))}
-                                        disabled={isLoading || hasError}>
-                                <Icon>chevron_right</Icon>
-                            </IconButton>
-                            { isLoading ? <Loading type='spinner' size={60} className='circularButtonLoader' thickness={0.2} /> : null }
-                        </div>
-
                     </div>
-                    <div className='buttonContainer'>
-                        <Button className={'timeToggleButton'}
-                                variant={timeSpan === TimeSpan.month ? 'contained' : 'text'}
-                                onClick={() => {
-                                    props.setTimeSpan(TimeSpan.month);
-                                    props.setStartDate(graphStartDateTime);
-                                }}
-                                size='small'
-                                color='primary'>
-                            Maand
-                        </Button>
-                        <Button className={'timeToggleButton'}
-                                variant={timeSpan === TimeSpan.week ? 'contained' : 'text'}
-                                onClick={() => {
-                                    props.setTimeSpan(TimeSpan.week);
-                                    props.setStartDate(graphStartDateTime);
-                                }}
-                                size='small'
-                                color='primary'>
-                            Week
-                        </Button>
-                        <Button className={'timeToggleButton'}
-                                variant={timeSpan === TimeSpan.day ? 'contained' : 'text'}
-                                onClick={() => {
-                                    props.setTimeSpan(TimeSpan.day);
-                                    props.setStartDate(graphStartDateTime);
-                                }}
-                                size='small'
-                                color='primary'>
-                            Dag
-                        </Button>
+                    <div>
+                        <Typography variant='overline' gutterBottom>
+                            { !isLoading ? getDisplayDateForTimespan(timeSpan, graphStartDateTime) : null }
+                        </Typography>
+                    </div>
+                    <div>
+                        <TimeSpanButtons {...props}/>
                     </div>
                 </div>
                 <Grid
@@ -202,7 +161,7 @@ const mapStateToProps = (state: any) => {
     const { selected, loading, error } = state.data;
     return { selected, loading, error }
 };
-const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
+const mapDispatchToProps = (dispatch: any): Partial<IOverzichtProps> => ({
     setTimeSpan: (timeSpan: TimeSpan) => dispatch(actions.setTimeSpanForGraphs(timeSpan)),
     setStartDate: (date: Date) => {
         dispatch(actions.setCurrentDate());

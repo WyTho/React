@@ -8,23 +8,37 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    div.buttonContainer {
+    @include mq-max(medium) {
+      flex-direction: column;
+    }
+    padding-bottom: 24px;
+    > div {
       display: flex;
-      div.circularButtonWrapper{
-        position: relative;
-        .circularButtonLoader {
-          position: absolute;
-          top: -6px;
-          left: -6px;
-          z-index: 1;
-        }
-      }
-      padding-bottom: 24px;
+      align-items: center;
       .timeToggleButton {
         padding: 4px 0;
         min-height: 0;
       }
+      .loadingContainer {
+        margin-left: 24px
+      }
     }
+    > div.titleAndTimeNavigation {
+      @include mq-max(medium) {
+        flex-direction: column;
+      }
+      > h3 {
+        margin: 0;
+      }
+      div {
+        > * {
+          margin: auto 4px;
+        }
+        display: flex;
+        align-items: center;
+      }
+    }
+
   }
 
 }
