@@ -35,14 +35,16 @@ export interface IApiItem {
             data: any
         }
     },
-    usages: Array<{
-        id: number
-        item_id: number
-        usage_type: string
-        usage: number
-    }>,
-    groups: Array<{
-        id: number
-        name: string
-    }>,
+    usages: IApiItemUsage[],
+    groups: IApiItemGroup[],
+}
+export interface IApiItemUsage {
+    id: number
+    item_id: number
+    usage_type: string
+    usage: number
+}
+export interface IApiItemGroup {
+    id: number
+    name: string
 }

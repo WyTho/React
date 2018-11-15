@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {IApiItem} from '../data/dataTypes';
+import {IApiItem, IApiItemGroup} from '../data/dataTypes';
 import {Avatar, Icon, List, ListItem, ListItemSecondaryAction, ListItemText, ListSubheader, Theme, Typography} from '@material-ui/core';
 
 export enum ModalType {
@@ -15,6 +15,15 @@ export interface IModalDataDatapoint {
     dateString: string
     value: string
 }
+const getIconNameForGroups = (groups: IApiItemGroup[]) => {
+    const groupNames = groups.map(group => group.name);
+    console.log(groups);
+    if (groupNames.indexOf('Verlichting') !== -1) {
+        return 'wb_incandescent'
+    }
+    return 'device_unknown'
+};
+
 export const buildModalJsxFor = (type: ModalType, data: IModalDataItems | IModalDataDatapoint, theme: Theme) => {
     if (type === ModalType.ITEM) {
         return (
@@ -33,16 +42,24 @@ export const buildModalJsxFor = (type: ModalType, data: IModalDataItems | IModal
                                 <ul>
                                     { partialItems.length ? subHeaderForState : null }
                                     { partialItems.map(item => (
-                                        <ListItem key={item.id} role={undefined} dense button onClick={() => { alert('clicked') }}>
-                                            <Avatar>
-                                                <Icon>device_unknown</Icon>
+                                        <ListItem key={item.id}
+                                                  role={undefined}
+                                                  dense
+                                                  button
+                                                  onClick={() => { alert(`item ${item.id} clicked`) }}>
+                                            <Avatar style={{backgroundColor: theme.palette.background.paper}}>
+                                                <Icon color={itemState ? 'secondary' : 'disabled'}>
+                                                    {getIconNameForGroups(item.groups)}
+                                                    </Icon>
                                             </Avatar>
                                             <ListItemText primary={item.name} secondary={item.groups.map(g => g.name).join(', ')} />
-                                            <ListItemSecondaryAction className='rightTextContainer'>
-                                                <Typography variant='overline'>
-                                                    {item.usages.find(u => u.usage_type === 'KILOWATT').usage} Kwh
-                                                </Typography>
-                                            </ListItemSecondaryAction>
+                                            { itemState ? (
+                                                <ListItemSecondaryAction className='rightTextContainer'>
+                                                    <Typography variant='overline'>
+                                                        {item.usages.find(u => u.usage_type === 'KILOWATT').usage} Kwh
+                                                    </Typography>
+                                                </ListItemSecondaryAction>
+                                            ) : null }
                                         </ListItem>
                                     )) }
                                 </ul>

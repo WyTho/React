@@ -20,6 +20,7 @@ import StatusForLights from './Tiles/StatusForLights/StatusForLights';
 import TimeButtons from './Navigation/TimeButtons/TimeButtons';
 import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
 import {buildModalJsxFor, ModalType} from '../../utils/modal/modal';
+import StatusForOtherDevices from './Tiles/StatusForOtherDevices/StatusForOtherDevices';
 
 interface IState {
     modalOpened: boolean
@@ -109,7 +110,7 @@ export class Overzicht extends React.Component<IOverzichtProps, IState> {
                         <StatusForLights fetchApiItemsData={props.fetchApiItemsData} openModal={this.openModalHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
-3
+                        <StatusForOtherDevices fetchApiItemsData={props.fetchApiItemsData} openModal={this.openModalHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={6} sm={12} xs={12}>
 6
