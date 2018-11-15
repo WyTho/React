@@ -2,7 +2,7 @@ import * as React from 'react';
 import ChartCard from '../../../../components/ChartCard/ChartCard'
 import {connect} from 'react-redux';
 import {Grid, Theme, Typography} from '@material-ui/core';
-import {getValuesForChart, getCurrentValue} from '../../../../utils/chart/chart';
+import {getValuesForChart, getCurrentValue} from '../../../../utils/dashboard/chart';
 import {beautifyDate} from '../../../../utils/date/date';
 import {TimeSpan} from '../../../../utils/date/dateTypes';
 import {IApiGraph} from '../../../../utils/data/dataTypes';

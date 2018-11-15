@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Grid, Icon, Theme, Typography} from '@material-ui/core';
+import {Theme} from '@material-ui/core';
 import {IApiItem} from '../../../../utils/data/dataTypes';
 import InformationCard from '../../../../components/InformationCard/InformationCard';
 import {IModalDataItems, ModalType} from '../../../../utils/modal/modal';
+import {createContentForItemsTile} from '../../../../utils/dashboard/items';
 
 export interface IStatusForLightsProps {
     theme: Theme
@@ -23,8 +24,7 @@ class StatusForLights extends React.Component<IStatusForLightsProps, {}> {
         let lights: IApiItem[] = [];
         let on: IApiItem[] = [];
         let off: IApiItem[] = [];
-
-        let content = null;
+        let usage = 0;
 
         if (!loading && items) {
 
@@ -35,37 +35,11 @@ class StatusForLights extends React.Component<IStatusForLightsProps, {}> {
             on = lights.filter(light => light.last_use.last_used);
             off = lights.filter(light => !light.last_use.last_used);
 
-            const lightsOnUsage = on
+            usage = on
                 .map(light => light.usages.find(u => u.usage_type === 'KILOWATT').usage)
                 // TODO: remove mapping to Number once backend-bug if fixed (sends strings instead of numbers)
                 .map(x => Number(x))
-                .reduce((sum, usage) => sum + usage, 0);
-
-            content = (
-                <Grid container direction='column' justify='space-between' alignItems='stretch' className={'textCenter'}>
-                    <Grid item>
-                        <Typography variant='overline' className='tinyText'>
-                            verbruik: {lightsOnUsage} Kwh
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Icon style={{ fontSize: 120 }} color='secondary'>wb_incandescent</Icon>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant='subtitle1' color='secondary'>
-                            {on.length} staan aan
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <hr />
-                    </Grid>
-                    <Grid item>
-                        <Typography variant='subtitle1'>
-                            {off.length} staan uit
-                        </Typography>
-                    </Grid>
-                </Grid>
-            );
+                .reduce((sum, u) => sum + u, 0);
         }
 
         return (
@@ -74,7 +48,9 @@ class StatusForLights extends React.Component<IStatusForLightsProps, {}> {
                              errorMessage={!loading && !items ?  `Het laden van ${title.toLowerCase()} is mislukt!` : null}
                              onFetchData={props.fetchApiItemsData}
                              onClicked={() => props.openModal(ModalType.ITEM, title, { on, off })}>
-                { content }
+
+                { createContentForItemsTile(usage, on.length, off.length) }
+
             </InformationCard>
         );
 

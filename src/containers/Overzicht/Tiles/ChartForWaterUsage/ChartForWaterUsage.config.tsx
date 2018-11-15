@@ -4,12 +4,12 @@ import {
     createGradientForChart,
     getLabelsForChart,
     getValuesForChart, getYAxisHeight
-} from '../../../../utils/chart/chart';
+} from '../../../../utils/dashboard/chart';
 import {beautifyDate} from '../../../../utils/date/date';
-import {IAnnotation, IChartData, IChartOptions} from '../../../../utils/chart/chartTypes';
+import {IAnnotation, IChartData, IChartOptions} from '../../../../utils/dashboard/chartTypes';
 import {IChartForWaterUsageProps} from './ChartForWaterUsage';
 import {ChartData} from 'react-chartjs-2';
-import {createChartOptions, chartOptionsPresets} from '../../../../utils/chart/chartOptionsPresets';
+import {createChartOptions, chartOptionsPresets} from '../../../../utils/dashboard/chartOptionsPresets';
 import {DataSet} from '../../../../utils/data/apiGraph';
 import {ModalType} from '../../../../utils/modal/modal';
 
