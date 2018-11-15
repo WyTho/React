@@ -8,11 +8,12 @@ import {TimeSpan} from '../../../../utils/date/dateTypes';
 import {IApiGraph} from '../../../../utils/data/dataTypes';
 import configureChart from './ChartForWaterUsage.config';
 import {DataSet} from '../../../../utils/data/apiGraph';
+import {IModalDataDatapoint, ModalType} from '../../../../utils/modal/modal';
 
 export interface IChartForWaterUsageProps {
     theme: Theme
     fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
-    openModal: (title: string, date: Date, value: number | string) => void
+    openModal: (type: ModalType, title: string, data: IModalDataDatapoint) => void
     selected: {
         timeSpan: TimeSpan
         graphStartDateTime: Date

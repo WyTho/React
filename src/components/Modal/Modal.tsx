@@ -1,15 +1,18 @@
 import {Dialog, DialogTitle } from '@material-ui/core';
-
 import * as React from 'react';
+
 interface IModal {
-    children: any,
-    onClosed: any,
-    opened: boolean,
+    children: any
+    onClosed: any
+    opened: boolean
     title: string
 }
 
 const modal = (props: IModal) => (
-    <Dialog onClose={props.onClosed} open={props.opened}>
+    <Dialog onClose={props.onClosed}
+            open={props.opened}
+            fullWidth={true}
+            maxWidth = {'sm'}>
         <DialogTitle>{props.title}</DialogTitle>
         {props.children}
     </Dialog>

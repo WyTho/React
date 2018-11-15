@@ -1,0 +1,17 @@
+.modalContent {
+  &.items {
+    .listSection {
+      ul {
+        padding: 0;
+      }
+    }
+    .rightTextContainer {
+      pointer-events: none;
+      margin: auto 12px;
+      user-select: none;
+    }
+  }
+  &.datapoint {
+    margin: 24px
+  }
+}

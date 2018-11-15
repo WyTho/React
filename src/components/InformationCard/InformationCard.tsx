@@ -10,6 +10,7 @@ interface IProps {
     errorMessage?: string
     noDataMessage?: string
     onFetchData: () => void
+    onClicked: () => void
 }
 const defaults = {
     elevation: 1,
@@ -17,7 +18,7 @@ const defaults = {
 };
 
 const informationCard = (props: IProps) => {
-    const { children, title, elevation, loading, errorMessage, noDataMessage } = props;
+    const { children, title, elevation, loading, errorMessage, noDataMessage, onClicked } = props;
 
     let content = (
         <div className='absoluteFlexContainer'>
@@ -55,7 +56,9 @@ const informationCard = (props: IProps) => {
         );
     }
     return (
-        <Paper className='card DashboardCard' elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}>
+        <Paper className='card DashboardCard'
+               elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}
+               onClick={onClicked}>
             <div className={'titleContainer'}>
                 <Typography variant='h6'>
                     { title }
