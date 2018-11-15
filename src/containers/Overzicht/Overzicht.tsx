@@ -1,6 +1,7 @@
 import {
     Typography,
-    Grid
+    Grid,
+    Theme
 } from '@material-ui/core';
 import * as React from 'react';
 import Modal from '../../components/Modal/Modal';
@@ -8,7 +9,6 @@ import ChartForKlimaatbeheer from './Tiles/ChartForKlimaatbeheer/ChartForKlimaat
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
 import {
-    beautifyDate,
     getDisplayDateForTimespan,
     IDateRange,
 } from '../../utils/date/date';
@@ -19,16 +19,18 @@ import Loading from '../../components/Loading/Loading';
 import StatusForLights from './Tiles/StatusForLights/StatusForLights';
 import TimeButtons from './Navigation/TimeButtons/TimeButtons';
 import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
+import {buildModalJsxFor, ModalType} from '../../utils/modal/modal';
 
 interface IState {
     modalOpened: boolean
     modalData: {
+        type: ModalType
         title: string
-        date: Date
-        value: number | string
+        data: any
     }
 }
 export interface IOverzichtProps {
+    theme: Theme,
     selected: {
         timeSpan: TimeSpan
         graphStartDateTime: Date
@@ -53,9 +55,9 @@ export class Overzicht extends React.Component<IOverzichtProps, IState> {
     public state = {
         modalOpened: false,
         modalData: {
+            type: null as ModalType,
             title: null as string,
-            date: null as Date,
-            value: null as number | string
+            data: null as any
         }
     };
 
@@ -91,13 +93,12 @@ export class Overzicht extends React.Component<IOverzichtProps, IState> {
                         <TimeSpanButtons {...props}/>
                     </div>
                 </div>
-                <Grid
-                    className={'GridContainer'}
-                    container
-                    direction='row'
-                    justify='center'
-                    alignItems='stretch'
-                    spacing={24}>
+                <Grid className={'GridContainer'}
+                      container
+                      direction='row'
+                      justify='center'
+                      alignItems='stretch'
+                      spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
                         <ChartForKlimaatbeheer fetchApiGraphData={props.fetchApiGraphData} openModal={this.openModalHandler} />
                     </Grid>
@@ -120,46 +121,38 @@ export class Overzicht extends React.Component<IOverzichtProps, IState> {
         )
     }
 
-    private openModalHandler = (title: string, date: Date, value: number) => {
+    private openModalHandler = (type: ModalType, title: string, data: any) => {
         this.setState({
             modalOpened: true,
             modalData: {
+                type,
                 title,
-                date,
-                value
+                data
             }
         })
     };
+    private closeModalHandler = () => {
+        this.setState({
+            modalOpened: false
+        } )
+    };
 
     private modalJSX = () => {
-        const { modalOpened, modalData: { title, date, value } } = this.state;
+        const { modalOpened, modalData: { type, title, data } } = this.state;
         return (
             <Modal title={title ? title : 'Loading...'}
                    opened={modalOpened}
-                   onClosed={() => this.setState({
-                       modalOpened: false,
-                       modalData: {
-                           title: null as string,
-                           date: null as Date,
-                           value: null as number | string
-                       }
-                   } )}>
-                <div style={{ margin: 24 }}>
-                    <Typography variant='overline'>
-                        {date ? beautifyDate(date, `De ${title.toLowerCase()} op {WEEK_DAY} {DAY} {MONTH} {YEAR} om {TIME} is`) : null}
-                    </Typography>
-                    <Typography variant='h3'>
-                        {value ? value : null}
-                    </Typography>
-                </div>
+                   onClosed={this.closeModalHandler}>
+                {buildModalJsxFor(type, data, this.props.theme)}
             </Modal>
         );
     }
 
 }
 const mapStateToProps = (state: any) => {
+    const { theme } = state.theme;
     const { selected, loading, error } = state.data;
-    return { selected, loading, error }
+    return { theme, selected, loading, error }
 };
 const mapDispatchToProps = (dispatch: any): Partial<IOverzichtProps> => ({
     setTimeSpan: (timeSpan: TimeSpan) => dispatch(actions.setTimeSpanForGraphs(timeSpan)),
