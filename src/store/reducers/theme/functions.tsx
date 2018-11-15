@@ -1,15 +1,12 @@
-import teal from '@material-ui/core/colors/teal';
-import blue from '@material-ui/core/colors/blue';
 import {createMuiTheme, Theme} from '@material-ui/core';
 import {updateObject} from '../../utilities';
 import {IThemeReducerState} from './index';
+import * as colors from '@material-ui/core/colors';
 
 const defaultTheme = {
     palette: {
-        primary: teal,
-        secondary: {
-            main: '#ef6c00',
-        },
+        primary: colors.teal,
+        secondary: colors.blue
     },
     typography: {
         useNextVariants: true
@@ -24,10 +21,8 @@ export const darkTheme = createMuiTheme({
     ...defaultTheme,
     palette: {
         type: 'dark',
-        primary: blue,
-        secondary: {
-            main: '#ef6c00',
-        }
+        primary: colors.brown,
+        secondary: colors.amber
     },
 });
 
