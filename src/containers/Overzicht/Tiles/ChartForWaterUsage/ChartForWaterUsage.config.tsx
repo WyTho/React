@@ -17,9 +17,9 @@ const configureChart = (props: IChartForWaterUsageProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openModal, dataset } = props;
 
     const chartColors = {
-        light: theme.palette.type === 'light' ? '#6c74ff' : theme.palette.primary.light,
-        main:  theme.palette.type === 'light' ? '#4C4CFF' : theme.palette.primary.main,
-        dark:  theme.palette.type === 'light' ? '#3131a2' : theme.palette.primary.dark
+        light: theme.palette.type === 'light' ? theme.palette.secondary.light : theme.palette.primary.light,
+        main:  theme.palette.type === 'light' ? theme.palette.secondary.main  : theme.palette.primary.main,
+        dark:  theme.palette.type === 'light' ? theme.palette.secondary.dark  : theme.palette.primary.dark
     };
 
     const chartTitle = 'Gemiddeld water verbruik';
