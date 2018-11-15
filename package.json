@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "echo \"Warning: This is not the correct way to start the development server. Run 'npm run start:dev' or 'npm run start:prod'. The development server is started by default (npm run start:dev)\" && npm run start:dev",
     "start:dev": "webpack-dev-server --mode=development",
+    "start:dev:withnodemon": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --mode=development\"",
     "start:prod": "webpack-dev-server --mode=production",
+    "build": "webpack --mode production",
     "fix:nodesass": "npm rebuild node-sass"
   },
   "repository": {
