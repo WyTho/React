@@ -100,7 +100,7 @@ export const getValuesForChart = (timeSpan: TimeSpan, startDate: Date, data: IAp
             const average = day.values.reduce((store: any, value: number, index: number) => {
                 if (value !== null) {
                     store.total += value;
-                    store.avg = store.total / index + 1;
+                    store.avg = store.total / (index + 1);
                 }
                 return store
             }, { total: 0, average: null }).avg;
