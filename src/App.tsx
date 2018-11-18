@@ -5,18 +5,23 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import routes from './config.routes';
+import Popup from './components/Popup/Popup';
+import {buildPopupJsxFor} from './utils/popup/popup';
+import {IPopup} from './store/reducers/popup';
 
 interface IProps {
-    darkThemeActive: boolean,
-    theme: Theme,
-    toggleThemeHandler: () => void,
+    darkThemeActive: boolean
+    theme: Theme
+    popups: IPopup[]
+    toggleThemeHandler: () => void
     onFetchTemperature: () => void
+    popPopup: () => void
 }
 
 export class App extends React.Component<IProps, {}> {
 
     public render() {
-        const { props, props: { theme, darkThemeActive } } = this;
+        const { props, props: { theme, popups, darkThemeActive } } = this;
 
         return (
             <MuiThemeProvider theme={theme}>
@@ -31,6 +36,14 @@ export class App extends React.Component<IProps, {}> {
                         )}
                     </Layout>
                 </BrowserRouter>
+                { popups.map((popup, i) =>
+                    <Popup key={i}
+                           title={popup.title ? popup.title : 'Loading...'}
+                           opened={true}
+                           onClosed={props.popPopup}>
+                        {buildPopupJsxFor(popup.type, popup.data, this.props.theme)}
+                    </Popup>
+                )}
             </MuiThemeProvider>
         )
     }
@@ -38,11 +51,13 @@ export class App extends React.Component<IProps, {}> {
 
 const mapStateToProps = (state: any) => {
     const { theme, darkThemeActive } = state.theme;
-    return { theme, darkThemeActive }
+    const { popups } = state.popup;
+    return { theme, darkThemeActive, popups }
 };
 
 const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
-    toggleThemeHandler: () => dispatch(actions.toggleTheme())
+    toggleThemeHandler: () => dispatch(actions.toggleTheme()),
+    popPopup: () => dispatch(actions.popPopup())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

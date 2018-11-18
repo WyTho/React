@@ -4,7 +4,6 @@ import {
     Theme
 } from '@material-ui/core';
 import * as React from 'react';
-import Popup from '../../components/Popup/Popup';
 import ChartForKlimaatbeheer from './Tiles/ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
@@ -15,21 +14,12 @@ import {
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {DataSet, getMissingDataRange} from '../../utils/data/apiGraph';
 import ChartForWaterUsage from './Tiles/ChartForWaterUsage/ChartForWaterUsage';
-import Loading from '../../components/Loading/Loading';
 import StatusForLights from './Tiles/StatusForLights/StatusForLights';
 import TimeButtons from './Navigation/TimeButtons/TimeButtons';
 import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
-import {buildPopupJsxFor, PopupType} from '../../utils/popup/popup';
 import StatusForOtherDevices from './Tiles/StatusForOtherDevices/StatusForOtherDevices';
+import {IPopup} from '../../store/reducers/popup';
 
-interface IState {
-    popupOpened: boolean
-    popupData: {
-        type: PopupType
-        title: string
-        data: any
-    }
-}
 export interface IOverzichtProps {
     theme: Theme,
     selected: {
@@ -50,17 +40,10 @@ export interface IOverzichtProps {
     setStartDate: (date: Date) => void
     fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
     fetchApiItemsData: () => void
+    pushPopup: (popup: IPopup) => void
 }
 
-export class Overzicht extends React.Component<IOverzichtProps, IState> {
-    public state = {
-        popupOpened: false,
-        popupData: {
-            type: null as PopupType,
-            title: null as string,
-            data: null as any
-        }
-    };
+export class Overzicht extends React.Component<IOverzichtProps, {}> {
 
     public componentDidMount() {
         if (this.props.loading.initial) {
@@ -101,52 +84,24 @@ export class Overzicht extends React.Component<IOverzichtProps, IState> {
                       alignItems='stretch'
                       spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer fetchApiGraphData={props.fetchApiGraphData} openPopup={this.openPopupHandler} />
+                        <ChartForKlimaatbeheer fetchApiGraphData={props.fetchApiGraphData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <ChartForWaterUsage fetchApiGraphData={props.fetchApiGraphData} openPopup={this.openPopupHandler} />
+                        <ChartForWaterUsage fetchApiGraphData={props.fetchApiGraphData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
-                        <StatusForLights fetchApiItemsData={props.fetchApiItemsData} openPopup={this.openPopupHandler} />
+                        <StatusForLights fetchApiItemsData={props.fetchApiItemsData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
-                        <StatusForOtherDevices fetchApiItemsData={props.fetchApiItemsData} openPopup={this.openPopupHandler} />
+                        <StatusForOtherDevices fetchApiItemsData={props.fetchApiItemsData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={6} sm={12} xs={12}>
 6
                     </Grid>
 
                 </Grid>
-                {this.popupJSX()}
             </div>
         )
-    }
-
-    private openPopupHandler = (type: PopupType, title: string, data: any) => {
-        this.setState({
-            popupOpened: true,
-            popupData: {
-                type,
-                title,
-                data
-            }
-        })
-    };
-    private closePopupHandler = () => {
-        this.setState({
-            popupOpened: false
-        } )
-    };
-
-    private popupJSX = () => {
-        const { popupOpened, popupData: { type, title, data } } = this.state;
-        return (
-            <Popup title={title ? title : 'Loading...'}
-                   opened={popupOpened}
-                   onClosed={this.closePopupHandler}>
-                {buildPopupJsxFor(type, data, this.props.theme)}
-            </Popup>
-        );
     }
 
 }
@@ -167,7 +122,8 @@ const mapDispatchToProps = (dispatch: any): Partial<IOverzichtProps> => ({
     },
     fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) =>
         dispatch(actions.fetchApiGraphData(centerDate, typeOfData)),
-    fetchApiItemsData: () => dispatch(actions.fetchApiItemsData())
+    fetchApiItemsData: () => dispatch(actions.fetchApiItemsData()),
+    pushPopup: (popup: IPopup) => dispatch(actions.pushPopup(popup))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Overzicht);

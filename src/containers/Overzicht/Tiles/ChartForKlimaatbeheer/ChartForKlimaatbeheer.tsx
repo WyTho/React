@@ -8,12 +8,12 @@ import {TimeSpan} from '../../../../utils/date/dateTypes';
 import {IApiGraph} from '../../../../utils/data/dataTypes';
 import configureChart from './ChartForKlimaatbeheer.config';
 import {DataSet} from '../../../../utils/data/apiGraph';
-import {IPopupDataDatapoint, PopupType} from '../../../../utils/popup/popup';
+import {IPopup} from '../../../../store/reducers/popup';
 
 export interface IChartForKlimaatBeheerProps {
     theme: Theme
     fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
-    openPopup: (type: PopupType, title: string, data: IPopupDataDatapoint) => void
+    openPopup: (popup: IPopup) => void
     selected: {
         timeSpan: TimeSpan
         graphStartDateTime: Date

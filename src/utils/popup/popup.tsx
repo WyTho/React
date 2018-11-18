@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {IApiItem, IApiItemGroup} from '../data/dataTypes';
-import Popup from '../../components/Popup/Popup';
 import {
     Avatar,
     Icon,
@@ -81,13 +80,7 @@ export const buildPopupJsxFor = (type: PopupType, data: IPopupDataItems | IPopup
                         })}
                     </List>
                 </div>
-                <Popup title={'Loading...'}
-                       opened={true}
-                       onClosed={() => console.log('closing')}>
-                    hi
-                </Popup>
             </>
-
         );
     } else if (type === PopupType.DATAPOINT) {
         return (

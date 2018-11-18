@@ -12,6 +12,7 @@ import {ChartData} from 'react-chartjs-2';
 import {createChartOptions, chartOptionsPresets} from '../../../../utils/dashboard/chartOptionsPresets';
 import {DataSet} from '../../../../utils/data/apiGraph';
 import {PopupType} from '../../../../utils/popup/popup';
+import {IPopup} from '../../../../store/reducers/popup';
 
 const configureChart = (props: IChartForWaterUsageProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openPopup, dataset } = props;
@@ -47,17 +48,18 @@ const configureChart = (props: IChartForWaterUsageProps) => {
                         backgroundColor: chartColors.dark,
                         listeners: {
                             click: (context: any) => {
-                                openPopup(
-                                    PopupType.DATAPOINT,
-                                    chartTitle,
-                                    {
+                                const popup: IPopup = {
+                                    type: PopupType.DATAPOINT,
+                                    title: chartTitle,
+                                    data: {
                                         dateString: beautifyDate(
                                             new Date(labels[context.dataIndex]),
                                             `De ${chartTitle.toLowerCase()} op {WEEK_DAY} {DAY} {MONTH} {YEAR} om {TIME} is`
                                         ),
                                         value: valueReFormatter(context.dataset.data[context.dataIndex])
                                     }
-                                )
+                                };
+                                openPopup(popup)
                             }
                         }
                     }

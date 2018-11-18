@@ -9,3 +9,7 @@ export {
     fetchApiItemsData,
     fetchDataInRange
 } from './data';
+export {
+    pushPopup,
+    popPopup
+} from './popup';

@@ -42,7 +42,11 @@ class StatusForLights extends React.Component<IStatusItemsProps, {}> {
                              loading={loading}
                              errorMessage={!loading && !items ?  `Het laden van ${title.toLowerCase()} is mislukt!` : null}
                              onFetchData={props.fetchApiItemsData}
-                             onClicked={() => props.openPopup(PopupType.ITEM_LIST, title, { on, off })}>
+                             onClicked={() => props.openPopup({
+                                 type: PopupType.ITEM_LIST,
+                                 title,
+                                 data: { on, off }
+                             })}>
                 { content }
             </InformationCard>
         );

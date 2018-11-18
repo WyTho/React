@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {Grid, Icon, Theme, Typography} from '@material-ui/core';
 import {IApiItem} from '../data/dataTypes';
-import {IPopupDataItems, PopupType} from '../popup/popup';
+import {IPopup} from '../../store/reducers/popup';
 
 export interface IStatusItemsProps {
     theme: Theme
     fetchApiItemsData: () => void
-    openPopup: (type: PopupType, title: string, data: IPopupDataItems) => void
+    openPopup: (popup: IPopup) => void
     items: IApiItem[],
     loading: boolean
 }
