@@ -16,6 +16,7 @@ interface IProps {
     toggleThemeHandler: () => void
     onFetchTemperature: () => void
     popPopup: () => void
+    pushPopup: (popup: IPopup) => void
 }
 
 export class App extends React.Component<IProps, {}> {
@@ -41,7 +42,8 @@ export class App extends React.Component<IProps, {}> {
                            title={popup.title ? popup.title : 'Loading...'}
                            opened={true}
                            onClosed={props.popPopup}>
-                        {buildPopupJsxFor(popup.type, popup.data, this.props.theme)}
+                        {/* TODO: Change JSXbuilder to actual React component */}
+                        {buildPopupJsxFor(popup, this.props.theme, props.pushPopup)}
                     </Popup>
                 )}
             </MuiThemeProvider>
@@ -57,7 +59,8 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any): Partial<IProps> => ({
     toggleThemeHandler: () => dispatch(actions.toggleTheme()),
-    popPopup: () => dispatch(actions.popPopup())
+    popPopup: () => dispatch(actions.popPopup()),
+    pushPopup: (popup: IPopup) => dispatch(actions.pushPopup(popup))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

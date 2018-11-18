@@ -2,11 +2,12 @@
 import Actions from '../../actionTypes';
 import functions from './functions';
 import {IPopupDataDatapoint, IPopupDataItems, PopupType} from '../../../utils/popup/popup';
+import {IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IPopup {
     type: PopupType
     title: string
-    data: IPopupDataItems | IPopupDataDatapoint
+    data: IPopupDataItems | IPopupDataDatapoint | IApiItem
 }
 
 export interface IPopupReducerState {
