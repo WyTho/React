@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {IApiItem} from '../../../../utils/data/dataTypes';
 import InformationCard from '../../../../components/InformationCard/InformationCard';
-import {ModalType} from '../../../../utils/modal/modal';
+import {PopupType} from '../../../../utils/popup/popup';
 import {createContentForItemsTile, IStatusItemsProps, ItemTileType} from '../../../../utils/dashboard/items';
 
 class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}> {
@@ -43,7 +43,7 @@ class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}> {
                              loading={loading}
                              errorMessage={!loading && !items ?  `Het laden van ${title.toLowerCase()} is mislukt!` : null}
                              onFetchData={props.fetchApiItemsData}
-                             onClicked={() => props.openModal(ModalType.ITEM, title, { on, off })}>
+                             onClicked={() => props.openPopup(PopupType.ITEM_LIST, title, { on, off })}>
                 { content }
             </InformationCard>
         );

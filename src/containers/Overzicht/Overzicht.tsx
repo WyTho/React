@@ -4,7 +4,7 @@ import {
     Theme
 } from '@material-ui/core';
 import * as React from 'react';
-import Modal from '../../components/Modal/Modal';
+import Popup from '../../components/Popup/Popup';
 import ChartForKlimaatbeheer from './Tiles/ChartForKlimaatbeheer/ChartForKlimaatbeheer'
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions';
@@ -19,13 +19,13 @@ import Loading from '../../components/Loading/Loading';
 import StatusForLights from './Tiles/StatusForLights/StatusForLights';
 import TimeButtons from './Navigation/TimeButtons/TimeButtons';
 import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
-import {buildModalJsxFor, ModalType} from '../../utils/modal/modal';
+import {buildPopupJsxFor, PopupType} from '../../utils/popup/popup';
 import StatusForOtherDevices from './Tiles/StatusForOtherDevices/StatusForOtherDevices';
 
 interface IState {
-    modalOpened: boolean
-    modalData: {
-        type: ModalType
+    popupOpened: boolean
+    popupData: {
+        type: PopupType
         title: string
         data: any
     }
@@ -54,9 +54,9 @@ export interface IOverzichtProps {
 
 export class Overzicht extends React.Component<IOverzichtProps, IState> {
     public state = {
-        modalOpened: false,
-        modalData: {
-            type: null as ModalType,
+        popupOpened: false,
+        popupData: {
+            type: null as PopupType,
             title: null as string,
             data: null as any
         }
@@ -101,51 +101,51 @@ export class Overzicht extends React.Component<IOverzichtProps, IState> {
                       alignItems='stretch'
                       spacing={24}>
                     <Grid className={'GridItem'} item md={8} sm={12} xs={12}>
-                        <ChartForKlimaatbeheer fetchApiGraphData={props.fetchApiGraphData} openModal={this.openModalHandler} />
+                        <ChartForKlimaatbeheer fetchApiGraphData={props.fetchApiGraphData} openPopup={this.openPopupHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={4} sm={6} xs={12}>
-                        <ChartForWaterUsage fetchApiGraphData={props.fetchApiGraphData} openModal={this.openModalHandler} />
+                        <ChartForWaterUsage fetchApiGraphData={props.fetchApiGraphData} openPopup={this.openPopupHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
-                        <StatusForLights fetchApiItemsData={props.fetchApiItemsData} openModal={this.openModalHandler} />
+                        <StatusForLights fetchApiItemsData={props.fetchApiItemsData} openPopup={this.openPopupHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
-                        <StatusForOtherDevices fetchApiItemsData={props.fetchApiItemsData} openModal={this.openModalHandler} />
+                        <StatusForOtherDevices fetchApiItemsData={props.fetchApiItemsData} openPopup={this.openPopupHandler} />
                     </Grid>
                     <Grid className={'GridItem'} item md={6} sm={12} xs={12}>
 6
                     </Grid>
 
                 </Grid>
-                {this.modalJSX()}
+                {this.popupJSX()}
             </div>
         )
     }
 
-    private openModalHandler = (type: ModalType, title: string, data: any) => {
+    private openPopupHandler = (type: PopupType, title: string, data: any) => {
         this.setState({
-            modalOpened: true,
-            modalData: {
+            popupOpened: true,
+            popupData: {
                 type,
                 title,
                 data
             }
         })
     };
-    private closeModalHandler = () => {
+    private closePopupHandler = () => {
         this.setState({
-            modalOpened: false
+            popupOpened: false
         } )
     };
 
-    private modalJSX = () => {
-        const { modalOpened, modalData: { type, title, data } } = this.state;
+    private popupJSX = () => {
+        const { popupOpened, popupData: { type, title, data } } = this.state;
         return (
-            <Modal title={title ? title : 'Loading...'}
-                   opened={modalOpened}
-                   onClosed={this.closeModalHandler}>
-                {buildModalJsxFor(type, data, this.props.theme)}
-            </Modal>
+            <Popup title={title ? title : 'Loading...'}
+                   opened={popupOpened}
+                   onClosed={this.closePopupHandler}>
+                {buildPopupJsxFor(type, data, this.props.theme)}
+            </Popup>
         );
     }
 

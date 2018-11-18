@@ -10,10 +10,10 @@ import {IChartForKlimaatBeheerProps} from './ChartForKlimaatbeheer';
 import {ChartData} from 'react-chartjs-2';
 import {createChartOptions, chartOptionsPresets} from '../../../../utils/dashboard/chartOptionsPresets';
 import {DataSet} from '../../../../utils/data/apiGraph';
-import {ModalType} from '../../../../utils/modal/modal';
+import {PopupType} from '../../../../utils/popup/popup';
 
 const configureChart = (props: IChartForKlimaatBeheerProps) => {
-    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openModal, dataset } = props;
+    const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openPopup, dataset } = props;
 
     const chartColors = {
         light: theme.palette.type === 'light' ? theme.palette.primary.light : theme.palette.secondary.light,
@@ -46,8 +46,8 @@ const configureChart = (props: IChartForKlimaatBeheerProps) => {
                         backgroundColor: chartColors.dark,
                         listeners: {
                             click: (context: any) => {
-                                openModal(
-                                    ModalType.DATAPOINT,
+                                openPopup(
+                                    PopupType.DATAPOINT,
                                     chartTitle,
                                     {
                                         dateString: beautifyDate(

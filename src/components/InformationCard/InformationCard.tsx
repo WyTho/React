@@ -3,10 +3,10 @@ import { Button, Paper, Typography } from '@material-ui/core';
 import Loading from '../../components/Loading/Loading'
 
 interface IProps {
-    children: any,
-    title: string,
-    elevation?: number,
-    loading: boolean,
+    children: any
+    title: string
+    elevation?: number
+    loading: boolean
     errorMessage?: string
     noDataMessage?: string
     onFetchData: () => void
@@ -56,7 +56,7 @@ const informationCard = (props: IProps) => {
         );
     }
     return (
-        <Paper className='card DashboardCard'
+        <Paper className='card DashboardCard InformationCard'
                elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}
                onClick={onClicked}>
             <div className={'titleContainer'}>

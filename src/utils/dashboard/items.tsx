@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {Grid, Icon, Theme, Typography} from '@material-ui/core';
 import {IApiItem} from '../data/dataTypes';
-import {IModalDataItems, ModalType} from '../modal/modal';
+import {IPopupDataItems, PopupType} from '../popup/popup';
 
 export interface IStatusItemsProps {
     theme: Theme
     fetchApiItemsData: () => void
-    openModal: (type: ModalType, title: string, data: IModalDataItems) => void
+    openPopup: (type: PopupType, title: string, data: IPopupDataItems) => void
     items: IApiItem[],
     loading: boolean
 }

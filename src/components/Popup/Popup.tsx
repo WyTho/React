@@ -1,14 +1,14 @@
-import {Dialog, DialogTitle } from '@material-ui/core';
+import {Dialog, DialogTitle} from '@material-ui/core';
 import * as React from 'react';
 
-interface IModal {
+interface IPopup {
     children: any
     onClosed: any
     opened: boolean
     title: string
 }
 
-const modal = (props: IModal) => (
+const popup = (props: IPopup) => (
     <Dialog onClose={props.onClosed}
             open={props.opened}
             fullWidth={true}
@@ -18,4 +18,4 @@ const modal = (props: IModal) => (
     </Dialog>
 );
 
-export default modal;
+export default popup;

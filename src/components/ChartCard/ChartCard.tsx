@@ -41,7 +41,7 @@ const chartCard = (props: IProps) => {
         content = (
             <>
                 <div className={'content'}>
-                    {children}
+                    { children }
                 </div>
                 <div className={'chartContainer'}>
                     <Line data={chartData} options={chartOptions}/>
@@ -62,7 +62,7 @@ const chartCard = (props: IProps) => {
         content = (
             <div className='absoluteFlexContainer'>
                 <Typography variant='overline'>
-                    {errorMessage}
+                    { errorMessage }
                 </Typography>
                 <Button color='primary' onClick={props.onFetchData}>
                     Probeer het opnieuw
