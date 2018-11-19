@@ -12,7 +12,14 @@
     }
   }
   &.item {
-    margin: 24px
+    margin: 24px;
+    .itemIcon {
+      font-size: 120px;
+      margin: auto 24px 24px auto
+    }
+    .infoSection {
+      margin-bottom: 12px;
+    }
   }
   &.datapoint {
     margin: 24px

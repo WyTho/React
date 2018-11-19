@@ -17,17 +17,6 @@ $default-dashboard-card-height: 250px;
   }
   div.absoluteFlexContainer {
     padding: $spacing;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    > * {
-      text-align: center;
-    }
   }
   div.content {
     padding: $spacing;
