@@ -1,4 +1,3 @@
-
 import Actions from '../actionTypes';
 import {IPopup} from '../../utils/popup/popup';
 

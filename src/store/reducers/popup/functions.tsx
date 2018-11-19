@@ -10,11 +10,9 @@ export default {
         });
     },
     popPopup: (oldState: IPopupReducerState) => {
-        const copy = [ ...oldState.popups ];
-        copy.pop();
-        return updateObject(oldState, {
-            popups: copy
-        });
+        const popups = [ ...oldState.popups ];
+        popups.pop();
+        return updateObject(oldState, { popups });
     }
 
 }

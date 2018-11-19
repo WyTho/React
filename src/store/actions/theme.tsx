@@ -1,4 +1,3 @@
-
 import Actions from '../actionTypes';
 
 export const toggleTheme = () => ({

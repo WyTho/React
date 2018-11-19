@@ -1,4 +1,3 @@
-
 export enum TypeOf {
     UNDEFINED = 'undefined',
     NUMBER = 'number',
