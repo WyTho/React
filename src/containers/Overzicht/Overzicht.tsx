@@ -18,7 +18,7 @@ import StatusForLights from './Tiles/StatusForLights/StatusForLights';
 import TimeButtons from './Navigation/TimeButtons/TimeButtons';
 import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
 import StatusForOtherDevices from './Tiles/StatusForOtherDevices/StatusForOtherDevices';
-import {IPopup} from '../../store/reducers/popup';
+import {IPopup} from '../../utils/popup/popup';
 
 export interface IOverzichtProps {
     theme: Theme,

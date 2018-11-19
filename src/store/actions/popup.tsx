@@ -1,6 +1,6 @@
 
 import Actions from '../actionTypes';
-import {IPopup} from '../reducers/popup';
+import {IPopup} from '../../utils/popup/popup';
 
 export const pushPopup = (popup: IPopup) => ({
     type: Actions.PUSH_POPUP,

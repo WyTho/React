@@ -1,14 +1,7 @@
 
 import Actions from '../../actionTypes';
 import functions from './functions';
-import {IPopupDataDatapoint, IPopupDataItems, PopupType} from '../../../utils/popup/popup';
-import {IApiItem} from '../../../utils/data/dataTypes';
-
-export interface IPopup {
-    type: PopupType
-    title: string
-    data: IPopupDataItems | IPopupDataDatapoint | IApiItem
-}
+import {IPopup} from '../../../utils/popup/popup';
 
 export interface IPopupReducerState {
     popups: IPopup[]

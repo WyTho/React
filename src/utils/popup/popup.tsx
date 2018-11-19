@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {IApiItem, IApiItemGroup} from '../data/dataTypes';
 
-export enum PopupType {
-    ITEM_LIST = 'ITEM_LIST',
-    ITEM = 'ITEM',
-    DATAPOINT = 'DATAPOINT'
+export interface IPopup {
+    type: PopupType
+    title: string
+    data: IPopupDataItems | IPopupDataDatapoint | IApiItem
 }
 
 export interface IPopupDataItems {
@@ -15,11 +15,23 @@ export interface IPopupDataDatapoint {
     dateString: string
     value: string
 }
+
+export enum PopupType {
+    ITEM = 'ITEM',
+    ITEM_LIST = 'ITEM_LIST',
+    DATAPOINT = 'DATAPOINT'
+}
+
+const groupIcons: any = {
+    Verlichting: 'wb_incandescent'
+};
+
 export const getIconNameForGroups = (groups: IApiItemGroup[]) => {
-    const groupNames = groups.map(group => group.name);
-    console.log(groups);
-    if (groupNames.indexOf('Verlichting') !== -1) {
-        return 'wb_incandescent'
+    for (const groupName of Object.keys(groupIcons)) {
+        if (groups.map(group => group.name).indexOf(groupName) !== -1) {
+            return groupIcons[groupName]
+        }
     }
+
     return 'device_unknown'
 };

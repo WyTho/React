@@ -8,7 +8,7 @@ import {TimeSpan} from '../../../../utils/date/dateTypes';
 import {IApiGraph} from '../../../../utils/data/dataTypes';
 import configureChart from './ChartForWaterUsage.config';
 import {DataSet} from '../../../../utils/data/apiGraph';
-import {IPopup} from '../../../../store/reducers/popup';
+import {IPopup} from '../../../../utils/popup/popup';
 
 export interface IChartForWaterUsageProps {
     theme: Theme

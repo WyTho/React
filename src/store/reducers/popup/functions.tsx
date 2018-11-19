@@ -1,5 +1,6 @@
 import {updateObject} from '../../utilities';
-import {IPopup, IPopupReducerState} from './index';
+import {IPopupReducerState} from './index';
+import {IPopup} from '../../../utils/popup/popup';
 
 export default {
 

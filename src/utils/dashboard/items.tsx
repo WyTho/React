@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Grid, Icon, Theme, Typography} from '@material-ui/core';
 import {IApiItem} from '../data/dataTypes';
-import {IPopup} from '../../store/reducers/popup';
+import {IPopup} from '../popup/popup';
 
 export interface IStatusItemsProps {
     theme: Theme

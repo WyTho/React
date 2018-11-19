@@ -11,8 +11,7 @@ import {IChartForWaterUsageProps} from './ChartForWaterUsage';
 import {ChartData} from 'react-chartjs-2';
 import {createChartOptions, chartOptionsPresets} from '../../../../utils/dashboard/chartOptionsPresets';
 import {DataSet} from '../../../../utils/data/apiGraph';
-import {PopupType} from '../../../../utils/popup/popup';
-import {IPopup} from '../../../../store/reducers/popup';
+import {IPopup, PopupType} from '../../../../utils/popup/popup';
 
 const configureChart = (props: IChartForWaterUsageProps) => {
     const  { theme, selected: { timeSpan, graphStartDateTime, currentHourDateTime }, openPopup, dataset } = props;

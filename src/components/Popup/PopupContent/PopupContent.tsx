@@ -1,8 +1,7 @@
 import * as React from 'react';
 import * as actions from '../../../store/actions';
-import {IPopup} from '../../../store/reducers/popup';
 import {connect} from 'react-redux';
-import {PopupType} from '../../../utils/popup/popup';
+import {IPopup, PopupType} from '../../../utils/popup/popup';
 import {Theme} from '@material-ui/core';
 import ItemListPopup from './ItemListPopup/ItemListPopup';
 import ItemPopup from './ItemPopup/ItemPopup';

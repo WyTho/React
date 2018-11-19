@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import * as actions from './store/actions';
 import routes from './config.routes';
 import Popup from './components/Popup/Popup';
-import {IPopup} from './store/reducers/popup';
 import PopupContent from './components/Popup/PopupContent/PopupContent';
+import {IPopup} from './utils/popup/popup';
 
 interface IProps {
     darkThemeActive: boolean
