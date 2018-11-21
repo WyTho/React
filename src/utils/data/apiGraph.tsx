@@ -2,7 +2,7 @@ import store from '../../store/initialize';
 import {
     addDays,
     epochTimestamp,
-    getDateRangeOfTwoMonthsAround,
+    getDateRangeOfSixtyDaysAround,
     IDateRange,
     subtractDays
 } from '../date/date';
@@ -18,7 +18,7 @@ export const getAllDatasets = (): DataSet[] => {
 };
 
 export const getMissingDataRange = (centerDate: Date): null | IDateRange => {
-    const { fromDate, toDate } = getDateRangeOfTwoMonthsAround(centerDate);
+    const { fromDate, toDate } = getDateRangeOfSixtyDaysAround(centerDate);
     const neededFromTimestamp = epochTimestamp(fromDate);
     const neededToTimestamp = epochTimestamp(toDate);
 

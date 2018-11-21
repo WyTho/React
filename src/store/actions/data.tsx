@@ -1,7 +1,7 @@
 import Actions from '../actionTypes';
 import axios from '../../config.axios';
 import {TimeSpan} from '../../utils/date/dateTypes';
-import {epochTimestamp, getDateRangeOfTwoMonthsAround} from '../../utils/date/date';
+import {epochTimestamp, getDateRangeOfSixtyDaysAround} from '../../utils/date/date';
 import {DataSet, getAllDatasets} from '../../utils/data/apiGraph';
 
 export const setTimeSpanForGraphs = (timeSpan: TimeSpan) => ({
@@ -41,8 +41,8 @@ export const fetchApiDataFailed = (error: any) => ({
 });
 
 export const fetchApiGraphData = (centerDate: Date, typesOfData?: DataSet[]) => {
-    const fromDate = getDateRangeOfTwoMonthsAround(centerDate).fromDate;
-    const toDate = getDateRangeOfTwoMonthsAround(centerDate).toDate;
+    const fromDate = getDateRangeOfSixtyDaysAround(centerDate).fromDate;
+    const toDate = getDateRangeOfSixtyDaysAround(centerDate).toDate;
     return fetchApiGraphDataDispatcher(epochTimestamp(fromDate), epochTimestamp(toDate), typesOfData)
 };
 export const fetchApiItemsData = () => {

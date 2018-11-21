@@ -77,12 +77,12 @@ export const beautifyDate = (date: Date, format: string = '{DATE}'): string => {
 };
 
 export const getBeginningOfTheHour = (date: Date): Date => {
-    const beginDate = new Date(date.getTime());
+    const beginDate = new Date(date);
     beginDate.setHours(date.getHours(), 0, 0, 0);
     return beginDate
 };
 export const getBeginningOfTheDay = (date: Date): Date => {
-    const beginDate = new Date(date.getTime());
+    const beginDate = new Date(date);
     beginDate.setHours(0, 0, 0, 0);
     return beginDate
 };
@@ -93,12 +93,13 @@ export const getBeginningOfTheWeek = (date: Date): Date => {
         const diff = d.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
         return new Date(d.setDate(diff));
     };
-    return getMonday(date)
+    return getBeginningOfTheDay(getMonday(date))
 };
 export const getEndOfTheWeek = (date: Date): Date => {
     const copy = new Date(date.getTime());
-    copy.setDate(date.getDate() - (date.getDay() - 1) + 6);
-    return copy;
+    const dayNr = (date.getDay() === 0) ? 6 : (date.getDay() - 1);
+    copy.setDate(date.getDate() - dayNr + 6);
+    return getBeginningOfTheDay(copy);
 };
 export const getBeginningOfTheMonth = (date: Date): Date => {
     return new Date(date.getFullYear(), date.getMonth(), 1);
@@ -124,9 +125,17 @@ export const cleanMilliSecondsAndSeconds = (date: Date): Date => {
     return cleanedDate
 };
 
-export const chartIsAtCurrentTimespan = (timeSpan: TimeSpan, date: Date): boolean => {
+/**
+ * This function checks the starting date of a chart and returns true if the chart is displaying
+ * the current day/week/month (depending on the provided timespan)
+ *
+ * @param {TimeSpan} timeSpan
+ * @param {Date} startingDate
+ * @returns {boolean}
+ */
+export const chartIsAtCurrentTimespan = (timeSpan: TimeSpan, startingDate: Date): boolean => {
     const now = new Date();
-    const diff = getDiffrenceIn(timeSpan, now, date);
+    const diff = getDiffrenceIn(timeSpan, now, startingDate);
     return diff === 0
 };
 
@@ -174,6 +183,7 @@ export const getDiffrenceIn = (timeSpan: TimeSpan, date1: Date, date2: Date): nu
     if (timeSpan === TimeSpan.day) {
         diff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     } else if (timeSpan === TimeSpan.week) {
+        // TODO: calculate week diffrence diffrently
         diff = Math.ceil(timeDiff / (1000 * 3600 * 24 * 7));
     } else {
         let months = (date2.getFullYear() - date1.getFullYear()) * 12;
@@ -203,7 +213,7 @@ const getNextOrPreviousDate = (type: string, timeSpan: TimeSpan, date: Date): Da
     return date
 };
 
-export const getDateRangeOfTwoMonthsAround = (centerDate: Date): IDateRange => {
+export const getDateRangeOfSixtyDaysAround = (centerDate: Date): IDateRange => {
     const fromDate = getBeginningOfTheWeek(getBeginningOfTheDay(subtractDays(new Date(centerDate.getTime()), 60)));
     const toDate = getEndOfTheWeek(getBeginningOfTheDay(addDays(new Date(centerDate.getTime()), 60)));
     return { fromDate, toDate }

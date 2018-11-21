@@ -6,7 +6,7 @@ import 'chartjs-plugin-style';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import store from './store/initialize'
+import store from './store/initialize';
 import App from './App';
 import './styles.scss';
 import './styles/main.scss';
