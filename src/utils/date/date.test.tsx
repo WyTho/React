@@ -227,6 +227,7 @@ describe('date.tsx (utils)', () => {
             shouldMakeACopyOfTheDateObject(func, date)
         });
     });
+
     describe('chartIsAtCurrentTimespan()', () => {
         const func = dateUtils.chartIsAtCurrentTimespan;
 
@@ -258,7 +259,6 @@ describe('date.tsx (utils)', () => {
             });
         });
 
-        // TODO: fix
         describe('chartIsAtCurrent WEEK', () => {
             it('should be false for every date that falls outside the current week', () => {
                 const sundayBeforeThisWeek = dateUtils.getBeginningOfTheWeek(today);
@@ -267,8 +267,8 @@ describe('date.tsx (utils)', () => {
                 sundayBeforeThisWeek.setDate(sundayBeforeThisWeek.getDate() - 1);
                 mondayAfterThisWeek.setDate(mondayAfterThisWeek.getDate() + 1);
 
-                // expect(func(TimeSpan.week, sundayBeforeThisWeek)).toBe(false);
-                // expect(func(TimeSpan.week, mondayAfterThisWeek)).toBe(false);
+                expect(func(TimeSpan.week, sundayBeforeThisWeek)).toBe(false);
+                expect(func(TimeSpan.week, mondayAfterThisWeek)).toBe(false);
             });
         });
 
@@ -337,10 +337,139 @@ describe('date.tsx (utils)', () => {
         });
     });
 
-    // TODO:
     describe('getDiffrenceIn()', () => {
         const func = dateUtils.getDiffrenceIn;
+        describe('timeSpan DAY', () => {
+            it('should be a diffrence of 0 days when comparing today to today', () => {
+                expect(func(TimeSpan.day, today, today)).toBe(0);
+            });
+            it('should be a diffrence of 0 days when comparing the beginning of the day and the end of the day', () => {
+                const beginningOfTheDay = dateUtils.getBeginningOfTheDay(today);
+                const endOfTheDay = new Date();
+                endOfTheDay.setDate(beginningOfTheDay.getDate());
+                endOfTheDay.setHours(23);
+                endOfTheDay.setMinutes(59);
+                endOfTheDay.setSeconds(59);
+                endOfTheDay.setMilliseconds(999);
 
+                expect(func(TimeSpan.day, beginningOfTheDay, endOfTheDay)).toBe(0);
+            });
+
+            it('should be a diffrence of 1 day when comparing today to tomorrow', () => {
+                const tomorrow = new Date();
+                tomorrow.setDate(today.getDate() + 1);
+                expect(func(TimeSpan.day, today, tomorrow)).toBe(1);
+            });
+            it('should be a diffrence of -1 day when comparing today to yesterday', () => {
+                const yesterday = new Date();
+                yesterday.setDate(today.getDate() - 1);
+                expect(func(TimeSpan.day, today, yesterday)).toBe(-1);
+            });
+
+            it('should be a diffrence of 90000 when comparing today to 90000 days in the future', () => {
+                const somewhereInTheFuture = new Date();
+                somewhereInTheFuture.setDate(today.getDate() + 90000);
+                expect(func(TimeSpan.day, today, somewhereInTheFuture)).toBe(90000);
+            });
+            it('should be a diffrence of -90000 when comparing today to 90000 days in the past', () => {
+                const somewhereInThePast = new Date();
+                somewhereInThePast.setDate(today.getDate() - 90000);
+                expect(func(TimeSpan.day, today, somewhereInThePast)).toBe(-90000);
+            });
+        });
+        describe('timeSpan WEEK', () => {
+            it('should be a diffrence of 0 weeks when comparing today to today', () => {
+                expect(func(TimeSpan.week, today, today)).toBe(0);
+            });
+            it('should be a diffrence of 0 weeks when comparing the beginning of the week to the end of the week', () => {
+                const beginningOfTheWeek = dateUtils.getBeginningOfTheWeek(today);
+                const endOfTheWeek = dateUtils.getEndOfTheWeek(today);
+                expect(func(TimeSpan.week, beginningOfTheWeek, endOfTheWeek)).toBe(0);
+            });
+
+            it('should be a diffrence of 1 week when comparing this week to next week', () => {
+                const nextWeek = new Date();
+                nextWeek.setDate(today.getDate() + 7);
+                expect(func(TimeSpan.week, today, nextWeek)).toBe(1);
+            });
+            it('should be a diffrence of 1 week when comparing the beginning of this week to the beginning of next week', () => {
+                const beginningOfThisWeek = dateUtils.getBeginningOfTheWeek(today);
+                const nextWeek = new Date();
+                nextWeek.setDate(today.getDate() + 7);
+                const beginningOfNextWeek = dateUtils.getBeginningOfTheWeek(nextWeek);
+                expect(func(TimeSpan.week, beginningOfThisWeek, beginningOfNextWeek)).toBe(1);
+            });
+            it('should be a diffrence of 1 week when comparing the end of this week to the end of next week', () => {
+                const endOfThisWeek = dateUtils.getEndOfTheWeek(today);
+                const nextWeek = new Date();
+                nextWeek.setDate(today.getDate() + 7);
+                const endOfNextWeek = dateUtils.getEndOfTheWeek(nextWeek);
+                expect(func(TimeSpan.week, endOfThisWeek, endOfNextWeek)).toBe(1);
+            });
+
+            it('should be a diffrence of -1 week when comparing this week to the previous week', () => {
+                const previousWeek = new Date();
+                previousWeek.setDate(today.getDate() - 7);
+                expect(func(TimeSpan.week, today, previousWeek)).toBe(-1);
+            });
+            it('should be a diffrence of -1 week when comparing the beginning of this week to the beginning of the previous week', () => {
+                const beginningOfThisWeek = dateUtils.getBeginningOfTheWeek(today);
+                const previousWeek = new Date();
+                previousWeek.setDate(today.getDate() - 7);
+                const beginningOfNextWeek = dateUtils.getBeginningOfTheWeek(previousWeek);
+                expect(func(TimeSpan.week, beginningOfThisWeek, beginningOfNextWeek)).toBe(-1);
+            });
+            it('should be a diffrence of -1 week when comparing the end of this week to the end of the previous week', () => {
+                const endOfThisWeek = dateUtils.getEndOfTheWeek(today);
+                const previousWeek = new Date();
+                previousWeek.setDate(today.getDate() - 7);
+                const endOfPreviousWeek = dateUtils.getEndOfTheWeek(previousWeek);
+                expect(func(TimeSpan.week, endOfThisWeek, endOfPreviousWeek)).toBe(-1);
+            });
+
+            it('should be a diffrence of 999 weeks when comparing this week to (999 * 7 days) from now', () => {
+                const someFutureDay = new Date();
+                someFutureDay.setDate(today.getDate() + (999 * 7));
+
+                expect(func(TimeSpan.week, today, someFutureDay)).toBe(999);
+            });
+            it('should be a diffrence of 2 weeks when comparing the beginning of this week to the end of the week, 2 weeks from now', () => {
+                const beginningOfThisWeek = dateUtils.getBeginningOfTheWeek(today);
+                let endOfTheWeek2WeeksFromNow = new Date();
+                endOfTheWeek2WeeksFromNow.setDate(beginningOfThisWeek.getDate() + 14);
+                endOfTheWeek2WeeksFromNow = dateUtils.getEndOfTheWeek(endOfTheWeek2WeeksFromNow);
+
+                expect(func(TimeSpan.week, beginningOfThisWeek, endOfTheWeek2WeeksFromNow)).toBe(2);
+            });
+        });
+        describe('timeSpan MONTH', () => {
+            it('should be a diffrence of 0 months when comparing today to today', () => {
+                expect(func(TimeSpan.month, today, today)).toBe(0);
+            });
+            it('should be a diffrence of 0 month when comparing the beginning of this month to the end of this month', () => {
+                const beginningOfThisMonth = dateUtils.getBeginningOfTheMonth(today);
+                const endOfThisMonth = dateUtils.getEndOfTheMonth(today);
+                expect(func(TimeSpan.month, beginningOfThisMonth, endOfThisMonth)).toBe(0);
+                expect(func(TimeSpan.month, endOfThisMonth, beginningOfThisMonth)).toBe(0);
+            });
+            it('should be a diffrence of 1 month when comparing today to next month', () => {
+                const thisDateNextMonth = new Date();
+                thisDateNextMonth.setMonth(today.getMonth() + 1);
+                expect(func(TimeSpan.month, today, thisDateNextMonth)).toBe(1);
+            });
+            it('should be a diffrence of -1 month when comparing today to the previous month', () => {
+                const thisDatePreviousMonth = new Date();
+                thisDatePreviousMonth.setMonth(today.getMonth() - 1);
+                expect(func(TimeSpan.month, today, thisDatePreviousMonth)).toBe(-1);
+            });
+            it('should be a diffrence of 1 month when comparing the beginning of this month to the end of next month', () => {
+                const beginningOfThisMonth = dateUtils.getBeginningOfTheMonth(today);
+                const thisDateNextMonth = new Date();
+                thisDateNextMonth.setMonth(today.getMonth() + 1);
+                const endOfNextMonth = dateUtils.getEndOfTheMonth(thisDateNextMonth);
+                expect(func(TimeSpan.month, beginningOfThisMonth, endOfNextMonth)).toBe(1);
+            });
+        });
     });
 
     describe('getPreviousDate()', () => {
@@ -532,6 +661,7 @@ describe('date.tsx (utils)', () => {
             expect(func(pastDate, 200).getTime()).toBe(subtractDaysFromDate(pastDate, 200).getTime());
         })
     });
+
 });
 
 const shouldGetTheBeginningOfTheDay = (func: (date: Date) => Date, date: Date) => {

@@ -175,16 +175,15 @@ export const getDisplayDateForTimespan = (timeSpan: TimeSpan, date: Date): strin
 };
 
 export const getDiffrenceIn = (timeSpan: TimeSpan, date1: Date, date2: Date): number => {
-    date1 = getBeginningOfTheDay(cleanMilliSecondsAndSeconds(date1));
-    date2 = getBeginningOfTheDay(cleanMilliSecondsAndSeconds(date2));
-    const timeDiff = date2.getTime() - date1.getTime();
-
     let diff;
     if (timeSpan === TimeSpan.day) {
-        diff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        date1 = getBeginningOfTheDay(date1);
+        date2 = getBeginningOfTheDay(date2);
+        diff = Math.ceil((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
     } else if (timeSpan === TimeSpan.week) {
-        // TODO: calculate week diffrence diffrently
-        diff = Math.ceil(timeDiff / (1000 * 3600 * 24 * 7));
+        date1 = getBeginningOfTheWeek(date1);
+        date2 = getBeginningOfTheWeek(date2);
+        diff = Math.ceil((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24 * 7));
     } else {
         let months = (date2.getFullYear() - date1.getFullYear()) * 12;
         months -= date1.getMonth();
