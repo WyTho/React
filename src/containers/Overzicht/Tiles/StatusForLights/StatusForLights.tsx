@@ -14,10 +14,11 @@ class StatusForLights extends React.Component<IStatusItemsProps, {}> {
 
         let content = null;
 
-        let on: IApiItem[];
-        let off: IApiItem[];
+        let onclickHandler;
 
         if (!loading && items) {
+            let on: IApiItem[];
+            let off: IApiItem[];
 
             // Create a list of all items in the group "Verlichting" that have "KILOWATT" usage
             let devices: IApiItem[] = items.filter(item => item.groups.map(group => group.name).indexOf('Verlichting') !== -1);
@@ -34,7 +35,13 @@ class StatusForLights extends React.Component<IStatusItemsProps, {}> {
 
             const show: IApiItem[] = [];
 
-            content = createContentForItemsTile(ItemTileType.LIGHTS, usage, on, off, show)
+            content = createContentForItemsTile(ItemTileType.LIGHTS, usage, on, off, show);
+
+            onclickHandler = () => props.openPopup({
+                type: PopupType.ITEM_LIST,
+                title,
+                data: { on, off }
+            })
         }
 
         return (
@@ -42,11 +49,7 @@ class StatusForLights extends React.Component<IStatusItemsProps, {}> {
                              loading={loading}
                              errorMessage={!loading && !items ?  `Het laden van ${title.toLowerCase()} is mislukt!` : null}
                              onFetchData={props.fetchApiItemsData}
-                             onClicked={() => props.openPopup({
-                                 type: PopupType.ITEM_LIST,
-                                 title,
-                                 data: { on, off }
-                             })}>
+                             onClicked={onclickHandler}>
                 { content }
             </InformationCard>
         );

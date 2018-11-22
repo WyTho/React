@@ -32,9 +32,6 @@ export class PopupContent extends React.Component<IPassedPopupContentProps & IRe
             default:
                 popupContent = <>Undefined popup type</>
         }
-        if (popup.type === PopupType.ITEM_LIST) {
-            popupContent = <ItemListPopup {...props} />
-        }
 
         return popupContent;
     }

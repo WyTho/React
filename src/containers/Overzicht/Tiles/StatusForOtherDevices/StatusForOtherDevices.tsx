@@ -14,10 +14,11 @@ class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}> {
 
         let content = null;
 
-        let on: IApiItem[];
-        let off: IApiItem[];
+        let onclickHandler;
 
         if (!loading && items) {
+            let on: IApiItem[];
+            let off: IApiItem[];
 
             // Create a list of all devices that are not in the group "Verlichting" and have "KILOWATT" usage
             let devices: IApiItem[] = items.filter(item => item.groups.map(group => group.name).indexOf('Verlichting') === -1);
@@ -36,6 +37,11 @@ class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}> {
                 .reduce((sum, u) => sum + u, 0);
 
             content = createContentForItemsTile(ItemTileType.OTHER, usage, on, off, show);
+            onclickHandler = () => props.openPopup({
+                type: PopupType.ITEM_LIST,
+                title,
+                data: { on, off }
+            })
         }
 
         return (
@@ -43,11 +49,7 @@ class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}> {
                              loading={loading}
                              errorMessage={!loading && !items ?  `Het laden van ${title.toLowerCase()} is mislukt!` : null}
                              onFetchData={props.fetchApiItemsData}
-                             onClicked={() => props.openPopup({
-                                 type: PopupType.ITEM_LIST,
-                                 title,
-                                 data: { on, off }
-                             })}>
+                             onClicked={onclickHandler}>
                 { content }
             </InformationCard>
         );
