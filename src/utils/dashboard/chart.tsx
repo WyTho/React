@@ -146,13 +146,14 @@ export const createAnnotationsForTimeSpan = (
     if (timeSpan === TimeSpan.day) {
 
         let timesToAnnotate = [6, 12, 18];
-        timesToAnnotate = timesToAnnotate.filter((x: number) => currentHour.getHours() !== x);
-        timesToAnnotate.forEach((hour: number) => annotations.push(createHourAnnotation(hour)));
-
-        const now = labels.find((label: Date) => label.getTime() === currentHour.getTime());
-        if (now) {
-            annotations.push(createNowAnnotation(now));
+        if (beginningOfTheDayLabel) {
+            timesToAnnotate = timesToAnnotate.filter((x: number) => currentHour.getHours() !== x);
+            const now = labels.find((label: Date) => label.getTime() === currentHour.getTime());
+            if (now) {
+                annotations.push(createNowAnnotation(now));
+            }
         }
+        timesToAnnotate.forEach((hour: number) => annotations.push(createHourAnnotation(hour)));
 
     } else if (timeSpan === TimeSpan.week) {
 

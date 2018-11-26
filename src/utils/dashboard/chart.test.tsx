@@ -63,6 +63,7 @@ describe('chart.tsx (utils)', () => {
 
     describe('createGradientForChart()', () => {
         const func = chartUtils.createGradientForChart;
+
         it('should return some gradient object when called', () => {
 
             const mockCanvas = {
@@ -439,7 +440,6 @@ describe('chart.tsx (utils)', () => {
                 }
             });
             expect(nuFound).toBeTruthy();
-            expect(result).toHaveLength(5);
         });
         it('should show the "NOW" label if the current week is shown', () => {
             const now = new Date();
@@ -464,7 +464,6 @@ describe('chart.tsx (utils)', () => {
                 }
             });
             expect(nuFound).toBeTruthy();
-            expect(result).toHaveLength(7);
         });
         it('should show the "NOW" label if the current month is shown', () => {
             const now = new Date();
