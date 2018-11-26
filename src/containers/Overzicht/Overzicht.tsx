@@ -12,13 +12,14 @@ import {
     IDateRange,
 } from '../../utils/date/date';
 import {TimeSpan} from '../../utils/date/dateTypes';
-import {DataSet, getMissingDataRange} from '../../utils/data/apiGraph';
+import {DataSet} from '../../utils/data/apiGraph';
 import ChartForWaterUsage from './Tiles/ChartForWaterUsage/ChartForWaterUsage';
 import StatusForLights from './Tiles/StatusForLights/StatusForLights';
 import TimeButtons from './Navigation/TimeButtons/TimeButtons';
 import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
 import StatusForOtherDevices from './Tiles/StatusForOtherDevices/StatusForOtherDevices';
 import {IPopup} from '../../utils/popup/popup';
+import {getMissingDataRange} from '../../utils/data/reduxStore';
 
 export interface IOverzichtProps {
     theme: Theme,
