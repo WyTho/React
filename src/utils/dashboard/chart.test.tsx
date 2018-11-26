@@ -21,12 +21,12 @@ describe('chart.tsx (utils)', () => {
 
     const testableDates = [date, today, futureDate, pastDate];
 
-    const mockApiGraphData = (timespan: TimeSpan, d: Date) => {
+    const mockApiGraphData = (timeSpan: TimeSpan, d: Date) => {
         let amountOfDummyWeeks = 1;
 
-        if (timespan === TimeSpan.day) {
+        if (timeSpan === TimeSpan.day) {
             d = dateUtils.getBeginningOfTheDay(d);
-        } else if (timespan === TimeSpan.week) {
+        } else if (timeSpan === TimeSpan.week) {
             d = dateUtils.getBeginningOfTheWeek(d);
         } else {
             d = dateUtils.getBeginningOfTheMonth(d);
@@ -91,12 +91,12 @@ describe('chart.tsx (utils)', () => {
         });
 
         it('should have the right labels', () => {
-            const getExpectedLabels = (startingDate: Date, timespan: TimeSpan, millisecondsBetweenLabels: number) => {
+            const getExpectedLabels = (startingDate: Date, timeSpan: TimeSpan, millisecondsBetweenLabels: number) => {
                 let amount;
-                if (timespan === TimeSpan.day) {
+                if (timeSpan === TimeSpan.day) {
                     startingDate = dateUtils.getBeginningOfTheDay(startingDate);
                     amount = 24
-                } else if (timespan === TimeSpan.week) {
+                } else if (timeSpan === TimeSpan.week) {
                     startingDate = dateUtils.getBeginningOfTheWeek(startingDate);
                     amount = 7
                 } else {
@@ -279,17 +279,17 @@ describe('chart.tsx (utils)', () => {
     describe('createAnnotationsForTimeSpan()', () => {
         const func = chartUtils.createAnnotationsForTimeSpan;
 
-        const mockLabels = (timespan: TimeSpan, d: Date) => {
+        const mockLabels = (timeSpan: TimeSpan, d: Date) => {
             const labels: Date[] = [];
             const oneHour = 3600000;
             const oneDay = oneHour * 24;
 
-            if (timespan === TimeSpan.day) {
+            if (timeSpan === TimeSpan.day) {
                 d = dateUtils.getBeginningOfTheDay(d);
                 for (let i = d.getTime(); i < d.getTime() + (oneHour * 24); i += oneHour) {
                     labels.push(new Date(i))
                 }
-            } else if (timespan === TimeSpan.week) {
+            } else if (timeSpan === TimeSpan.week) {
                 d = dateUtils.getBeginningOfTheWeek(d);
                 for (let i = d.getTime(); i < d.getTime() + (oneDay * 7); i += oneDay) {
                     labels.push(new Date(i))
@@ -312,30 +312,6 @@ describe('chart.tsx (utils)', () => {
                 useNextVariants: true
             }
         });
-
-        // const expectedAnnotations = (timespan: TimeSpan) => {
-        //     const heightAnnotation: IAnnotation = {
-        //         type: 'line',
-        //         drawTime: 'beforeDatasetsDraw',
-        //         mode: 'horizontal',
-        //         scaleID: 'y-axis-0',
-        //         value: 'no value defined',
-        //         borderColor: 'transparent',
-        //         borderWidth: 1,
-        //         borderDash: [0, 0],
-        //         // label: {
-        //         //     backgroundColor: '',
-        //         //     position: '',
-        //         //     content: ''
-        //         // }
-        //     };
-        //
-        //     if (timespan === TimeSpan.day) {
-        //         return [
-        //             heightAnnotation
-        //         ]
-        //     }
-        // }
 
         it('should create the correct day annotations of the times when the current day is not shown', () => {
             const now = new Date();
