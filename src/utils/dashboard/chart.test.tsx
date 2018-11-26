@@ -61,6 +61,24 @@ describe('chart.tsx (utils)', () => {
         return data
     };
 
+    describe('createGradientForChart()', () => {
+        const func = chartUtils.createGradientForChart;
+        it('should return some gradient object when called', () => {
+
+            const mockCanvas = {
+                getContext: (s: string) => ({
+                    createLinearGradient: (n1: number, n2: number, n3: number, n4: number) => ({
+                        addColorStop: (n: number, hexColor: string) => {
+                            return 1
+                        }
+                    })
+                })
+            };
+
+            expect(func(mockCanvas, '#123456')).toBeDefined();
+        });
+    });
+
     describe('getLabelsForChart()', () => {
         const func = chartUtils.getLabelsForChart;
 
@@ -277,7 +295,7 @@ describe('chart.tsx (utils)', () => {
                     labels.push(new Date(i))
                 }
             } else {
-                d = dateUtils.getEndOfTheMonth(d);
+                d = dateUtils.getBeginningOfTheMonth(d);
                 for (let i = d.getTime(); i < d.getTime() + (oneDay * dateUtils.getEndOfTheMonth(d).getDate()); i += oneDay) {
                     labels.push(new Date(i))
                 }
@@ -422,14 +440,181 @@ describe('chart.tsx (utils)', () => {
 
             expect(result[6]).toBeFalsy();
         });
-        it.skip('should handle annotation overlap of the "NOW" label if the current day is shown', () => {
+        it('should show the "NOW" label if the current day is shown', () => {
+            const now = new Date();
+            const timeSpan = TimeSpan.day;
+            const labels = mockLabels(timeSpan, now);
+            const currentHour = dateUtils.getBeginningOfTheHour(now);
+            const theme: Theme = mockTheme();
+            const yAxesHeight = 20;
+            const result = func(
+                timeSpan,
+                labels,
+                currentHour,
+                theme,
+                yAxesHeight
+            );
+            let nuFound = false;
+            result.forEach(res => {
+                if (res.label) {
+                    if (res.label.content === 'Nu') {
+                        nuFound = true
+                    }
+                }
+            });
+            expect(nuFound).toBeTruthy();
+            expect(result).toHaveLength(5);
+        });
+        it('should show the "NOW" label if the current week is shown', () => {
+            const now = new Date();
+            const timeSpan = TimeSpan.week;
+            const labels = mockLabels(timeSpan, now);
+            const currentHour = dateUtils.getBeginningOfTheHour(now);
+            const theme: Theme = mockTheme();
+            const yAxesHeight = 20;
+            const result = func(
+                timeSpan,
+                labels,
+                currentHour,
+                theme,
+                yAxesHeight
+            );
+            let nuFound = false;
+            result.forEach(res => {
+                if (res.label) {
+                    if (res.label.content === 'Nu') {
+                        nuFound = true
+                    }
+                }
+            });
+            expect(nuFound).toBeTruthy();
+            expect(result).toHaveLength(7);
+        });
+        it('should show the "NOW" label if the current month is shown', () => {
+            const now = new Date();
+            const timeSpan = TimeSpan.month;
+            const labels = mockLabels(timeSpan, now);
+            const currentHour = dateUtils.getBeginningOfTheHour(now);
+            const theme: Theme = mockTheme();
+            const yAxesHeight = 20;
+            const result = func(
+                timeSpan,
+                labels,
+                currentHour,
+                theme,
+                yAxesHeight
+            );
+            let nuFound = false;
+
+            result.forEach(res => {
+                if (res.label) {
+                    if (res.label.content === 'Nu') {
+                        nuFound = true
+                    }
+                }
+            });
+            expect(nuFound).toBeTruthy();
+        });
+
+        it('should handle annotation overlap of the "NOW" label if the current day is shown', () => {
+            const sixOClock = dateUtils.getBeginningOfTheDay(new Date());
+            sixOClock.setHours(6);
+
+            const timeSpan = TimeSpan.day;
+            const labels = mockLabels(timeSpan, sixOClock);
+            const currentHour = dateUtils.getBeginningOfTheHour(sixOClock);
+            const theme: Theme = mockTheme();
+            const yAxesHeight = 20;
+            const result = func(
+                timeSpan,
+                labels,
+                currentHour,
+                theme,
+                yAxesHeight
+            );
+
+            let nuFound = false;
+            let sixOClockFound = false;
+            result.forEach(res => {
+                if (res.label) {
+                    if (res.label.content === 'Nu') {
+                        nuFound = true
+                    }
+                    if (res.label.content === '6:00') {
+                        sixOClockFound = true
+                    }
+                }
+            });
+            expect(nuFound).toBeTruthy();
+            expect(sixOClockFound).toBeFalsy();
+            expect(result).toHaveLength(4);
 
         });
-        it.skip('should handle annotation overlap of the "NOW" label if the current week is shown', () => {
+        it('should handle annotation overlap of the "NOW" label if the current week is shown', () => {
+            const tuesday = new Date();
+            tuesday.setDate(date.getDate() - 1);
 
+            const timeSpan = TimeSpan.week;
+            const labels = mockLabels(timeSpan, tuesday);
+            const currentHour = dateUtils.getBeginningOfTheHour(tuesday);
+            const theme: Theme = mockTheme();
+            const yAxesHeight = 20;
+            const result = func(
+                timeSpan,
+                labels,
+                currentHour,
+                theme,
+                yAxesHeight
+            );
+
+            let nuFound = false;
+            let tuesdayFound = false;
+            result.forEach(res => {
+                if (res.label) {
+                    if (res.label.content === 'Nu') {
+                        nuFound = true
+                    }
+                    if (res.label.content === 'Di') {
+                        tuesdayFound = true
+                    }
+                }
+            });
+            expect(nuFound).toBeTruthy();
+            expect(tuesdayFound).toBeFalsy();
+            expect(result).toHaveLength(6);
         });
-        it.skip('should handle annotation overlap of the "NOW" label if the current month is shown', () => {
+        it('should handle annotation overlap of the "NOW" label if the current month is shown', () => {
+            const the20th = new Date();
+            the20th.setDate(date.getDate() - 1);
 
+            const timeSpan = TimeSpan.month;
+            const labels = mockLabels(timeSpan, the20th);
+            const currentHour = dateUtils.getBeginningOfTheHour(the20th);
+            const theme: Theme = mockTheme();
+            const yAxesHeight = 20;
+            const result = func(
+                timeSpan,
+                labels,
+                currentHour,
+                theme,
+                yAxesHeight
+            );
+
+            let nuFound = false;
+            let the20thFound = false;
+            result.forEach(res => {
+                if (res.label) {
+                    if (res.label.content === 'Nu') {
+                        nuFound = true
+                    }
+                    if (res.label.content === '20') {
+                        the20thFound = true
+                    }
+                }
+            });
+            expect(nuFound).toBeTruthy();
+            expect(the20thFound).toBeFalsy();
+            expect(result).toHaveLength(6);
         });
     });
 });
