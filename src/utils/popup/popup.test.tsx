@@ -1,7 +1,7 @@
 
 import * as popupUtils from './popup';
 
-describe('items.tsx (utils)', () => {
+describe('popup.tsx (utils)', () => {
 
     describe('getIconNameForGroups()', () => {
         const func = popupUtils.getIconNameForGroups;
