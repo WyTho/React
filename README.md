@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 You need:
 * [NodeJS and NPM](https://nodejs.org/) to install the dependencies for this project
-* [The Python Backend](https://github.com/WyTho/python_flask) running on `http://127.0.0.1:5000` (can be changed in `webpack.cinfig.js` is necessary)
+* [The Python Backend](https://github.com/WyTho/python_flask) running on `http://127.0.0.1:5000` (can be changed in `webpack.config.js` is necessary)
 
 ### Installing
 
@@ -53,35 +53,35 @@ npm run test:watch
 
 ## Generate a test-coverage rapport
 
-To generate a test coverage rapport run the following command:
+To generate a test coverage rapport run the following command.
 ```
 npm run test:coverage
 ```
 This command will add a folder named `/_coverage` in the root of this project. 
 
-After running this command you can open the `/lcov-report/index.html` file generated in this folder manually, or by running.
+If you're running this project on a Windows device, you can run the following command to open the coverage rapport in your default browser.
 ```
 npm run show:coverage
 ```
-This command will open the coverage rapport in your default browser.
+Alternatively you can open the coverage rapport manually by opening `/_coverage/lcov-report/index.html`.
 
 ## Generate documentation from the typescript code
 
-To automatically generate documentation for this project, run the following command:
+To automatically generate documentation for this project, run the following command.
 ```
 npm run docs:generate
 ```
 This command will add a folder named `/_documentation` in the root of this project. 
 
-After running this command you can open the `/index.html` file generated in this folder manually, or by running.
+If you're running this project on a Windows device, you can run the following command to open the generated documentation in your default browser.
 ```
 npm run show:docs
 ```
-This command will open the generated documentation in your default browser.
+Alternatively you can open the generated documentation manually by opening `/_documentation/index.html`.
 
 ## Deployment
 
-To build this app for deployment run the following command:
+To build this app for deployment run the following command.
 ```
 npm run build
 ```
