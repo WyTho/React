@@ -9,4 +9,7 @@ node_modules/*
 dist/*
 
 #JEST
-coverage/*
+_coverage/*
+
+#JS-DOC
+_documentation/*
