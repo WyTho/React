@@ -12,7 +12,9 @@
     "start:dev:withnodemon": "nodemon --watch webpack.config.js --exec \"webpack-dev-server --mode=development\"",
     "start:prod": "webpack-dev-server --mode=production",
     "build": "webpack --mode production",
-    "fix:nodesass": "npm rebuild node-sass"
+    "fix:nodesass": "npm rebuild node-sass",
+    "win:showcoverage": "start coverage/lcov-report/index.html",
+    "mac:showcoverage": "open coverage/lcov-report/index.html"
   },
   "repository": {
     "type": "git",
