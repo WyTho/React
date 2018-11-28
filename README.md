@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 You need:
 * [NodeJS and NPM](https://nodejs.org/) to install the dependencies for this project
-* [The Python Backend](https://github.com/WyTho/python_flask) running on `http://127.0.0.1:5000` (can be changed in `webpack.config.js` is necessary)
+* [The Python backend](https://github.com/WyTho/python_flask) running on `http://127.0.0.1:5000` (can be changed in `webpack.config.js` is necessary)
 
 ### Installing
 
@@ -86,6 +86,51 @@ To build this app for deployment run the following command.
 npm run build
 ```
 This command will compile the project files to `/dist` so this can be deployed on a web-server.
+
+# Code structure
+```markdown
+├── src
+│   ├── components (3)
+│   ├── containers (4)
+│   ├── store (5)
+│   │   ├── actions (5a)
+│   │   ├── reducers (5b)
+│   │   ├── actionTypes.tsx (5c)
+│   │   ├── initialize.tsx (5d)
+│   │   ├── middlewares.tsx (5e)
+│   │   └── utilities.tsx (5f)
+│   ├── styles (6)
+│   ├── utils (7)
+│   │   ├── dashboard (7a)
+│   │   ├── data (7b)
+│   │   ├── date (7c)
+│   │   └── popup (7d)
+│   ├── App.tsx (2)
+│   └── index.tsx (1)
+└── webpack.config.js
+```
+
+1. `index.tsx` is the entry point of the application (actually `webpack.config.js` is the entry point, but webpack will use `index.tsx` to bundle all files)
+
+2. `App.tsx` is the root component (and is being inserted into the DOM in `index.tsx`)
+
+3. The `components` folder contains (mostly) functional components to be used in `containers`.
+
+4. `containers` are the 'pages' of the application, they use functional components and have other components inside specific to that page.
+
+5. The [Redux](https://redux.js.org/) store ([Usage with react tutorial](https://redux.js.org/basics/usagewithreact))
+    * a. In the `actions` folder are all possible actions for the reducers defined.
+    * b. In the `reducers` folder you can find the logic behind all of the actions. In these reducers the state gets changed afer an action has been called.
+    * c. `actionTypes.tsx` is an enum with all possible actions to dispatch to the Redux-store.
+    * d. `initiallize.tsx` will initialize the state of Redux, this should only be called once (in `index.tsx`).
+    * e. `middlewares.tsx` is a place to put middleware for intercepting actions before being dispatched to the reducers (like a logger for example).
+    * f. `utilities.tsx` holds useful functions that are used in a lot of the reducers.
+6. The `styles` folder contains all styling for the pages as well as the functional components. For styling the [The 7-1 Architectural Pattern](https://sass-guidelin.es/#the-7-1-pattern) for SASS has been used.
+7. Utility functions
+    * a. In the `dashboard` folder, there are some utility functions for the `Overview` page (the dashboard). These functions include: building chart labels & values, creating annotations, getting the current value etc.
+    * b. In the `data` folder, there are utility functions for handling the different kinds of data send from [the Python backend](https://github.com/WyTho/python_flask).
+    * c. In the `date` folder, there are many utility functions for handling Date values.
+    * d. In the `popup` folder, there are utility functions for getting the name of an icon (for example) to be used in the pop-up window.
 
 ## Authors
 
