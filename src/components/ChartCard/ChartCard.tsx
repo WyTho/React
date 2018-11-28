@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Paper, Typography } from '@material-ui/core';
 import { ChartData, ChartOptions } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import Loading from '../../components/Loading/Loading'
+import Loading from '../../components/Loading/Loading';
 
 interface IProps {
     children: any

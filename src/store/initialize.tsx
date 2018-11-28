@@ -11,5 +11,11 @@ const rootReducer = combineReducers({
 });
 
 // const windowIfDefined = typeof window === 'undefined' ? null : window as any;
-const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+let composeEnhancers;
+if (!(typeof window === 'undefined')) {
+    composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+} else {
+    composeEnhancers = compose;
+}
+
 export default createStore(rootReducer, composeEnhancers(middlewares));
