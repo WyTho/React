@@ -39,7 +39,6 @@ describe('<ChartCard /> (functional component)', () => {
         expect(wrapper.find(Paper).length).toEqual(1);
     });
     it('should have a titleContainer div, no matter what the props are', () => {
-        expect(wrapper.find(Paper).find('div.titleContainer').text()).toEqual('My card');
         expect(wrapper.find(Paper).find('div.titleContainer').length).toEqual(1);
         expect(loadingWrapper.find(Paper).find('div.titleContainer').length).toEqual(1);
         expect(errorWrapper.find(Paper).find('div.titleContainer').length).toEqual(1);
