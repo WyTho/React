@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 You need:
 * [NodeJS and NPM](https://nodejs.org/) to install the dependencies for this project
-* [The Python backend](https://github.com/WyTho/python_flask) running on `http://127.0.0.1:5000` (can be changed in `webpack.config.js` is necessary)
+* [The Python backend](https://github.com/WyTho/python_flask) running on `http://127.0.0.1:5000` (can be changed in `webpack.config.js` if necessary)
 
 ### Installing
 
