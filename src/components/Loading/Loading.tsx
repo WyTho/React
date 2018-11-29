@@ -13,15 +13,13 @@ interface IProps {
 }
 
 const defaults = {
-    type: 'spinner',
-    color: 'primary'
+    type: 'spinner'
 };
 
 const loading = (props: IProps) => {
-    let { type, color } = props;
+    let { type } = props;
 
-    type  = type  ? type  : defaults.type;
-    color = color ? color : defaults.color;
+    type = type ? type : defaults.type;
 
     switch (type) {
         case 'spinner': return <CircularProgress {...props} />;

@@ -13,9 +13,9 @@ interface IProps {
     handleThemeToggle: any
 }
 
-class Navbar extends React.Component<IProps & WithStyles, IState> {
+export class Navbar extends React.Component<IProps & WithStyles, IState> {
     public state = {
-        title: 'Selficient Dashboard',
+        title: 'Wytho Dashboard',
         drawerOpened: false
     };
 
