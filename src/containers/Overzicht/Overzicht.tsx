@@ -97,7 +97,7 @@ export class Overzicht extends React.Component<IOverzichtProps, {}> {
                         <StatusForOtherDevices fetchApiItemsData={props.fetchApiItemsData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={6} sm={12} xs={12}>
-6
+
                     </Grid>
 
                 </Grid>

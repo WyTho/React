@@ -25,11 +25,11 @@ export interface IChartForKlimaatBeheerProps {
     }
     error: boolean
     dataset: {
-        [index in DataSet]: IApiGraph
+        [index in DataSet]?: IApiGraph
     }
 }
 
-class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps, {}> {
+export class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps, {}> {
     public render() {
         const { props, props: { theme, selected: { timeSpan, graphStartDateTime }, loading, error, dataset } } = this;
 
@@ -110,7 +110,7 @@ class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBeheerProps,
                             Temperatuur buiten
                         </Typography>
                         <Typography variant='subtitle1'>
-                            pittig heet °C
+                            ? °C
                         </Typography>
                     </>
                 )

@@ -25,11 +25,11 @@ export interface IChartForWaterUsageProps {
     }
     error: boolean
     dataset: {
-        [index in DataSet]: IApiGraph
+        [index in DataSet]?: IApiGraph
     }
 }
 
-class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
+export class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
     public render() {
         const { props, props: { selected: { timeSpan, graphStartDateTime }, loading, error, dataset } } = this;
 
@@ -40,7 +40,7 @@ class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps, {}> {
         let content = null;
         let noDataForTimeSpanMessage = null as string;
 
-        if (dataset[DataSet.AVERAGE_TEMPERATURE]) {
+        if (dataset[DataSet.AVERAGE_WATER_USAGE]) {
             const currentAverageWaterUsage = getCurrentValue(dataset[DataSet.AVERAGE_WATER_USAGE]);
 
             const averageWaterUsageData = getValuesForChart(timeSpan, graphStartDateTime, dataset[DataSet.AVERAGE_WATER_USAGE]);
