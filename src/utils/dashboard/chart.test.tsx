@@ -526,7 +526,7 @@ describe('chart.tsx (utils)', () => {
 
         });
         it('should handle annotation overlap of the "NOW" label if the current week is shown', () => {
-            const tuesday = new Date();
+            const tuesday = new Date(date.getTime());
             tuesday.setDate(date.getDate() - 1);
 
             const timeSpan = TimeSpan.week;
@@ -559,7 +559,7 @@ describe('chart.tsx (utils)', () => {
             expect(result).toHaveLength(6);
         });
         it('should handle annotation overlap of the "NOW" label if the current month is shown', () => {
-            const the20th = new Date();
+            const the20th = new Date(date.getTime());
             the20th.setDate(date.getDate() - 1);
 
             const timeSpan = TimeSpan.month;
