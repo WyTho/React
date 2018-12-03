@@ -8,7 +8,7 @@ import {
 import {updateObject} from '../../utilities';
 import {IDataReducerState} from './index';
 import {DataSet} from '../../../utils/data/apiGraph';
-import merge from 'deepmerge';
+import * as merge from 'deepmerge';
 import {IApiGraph} from '../../../utils/data/dataTypes';
 
 export default {
@@ -73,14 +73,16 @@ export default {
                 const duplicateIds = existingDataIds.filter(id => newDataIds.indexOf(id) !== -1);
 
                 // Filter out the duplicate data
-                if (duplicateIds) {
+                if (duplicateIds.length) {
                     newData.weeks = newData.weeks.filter(week => duplicateIds.indexOf(week.days[0].id) === -1)
                 }
 
                 if (newData.weeks.length) {
-                    const existingDataMustComeAfterNewData =
-                        newData.weeks[0].days[0].timestamp > existingData.weeks[existingData.weeks.length - 1].days[6].timestamp;
-                    if (existingDataMustComeAfterNewData) {
+                    const firstTimestampInNewData = newData.weeks[0].days[0].timestamp;
+                    const lastTimestampInExistingData = existingData.weeks[existingData.weeks.length - 1].days[6].timestamp;
+
+                    const newDataMustComeAfterExistingData = firstTimestampInNewData > lastTimestampInExistingData;
+                    if (newDataMustComeAfterExistingData) {
                         mergeOrder = [existingData, newData]
                     } else {
                         mergeOrder = [newData, existingData]

@@ -28,7 +28,7 @@ describe('index.tsx (popup reducer)', () => {
         popups: [{...popup}, {...popup}, {...popup}] as IPopup[]
     };
 
-    describe('pushPopup()', () => {
+    describe('PUSH_POPUP', () => {
         it('should add a popup to the list', () => {
 
             const action = {
@@ -44,7 +44,7 @@ describe('index.tsx (popup reducer)', () => {
             expect(reducer(initialState, action)).toEqual(expectedState);
         });
     });
-    describe('popPopup()', () => {
+    describe('POP_POPUP', () => {
         it('should remove a popup from the list', () => {
             const action = {
                 type: Actions.POP_POPUP
