@@ -1,9 +1,9 @@
-import functions from './functions';
+import reducer from './index';
 import Actions from '../../actionTypes';
 import {IPopup, PopupType} from '../../../utils/popup/popup';
 import {IApiItemGroup, IApiItemUsage} from '../../../utils/data/dataTypes';
 
-describe('functions.tsx (data reducer)', () => {
+describe('index.tsx (popup reducer)', () => {
     const popup = {
         type: PopupType.ITEM,
         title: 'Hello World',
@@ -29,8 +29,6 @@ describe('functions.tsx (data reducer)', () => {
     };
 
     describe('pushPopup()', () => {
-        const fn = functions.pushPopup;
-
         it('should add a popup to the list', () => {
 
             const action = {
@@ -43,17 +41,18 @@ describe('functions.tsx (data reducer)', () => {
                     popup
                 ]
             };
-            expect(fn(initialState, action)).toEqual(expectedState);
+            expect(reducer(initialState, action)).toEqual(expectedState);
         });
     });
     describe('popPopup()', () => {
-        const fn = functions.popPopup;
-
         it('should remove a popup from the list', () => {
+            const action = {
+                type: Actions.POP_POPUP
+            };
             const copy = [...initialState.popups];
             copy.pop();
             const expectedState = { popups: copy };
-            expect(fn(initialState)).toEqual(expectedState);
+            expect(reducer(initialState, action)).toEqual(expectedState);
         });
     });
 
