@@ -5,7 +5,7 @@ import InformationCard from '../../../../components/InformationCard/InformationC
 import {PopupType} from '../../../../utils/popup/popup';
 import {createContentForItemsTile, IStatusItemsProps, ItemTileType} from '../../../../utils/dashboard/items';
 
-class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}> {
+export class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}> {
 
     public render() {
         const { props, props: { items, loading } } = this;
