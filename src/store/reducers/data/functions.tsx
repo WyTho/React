@@ -8,8 +8,11 @@ import {
 import {updateObject} from '../../utilities';
 import {IDataReducerState} from './index';
 import {DataSet} from '../../../utils/data/apiGraph';
-import * as merge from 'deepmerge';
 import {IApiGraph} from '../../../utils/data/dataTypes';
+
+import mergeForJest from 'deepmerge';
+import * as mergeForTypescript from 'deepmerge';
+const merge = mergeForJest || mergeForTypescript;
 
 export default {
     setTimespanForGraphs: (state: IDataReducerState, action: any) => {
@@ -55,7 +58,7 @@ export default {
             })
         });
     },
-    fetchApiGraphDataSuccess: (state: IDataReducerState, action: any) => {
+    fetchApiGraphDataSuccess: (state: IDataReducerState, action: any) => { // , merge = defaultMerge
         const typesOfData: DataSet[] = action.payload.typesOfData;
 
         const datasets: any = {};
