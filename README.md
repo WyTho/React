@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 You need:
-* [NodeJS and NPM](https://nodejs.org/) to install the dependencies for this project
+* [NodeJS and NPM](https://nodejs.org/) to install the dependencies for this project (NodeJS version 6 or higher is recommended)
 * [The Python backend](https://github.com/WyTho/python_flask) running on `http://127.0.0.1:5000` (can be changed in `webpack.config.js` if necessary)
 
 ### Installing
@@ -137,7 +137,3 @@ This command will compile the project files to `/dist` so this can be deployed o
 * **Wesley Veenendaal** - *Initial work* - [Github page](https://github.com/eclipticrick)
 
 See also the list of [contributors](https://github.com/wytho/React/contributors) who participated in this project.
-
-## License
-
-###### TODO: Add a LICENCE.md file if necessary
