@@ -1,7 +1,7 @@
 import reducer from './index';
 import Actions from '../../actionTypes';
 import {IPopup, PopupType} from '../../../utils/popup/popup';
-import {IApiItemGroup, IApiItemUsage} from '../../../utils/data/dataTypes';
+import {IApiItem, IApiItemGroup, IApiItemUsage} from '../../../utils/data/dataTypes';
 
 describe('index.tsx (popup reducer)', () => {
     const popup = {
@@ -10,18 +10,15 @@ describe('index.tsx (popup reducer)', () => {
         data: {
             id: 0,
             name: '',
-            address: '',
             comment: '',
             last_use: {
-                last_used: 0,
-                last_use: {
-                    datatype: '',
-                    data: {}
-                }
+                last_use_timestamp: 0,
+                datatype: '',
+                data: {}
             },
             usages: [] as IApiItemUsage[],
             groups: [] as IApiItemGroup[]
-        }
+        } as IApiItem
     } as IPopup;
 
     const initialState = {

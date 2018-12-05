@@ -48,7 +48,7 @@ const itemListPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps
                                         { itemState ? (
                                             <ListItemSecondaryAction className='rightTextContainer'>
                                                 <Typography variant='overline'>
-                                                    {item.usages.find(u => u.usage_type === 'KILOWATT').usage} Kwh
+                                                    {item.usages.find(u => u.consumption_type === 'KILOWATT').consumption_amount} Kwh
                                                 </Typography>
                                             </ListItemSecondaryAction>
                                         ) : null }

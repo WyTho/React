@@ -472,14 +472,11 @@ describe('functions.tsx (data reducer)', () => {
             const dummyItem: IApiItem = {
                 id: 0,
                 name: '',
-                address: '',
                 comment: '',
                 last_use: {
-                    last_used: 0,
-                    last_use: {
-                        datatype: '',
-                        data: {}
-                    }
+                    last_use_timestamp: 0,
+                    datatype: '',
+                    data: {}
                 },
                 usages: [] as IApiItemUsage[],
                 groups: [] as IApiItemGroup[]

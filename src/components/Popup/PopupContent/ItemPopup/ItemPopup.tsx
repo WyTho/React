@@ -51,13 +51,13 @@ const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) =>
                         {infoJSX('commentaar',
                             item.comment
                         )}
-                        {infoJSX(
-                            `Laatste waarneming (${item.last_use.last_use.datatype})`,
+                        {!item.last_use ? null : infoJSX(
+                            `Laatste waarneming (${item.last_use.datatype})`,
                             [
-                                item.last_use.last_use.data,
-                                beautifyDate(new Date(item.last_use.last_used * 1000), '(op {DATE} om {TIME})')
+                                item.last_use.data,
+                                beautifyDate(new Date(item.last_use.last_use_timestamp * 1000), '(op {DATE} om {TIME})')
                             ],
-                            !item.last_use.last_use.data
+                            !item.last_use.data
                         )}
                     </Grid>
                 </Grid>
@@ -70,7 +70,7 @@ const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) =>
                     <Grid item md={6} sm={12} xs={12}>
                         {!item.usages.length ? null : headerJSX('Verbruik')}
                         {infoJSX(null,
-                            item.usages.map(usage => `${usage.usage} ${usage.usage_type}`)
+                            item.usages.map(usage => `${usage.consumption_amount} ${usage.consumption_type}`)
                         )}
                     </Grid>
 
