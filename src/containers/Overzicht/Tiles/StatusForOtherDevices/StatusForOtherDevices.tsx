@@ -22,18 +22,17 @@ export class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}
 
             // Create a list of all devices that are not in the group "Verlichting" and have "KILOWATT" usage
             let devices: IApiItem[] = items.filter(item => item.groups.map(group => group.name).indexOf('Verlichting') === -1);
-            devices = devices.filter(light => !!light.usages.filter(u => u.usage_type === 'KILOWATT')[0]);
+            devices = devices.filter(light => !!light.usages.filter(u => u.consumption_type === 'KILOWATT')[0]);
 
-            on = devices.filter(light => light.last_use.last_used);
-            off = devices.filter(light => !light.last_use.last_used);
+            on = devices.filter(light => light.last_use.last_use_timestamp);
+            off = devices.filter(light => !light.last_use.last_use_timestamp);
 
             // show the 3 items that use the most power
-            const show: IApiItem[] = devices.sort(item => item.usages[0].usage).filter(item => item.last_use.last_used).slice(0, 3);
+            const show: IApiItem[] = devices.sort(item => item.usages[0].consumption_amount)
+                .filter(item => item.last_use.last_use_timestamp).slice(0, 3);
 
             const usage: number = on
-                .map(light => light.usages.find(u => u.usage_type === 'KILOWATT').usage)
-                // TODO: remove mapping to Number once backend-bug if fixed (sends strings instead of numbers)
-                .map(x => Number(x))
+                .map(light => light.usages.find(u => u.consumption_type === 'KILOWATT').consumption_amount)
                 .reduce((sum, u) => sum + u, 0);
 
             content = createContentForItemsTile(ItemTileType.OTHER, usage, on, off, show);
