@@ -26,14 +26,11 @@ export interface IApiGraph {
 export interface IApiItem {
     id: number
     name: string
-    address: string
     comment: string
-    last_use: {
-        last_used: number, // [ 1 ] BE AWARE
-        last_use: {
-            datatype: string
-            data: any
-        }
+    last_use?: {
+        last_use_timestamp: number // [ 1 ] BE AWARE
+        datatype: string
+        data: any
     },
     usages: IApiItemUsage[],
     groups: IApiItemGroup[],
@@ -41,8 +38,12 @@ export interface IApiItem {
 export interface IApiItemUsage {
     id: number
     item_id: number
-    usage_type: string
-    usage: number
+    consumption_type: string
+    consumption_amount: number
+    address: string
+    unit: string
+    min_value?: number
+    max_value?: number
 }
 export interface IApiItemGroup {
     id: number
