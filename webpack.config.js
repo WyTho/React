@@ -60,16 +60,6 @@ module.exports = {
                             loader: 'css-loader',
                             options: {
 
-                                /////////////////////////// If you are having trouble with urls not resolving add this setting.
-                                /////////////////////////// See https://github.com/webpack-contrib/css-loader#url
-                                // url: false,
-
-                                /////////////////////////// use SASS Modules
-                                /////////////////////////// https://medium.com/@kswanie21/css-modules-sass-in-create-react-app-37c3152de9
-                                // modules: true,
-                                // localIdentName: '[name]__[local]__[hash:base64:5]',
-                                // importLoaders: 1,
-
                                 minimize: true,
                                 sourceMap: true
                             }
@@ -89,10 +79,7 @@ module.exports = {
 
         // makes a style.css file with all the minified styles from all the sass files
         new ExtractTextPlugin({
-            filename: 'style.css',
-
-            ////////// useful for SCSS Modules!, false by default
-            // ignoreOrder: true
+            filename: 'style.css'
         })
     ],
 
