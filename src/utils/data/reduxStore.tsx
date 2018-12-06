@@ -1,10 +1,12 @@
-import store from '../../store/initialize';
+import defaultStore from '../../store/initialize';
 import {addDays, epochTimestamp, getDateRangeOfSixtyDaysAround, IDateRange, subtractDays} from '../date/date';
 import {DataSet, getAllDatasets} from './apiGraph';
 import {IApiGraph} from './dataTypes';
+import {Store} from 'redux';
 
-export const getMissingDataRange = (centerDate: Date): null | IDateRange => {
+export const getMissingDataRange = (centerDate: Date, store: Store | any = defaultStore): null | IDateRange => {
     const { fromDate, toDate } = getDateRangeOfSixtyDaysAround(centerDate);
+
     const neededFromTimestamp = epochTimestamp(fromDate);
     const neededToTimestamp = epochTimestamp(toDate);
 
@@ -33,7 +35,7 @@ export const getMissingDataRange = (centerDate: Date): null | IDateRange => {
                 if (!timestamps.last) {
                     last = lastTimestampInDataset;
                 } else {
-                    last = lastTimestampInDataset   > timestamps.last  ? lastTimestampInDataset  : timestamps.last;
+                    last = lastTimestampInDataset > timestamps.last ? lastTimestampInDataset : timestamps.last;
                 }
 
                 return { first, last }
@@ -43,14 +45,16 @@ export const getMissingDataRange = (centerDate: Date): null | IDateRange => {
         { first: null, last: null }
     );
 
-    const firstDate = subtractDays(new Date(timestampRangeInDataset.first * 1000), 1);
-    const lastDate = addDays(new Date(timestampRangeInDataset.last * 1000), 1);
+    if (timestampRangeInDataset.first && timestampRangeInDataset.last) {
+        const firstDate = subtractDays(new Date(timestampRangeInDataset.first * 1000), 1);
+        const lastDate = addDays(new Date(timestampRangeInDataset.last * 1000), 1);
 
-    if (neededFromTimestamp < timestampRangeInDataset.first) {
-        return { fromDate, toDate: firstDate };
-    } else if (neededToTimestamp > timestampRangeInDataset.last) {
-        return { fromDate: lastDate, toDate };
+        if (neededFromTimestamp < timestampRangeInDataset.first) {
+            return { fromDate, toDate: firstDate };
+        } else if (neededToTimestamp > timestampRangeInDataset.last) {
+            return { fromDate: lastDate, toDate };
+        }
+
     }
-
     return null;
 };
