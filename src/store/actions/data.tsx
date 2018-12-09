@@ -1,5 +1,5 @@
 import Actions from '../actionTypes';
-import axios from '../../config.axios';
+import defaultAxios from '../../config.axios';
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {epochTimestamp, getDateRangeOfSixtyDaysAround} from '../../utils/date/date';
 import {DataSet, getAllDatasets} from '../../utils/data/apiGraph';
@@ -40,12 +40,12 @@ export const fetchApiDataFailed = (error: any) => ({
     payload: { error }
 });
 
-export const fetchApiGraphData = (centerDate: Date, typesOfData?: DataSet[]) => {
+export const fetchApiGraphData = (centerDate: Date, typesOfData?: DataSet[], axios: any = defaultAxios) => {
     const fromDate = getDateRangeOfSixtyDaysAround(centerDate).fromDate;
     const toDate = getDateRangeOfSixtyDaysAround(centerDate).toDate;
-    return fetchApiGraphDataDispatcher(epochTimestamp(fromDate), epochTimestamp(toDate), typesOfData)
+    return fetchApiGraphDataDispatcher(epochTimestamp(fromDate), epochTimestamp(toDate), typesOfData, axios)
 };
-export const fetchApiItemsData = () => {
+export const fetchApiItemsData = (axios: any = defaultAxios) => {
     const url: string = '/api/item';
     return (dispatch: any) => {
         dispatch(fetchApiItemsDataStart());
@@ -59,14 +59,15 @@ export const fetchApiItemsData = () => {
     };
 };
 
-export const fetchDataInRange = (startDate: Date, endDate: Date, typesOfData?: DataSet[]) => {
-    return fetchApiGraphDataDispatcher(epochTimestamp(startDate), epochTimestamp(endDate), typesOfData)
+export const fetchDataInRange = (startDate: Date, endDate: Date, typesOfData?: DataSet[], axios: any = defaultAxios) => {
+    return fetchApiGraphDataDispatcher(epochTimestamp(startDate), epochTimestamp(endDate), typesOfData, axios)
 };
 
 const fetchApiGraphDataDispatcher = (
     startingDateEpochTimestamp: string | number,
     endingDateEpochTimestamp: string | number,
     typesOfData: DataSet[] = getAllDatasets(),
+    axios: any = defaultAxios
 ) => {
     let urls: string[] = typesOfData.map(typeOfData => '/api/graph/' + typeOfData);
     if (startingDateEpochTimestamp && endingDateEpochTimestamp) {

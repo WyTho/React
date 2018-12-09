@@ -9,6 +9,9 @@ import {
     fetchApiItemsDataStart,
     fetchApiItemsDataSuccess
 } from './data';
+import {fetchApiGraphData, fetchApiItemsData, fetchDataInRange} from './data';
+import {DataSet, getAllDatasets} from '../../utils/data/apiGraph';
+import {epochTimestamp, getDateRangeOfSixtyDaysAround} from '../../utils/date/date';
 
 describe('theme actions', () => {
     describe('actions.toggleTheme()', () => {
@@ -70,7 +73,7 @@ describe('data actions', () => {
             })
         })
     });
-    describe('fetch()', () => {
+    describe('fetch() (actions)', () => {
         describe('fetchApiGraph()', () => {
             it('should create an action object with the correct type on start', () => {
                 expect(fetchApiGraphDataStart()).toEqual({
@@ -107,5 +110,70 @@ describe('data actions', () => {
                 payload: { error }
             })
         });
+    });
+    describe('fetch() (functions)', () => {
+        const mockDispatcher = () => { return };
+
+        it('should call axios with the correct url when retrieving items', () => {
+            const mockAxios = {
+                get: jest.fn(() => Promise.resolve({ data: {} }))
+            };
+            expect(fetchApiItemsData(mockAxios)(mockDispatcher));
+            expect(mockAxios.get).toHaveBeenCalledTimes(1);
+            expect(mockAxios.get).toHaveBeenCalledWith('/api/item')
+        });
+        it('should call axios the correct amount of times with the correct urls when retrieving datasets with center date', () => {
+            const mockAxios = {
+                get: jest.fn(() => Promise.resolve({ data: {} }))
+            };
+
+            const centerDate = new Date();
+            const centerDateRange = getDateRangeOfSixtyDaysAround(centerDate);
+            const typesOfData: DataSet[] = getAllDatasets();
+
+            const fromDate = epochTimestamp(centerDateRange.fromDate);
+            const toDate = epochTimestamp(centerDateRange.toDate);
+
+            expect(fetchApiGraphData(centerDate, typesOfData, mockAxios)(mockDispatcher));
+            expect(mockAxios.get).toHaveBeenCalledTimes(typesOfData.length);
+            typesOfData.forEach((typeOfData, i: number) => {
+                expect(mockAxios.get).toHaveBeenNthCalledWith(
+                    i + 1,
+                    `/api/graph/${typeOfData}?starting_date_timestamp=${fromDate}&ending_date_timestamp=${toDate}`
+                )
+            })
+        });
+        it('should call axios the correct amount of times with the correct urls when retrieving datasets with date range', () => {
+            const mockAxios = {
+                get: jest.fn(() => Promise.resolve({ data: {} }))
+            };
+
+            const centerDate = new Date();
+            const centerDateRange = getDateRangeOfSixtyDaysAround(centerDate);
+            const typesOfData: DataSet[] = getAllDatasets();
+
+            const fromDate = epochTimestamp(centerDateRange.fromDate);
+            const toDate = epochTimestamp(centerDateRange.toDate);
+
+            expect(fetchDataInRange(centerDateRange.fromDate, centerDateRange.toDate, typesOfData, mockAxios)(mockDispatcher));
+            expect(mockAxios.get).toHaveBeenCalledTimes(typesOfData.length);
+            typesOfData.forEach((typeOfData, i: number) => {
+                expect(mockAxios.get).toHaveBeenNthCalledWith(
+                    i + 1,
+                    `/api/graph/${typeOfData}?starting_date_timestamp=${fromDate}&ending_date_timestamp=${toDate}`
+                )
+            })
+        });
+        it('should be able to catch fetching errors', () => {
+            const mockAxios = {
+                get: jest.fn(() => Promise.reject('error'))
+            };
+
+            const typesOfData: DataSet[] = getAllDatasets();
+
+            expect(fetchDataInRange(new Date(), new Date(), typesOfData, mockAxios)(mockDispatcher));
+            expect(fetchApiItemsData(mockAxios)(mockDispatcher));
+            expect(mockAxios.get).toHaveBeenCalledTimes(typesOfData.length + 1);
+        })
     });
 });
