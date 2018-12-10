@@ -18,22 +18,37 @@ export default {
     setTimespanForGraphs: (state: IDataReducerState, action: any) => {
         return updateObject(state, {
             selected: updateObject(state.selected, {
+                previouslySelectedTimeSpan: state.selected.timeSpan,
                 timeSpan: action.payload.timeSpan
             })
         });
     },
     setStartDateForGraphs: (state: IDataReducerState, action: any) => {
-        let startDate = cleanMilliSecondsAndSeconds(action.payload.startDate);
-        if (state.selected.timeSpan === TimeSpan.day) {
-            startDate = getBeginningOfTheDay(startDate)
-        } else if (state.selected.timeSpan === TimeSpan.week) {
-            startDate = getBeginningOfTheWeek(startDate)
-        } else {
-            startDate = getBeginningOfTheMonth(startDate)
+        const { previouslySelectedTimeSpan, timeSpan, graphStartDateTime } = state.selected;
+
+        let startDate = action.payload.startDate;
+
+        const now = new Date();
+
+        const getBeginningFor = (ts: TimeSpan, date: Date) => (
+            ts === TimeSpan.day ? getBeginningOfTheDay(date) :
+                ts === TimeSpan.week ? getBeginningOfTheWeek(date) :
+                    getBeginningOfTheMonth(date)
+        );
+
+        if (
+            previouslySelectedTimeSpan &&
+            previouslySelectedTimeSpan !== timeSpan &&
+            graphStartDateTime.getTime() === getBeginningFor(previouslySelectedTimeSpan, now).getTime()
+        ) {
+            startDate = getBeginningFor(timeSpan, now)
         }
+
+        startDate = getBeginningFor(timeSpan, startDate);
 
         return updateObject(state, {
             selected: updateObject(state.selected, {
+                previouslySelectedTimeSpan: timeSpan,
                 graphStartDateTime: startDate
             })
         });

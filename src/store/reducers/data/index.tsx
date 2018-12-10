@@ -7,6 +7,7 @@ import {IApiGraph, IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IDataReducerState {
     selected: {
+        previouslySelectedTimeSpan?: TimeSpan
         timeSpan: TimeSpan
         graphStartDateTime: Date
         currentHourDateTime: Date
