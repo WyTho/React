@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import ItemListPopup from './ItemListPopup';
 import {IPopup, PopupType} from '../../../../utils/popup/popup';
 import {lightTheme} from '../../../../store/reducers/theme/functions';
-import {IApiItem, IApiItemGroup, IApiItemUsage} from '../../../../utils/data/dataTypes';
+import {IApiGroup, IApiItem, IApiItemGroup, IApiItemUsage} from '../../../../utils/data/dataTypes';
 
 describe('<ItemListPopup /> (functional component)', () => {
     let wrapper: any;
@@ -66,6 +66,7 @@ describe('<ItemListPopup /> (functional component)', () => {
             }
         } as IPopup,
         theme: lightTheme,
+        groups: null as IApiGroup[],
         pushPopup: () => { return }
     };
     beforeAll(() => wrapper = shallow(<ItemListPopup {...props} >{children}</ItemListPopup>));

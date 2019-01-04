@@ -35,6 +35,17 @@ export interface IApiItem {
     usages: IApiItemUsage[],
     groups: IApiItemGroup[],
 }
+export interface IApiGroup {
+    id: number
+    name: string
+    is_module: boolean
+    items: IApiItemCompact[]
+}
+export interface IApiItemCompact {
+    id: number
+    name: string
+    comment: string
+}
 export interface IApiItemUsage {
     id: number
     item_id: number

@@ -28,6 +28,7 @@ describe('<TimeButtons /> (functional component)', () => {
         setStartDate: () => { return },
         fetchApiGraphData: () => { return },
         fetchApiItemsData: () => { return },
+        fetchApiGroupsData: () => { return },
         pushPopup: () => { return }
     };
     beforeEach(() => wrapper = shallow(<TimeButtons {...props} />));

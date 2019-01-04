@@ -2,7 +2,7 @@ import reducer from './index';
 import functions from './functions';
 import {DataSet, getAllDatasets} from '../../../utils/data/apiGraph';
 import {TimeSpan} from '../../../utils/date/dateTypes';
-import {IApiGraph, IApiItem, IApiItemGroup, IApiItemUsage} from '../../../utils/data/dataTypes';
+import {IApiGraph, IApiGroup, IApiItem, IApiItemGroup, IApiItemUsage} from '../../../utils/data/dataTypes';
 import {getBeginningOfTheDay, getBeginningOfTheHour, getBeginningOfTheMonth, getBeginningOfTheWeek} from '../../../utils/date/date';
 import Actions from '../../actionTypes';
 import * as dateUtils from '../../../utils/date/date';
@@ -16,10 +16,12 @@ describe('functions.tsx (data reducer)', () => {
             currentHourDateTime: getBeginningOfTheHour(new Date())
         },
         items: null as IApiItem[],
+        groups: null as IApiGroup[],
         loading: {
             initial: true,
             partial: false,
-            items: false
+            items: false,
+            groups: false
         },
         error: {
             status: false,

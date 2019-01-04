@@ -6,7 +6,7 @@ import ItemPopup from './ItemPopup/ItemPopup';
 import GraphDatapointPopup from './GraphDatapointPopup/GraphDatapointPopup';
 import {IPopup, PopupType} from '../../../utils/popup/popup';
 import {lightTheme} from '../../../store/reducers/theme/functions';
-import {IApiItem, IApiItemGroup, IApiItemUsage} from '../../../utils/data/dataTypes';
+import {IApiGroup, IApiItem, IApiItemGroup, IApiItemUsage} from '../../../utils/data/dataTypes';
 
 describe('<PopupContent /> (component)', () => {
     let wrapper: any;
@@ -25,6 +25,7 @@ describe('<PopupContent /> (component)', () => {
             }
         } as IPopup,
         theme: lightTheme,
+        groups: null as IApiGroup[],
         pushPopup: () => { return }
     };
     beforeEach(() => wrapper = shallow(<PopupContent {...props} >{children}</PopupContent>));

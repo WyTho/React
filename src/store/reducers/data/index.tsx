@@ -3,7 +3,7 @@ import {TimeSpan} from '../../../utils/date/dateTypes';
 import {getBeginningOfTheDay, getBeginningOfTheHour} from '../../../utils/date/date';
 import functions from './functions';
 import {DataSet, getAllDatasets} from '../../../utils/data/apiGraph';
-import {IApiGraph, IApiItem} from '../../../utils/data/dataTypes';
+import {IApiGraph, IApiGroup, IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IDataReducerState {
     selected: {
@@ -13,10 +13,12 @@ export interface IDataReducerState {
         currentHourDateTime: Date
     },
     items: IApiItem[]
+    groups: IApiGroup[]
     loading: {
         initial: boolean
         partial: boolean
         items: boolean
+        groups: boolean
     },
     error: {
         status: boolean
@@ -35,10 +37,12 @@ const initialState: IDataReducerState = {
         currentHourDateTime: getBeginningOfTheHour(new Date())
     },
     items: null as IApiItem[],
+    groups: null as IApiGroup[],
     loading: {
         initial: true,
         partial: false,
-        items: false
+        items: false,
+        groups: false
     },
     error: {
         status: false,
@@ -62,6 +66,9 @@ const REDUCER = ( state: IDataReducerState = initialState, action: any ) => {
 
         case Actions.FETCH_API_ITEMS_DATA_START:   return functions.fetchApiItemsDataStart(state);
         case Actions.FETCH_API_ITEMS_DATA_SUCCESS: return functions.fetchApiItemsDataSuccess(state, action);
+
+        case Actions.FETCH_API_GROUPS_DATA_START:   return functions.fetchApiGroupsDataStart(state);
+        case Actions.FETCH_API_GROUPS_DATA_SUCCESS: return functions.fetchApiGroupsDataSuccess(state, action);
 
         case Actions.FETCH_API_DATA_FAILED:        return functions.fetchApiGraphDataFailed(state, action);
 

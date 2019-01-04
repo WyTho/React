@@ -4,7 +4,7 @@ import ItemPopup from './ItemPopup';
 import {IPopup, PopupType} from '../../../../utils/popup/popup';
 import {lightTheme} from '../../../../store/reducers/theme/functions';
 import Loading from '../../../Loading/Loading';
-import {IApiItem, IApiItemGroup, IApiItemUsage} from '../../../../utils/data/dataTypes';
+import {IApiGroup, IApiItem, IApiItemGroup, IApiItemUsage} from '../../../../utils/data/dataTypes';
 
 describe('<ItemPopup /> (functional component)', () => {
     let wrapper: any;
@@ -32,6 +32,7 @@ describe('<ItemPopup /> (functional component)', () => {
             } as IApiItem
         } as IPopup,
         theme: lightTheme,
+        groups: null as IApiGroup[],
         pushPopup: () => { return }
     };
     beforeEach(() => wrapper = shallow(<ItemPopup {...props} >{children}</ItemPopup>));

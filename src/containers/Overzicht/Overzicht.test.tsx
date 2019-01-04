@@ -27,6 +27,7 @@ describe('<Overzicht /> (container)', () => {
         setStartDate: () => { return },
         fetchApiGraphData: () => { return },
         fetchApiItemsData: () => { return },
+        fetchApiGroupsData: () => { return },
         pushPopup: () => { return }
     };
     beforeEach(() => wrapper = shallow(<Overzicht {...props} />));

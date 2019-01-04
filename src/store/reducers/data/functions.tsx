@@ -138,6 +138,19 @@ export default {
         });
     },
 
+    fetchApiGroupsDataStart: (state: IDataReducerState) => {
+        return updateObject(state, {
+            loading: updateObject(state.loading, { groups: true })
+        });
+    },
+
+    fetchApiGroupsDataSuccess: (state: IDataReducerState, action: any) => {
+        return updateObject(state, {
+            loading: updateObject(state.loading, { groups: false }),
+            groups: action.payload.data.data.groups
+        });
+    },
+
     fetchApiGraphDataFailed: (state: IDataReducerState, action: any) => {
         return updateObject(state, {
             loading: updateObject(state.loading, {

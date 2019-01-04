@@ -1,9 +1,9 @@
-import {Grid, Icon, Typography} from '@material-ui/core';
+import {Button, Grid, Icon, IconButton, Tooltip, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {IPassedPopupContentProps, IReduxPopupContentProps} from '../PopupContent';
 import {beautifyDate} from '../../../../utils/date/date';
 import {IApiItem} from '../../../../utils/data/dataTypes';
-import {getIconNameForGroups} from '../../../../utils/popup/popup';
+import {getIconNameForGroups, PopupType} from '../../../../utils/popup/popup';
 import Loading from '../../../../components/Loading/Loading'
 
 const headerJSX = (title: string) => (
@@ -31,6 +31,12 @@ const infoJSX = (title: string, values: string | string[], shouldHide?: boolean)
 const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) => {
     const { popup } = props;
     const item: IApiItem = popup.data as IApiItem;
+
+    const addItemToGroupClickHandler = () => props.pushPopup({
+        ...popup,
+        title: `'${item.name}' toevoegen aan een groep`,
+        type: PopupType.ADD_ITEM_TO_GROUP
+    });
 
     let content = <div className='absoluteFlexContainer'><Loading /></div>;
     if (item) {
@@ -67,18 +73,27 @@ const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) =>
                       justify='flex-start'
                       alignItems='stretch'>
 
-                    <Grid item md={6} sm={12} xs={12}>
+                    <Grid item md={12} sm={12} xs={12}>
                         {!item.usages.length ? null : headerJSX('Verbruik')}
                         {infoJSX(null,
                             item.usages.map(usage => `${usage.consumption_amount} ${usage.consumption_type}`)
                         )}
                     </Grid>
 
-                    <Grid item md={6} sm={12} xs={12}>
-                        {!item.groups.length ? null : headerJSX('Groep(en) waar dit apparaat in zit')}
-                        {infoJSX(null,
-                            item.groups.map(group => `- ${group.name}`)
-                        )}
+                    <Grid item md={12} sm={12} xs={12}>
+                        <div className='headerWrapper'>
+                            {headerJSX('Groep(en) waar dit apparaat in zit')}
+                            <Tooltip title='Groep toevoegen' aria-label='Groep toevoegen'>
+                                <IconButton aria-label='Add' onClick={addItemToGroupClickHandler}>
+                                    <Icon>add</Icon>
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                        {item.groups.length ?
+                            infoJSX(null, item.groups.map(group => `- ${group.name}`))
+                            :
+                            <div className='infoSection geen'>Geen</div>
+                        }
                     </Grid>
 
                 </Grid>

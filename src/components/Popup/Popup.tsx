@@ -12,7 +12,7 @@ const popup = (props: IPopup) => (
     <Dialog onClose={props.onClosed}
             open={props.opened}
             fullWidth={true}
-            maxWidth = {'sm'}>
+            maxWidth={'sm'}>
         <DialogTitle>{props.title}</DialogTitle>
         {props.children}
     </Dialog>

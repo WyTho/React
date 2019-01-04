@@ -7,6 +7,7 @@ export {
     setCurrentDate,
     fetchApiGraphData,
     fetchApiItemsData,
+    fetchApiGroupsData,
     fetchDataInRange
 } from './data';
 export {

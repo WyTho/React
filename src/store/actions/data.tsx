@@ -13,6 +13,7 @@ export const setStartDateForGraphs = (startDate: Date) => ({
     type: Actions.SET_START_DATE_FOR_GRAPHS,
     payload: { startDate }
 });
+
 export const setCurrentDate = () => ({
     type: Actions.SET_CURRENT_DATE
 });
@@ -32,6 +33,15 @@ export const fetchApiItemsDataStart = () => ({
 
 export const fetchApiItemsDataSuccess = (data: any[]) => ({
     type: Actions.FETCH_API_ITEMS_DATA_SUCCESS,
+    payload: { data }
+});
+
+export const fetchApiGroupsDataStart = () => ({
+    type: Actions.FETCH_API_GROUPS_DATA_START
+});
+
+export const fetchApiGroupsDataSuccess = (data: any[]) => ({
+    type: Actions.FETCH_API_GROUPS_DATA_SUCCESS,
     payload: { data }
 });
 
@@ -55,6 +65,19 @@ export const fetchApiItemsData = (axios: any = defaultAxios) => {
 
         axios.get(url)
             .then((res: any) => dispatch(fetchApiItemsDataSuccess(res)))
+            .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
+    };
+};
+export const fetchApiGroupsData = (axios: any = defaultAxios) => {
+    const url: string = '/api/group';
+    return (dispatch: any) => {
+        dispatch(fetchApiGroupsDataStart());
+
+        // TODO: REMOVE
+        console.log('[GET]', url);
+
+        axios.get(url)
+            .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
     };
 };

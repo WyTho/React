@@ -19,7 +19,8 @@ export interface IPopupDataDatapoint {
 export enum PopupType {
     ITEM = 'ITEM',
     ITEM_LIST = 'ITEM_LIST',
-    DATAPOINT = 'DATAPOINT'
+    DATAPOINT = 'DATAPOINT',
+    ADD_ITEM_TO_GROUP = 'ADD_ITEM_TO_GROUP'
 }
 
 const groupIcons: any = {

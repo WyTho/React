@@ -41,6 +41,7 @@ export interface IOverzichtProps {
     setStartDate: (date: Date) => void
     fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
     fetchApiItemsData: () => void
+    fetchApiGroupsData: () => void
     pushPopup: (popup: IPopup) => void
 }
 
@@ -49,7 +50,8 @@ export class Overzicht extends React.Component<IOverzichtProps, {}> {
     public componentDidMount() {
         if (this.props.loading.initial) {
             this.props.fetchApiGraphData(this.props.selected.graphStartDateTime);
-            this.props.fetchApiItemsData()
+            this.props.fetchApiItemsData();
+            this.props.fetchApiGroupsData();
         }
     }
 
@@ -124,6 +126,7 @@ const mapDispatchToProps = (dispatch: any): Partial<IOverzichtProps> => ({
     fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) =>
         dispatch(actions.fetchApiGraphData(centerDate, typeOfData)),
     fetchApiItemsData: () => dispatch(actions.fetchApiItemsData()),
+    fetchApiGroupsData: () => dispatch(actions.fetchApiGroupsData()),
     pushPopup: (popup: IPopup) => dispatch(actions.pushPopup(popup))
 });
 
