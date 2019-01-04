@@ -3,7 +3,7 @@ import {shallow} from 'enzyme';
 import GraphDatapointPopup from './GraphDatapointPopup';
 import {IPopup, PopupType} from '../../../../utils/popup/popup';
 import {lightTheme} from '../../../../store/reducers/theme/functions';
-import {IApiGroup} from '../../../../utils/data/dataTypes';
+import {IApiGroup, IApiItem} from '../../../../utils/data/dataTypes';
 
 describe('<GraphDatapointPopup /> (functional component)', () => {
     let wrapper: any;
@@ -24,7 +24,10 @@ describe('<GraphDatapointPopup /> (functional component)', () => {
         } as IPopup,
         theme: lightTheme,
         groups: null as IApiGroup[],
-        pushPopup: () => { return }
+        items: null as IApiItem[],
+        pushPopup: () => { return },
+        addItemToGroup: () => { return },
+        removeItemFromGroup: () => { return }
     };
     beforeEach(() => wrapper = shallow(<GraphDatapointPopup {...props} >{children}</GraphDatapointPopup>));
 

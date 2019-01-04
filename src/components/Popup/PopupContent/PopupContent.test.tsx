@@ -26,7 +26,10 @@ describe('<PopupContent /> (component)', () => {
         } as IPopup,
         theme: lightTheme,
         groups: null as IApiGroup[],
-        pushPopup: () => { return }
+        items: null as IApiItem[],
+        pushPopup: () => { return },
+        addItemToGroup: () => { return },
+        removeItemFromGroup: () => { return }
     };
     beforeEach(() => wrapper = shallow(<PopupContent {...props} >{children}</PopupContent>));
 

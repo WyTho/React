@@ -7,7 +7,7 @@ import ItemListPopup from './ItemListPopup/ItemListPopup';
 import ItemPopup from './ItemPopup/ItemPopup';
 import GraphDatapointPopup from './GraphDatapointPopup/GraphDatapointPopup';
 import AddItemToGroupPopup from './AddItemToGroupPopup/AddItemToGroupPopup';
-import {IApiGroup} from '../../../utils/data/dataTypes';
+import {IApiGroup, IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IPassedPopupContentProps {
     popup: IPopup
@@ -15,7 +15,10 @@ export interface IPassedPopupContentProps {
 export interface IReduxPopupContentProps {
     theme: Theme
     pushPopup: (popup: IPopup) => void
+    addItemToGroup: (itemId: number, groupId: number) => void
+    removeItemFromGroup: (itemId: number, groupId: number) => void
     groups: IApiGroup[]
+    items: IApiItem[]
 }
 export class PopupContent extends React.Component<IPassedPopupContentProps & IReduxPopupContentProps, {}> {
 
@@ -46,10 +49,12 @@ export class PopupContent extends React.Component<IPassedPopupContentProps & IRe
 
 const mapStateToProps = (state: any) => {
     const { theme } = state.theme;
-    const { groups } = state.data;
-    return { theme, groups }
+    const { groups, items } = state.data;
+    return { theme, groups, items }
 };
 const mapDispatchToProps = (dispatch: any): Partial<IReduxPopupContentProps> => ({
-    pushPopup: (popUp: IPopup) => dispatch(actions.pushPopup(popUp))
+    pushPopup: (popUp: IPopup) => dispatch(actions.pushPopup(popUp)),
+    addItemToGroup: (itemId: number, groupId: number) => dispatch(actions.addItemToGroup(itemId, groupId)),
+    removeItemFromGroup: (itemId: number, groupId: number) => dispatch(actions.removeItemFromGroup(itemId, groupId))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(PopupContent);

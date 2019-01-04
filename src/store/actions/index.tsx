@@ -8,6 +8,8 @@ export {
     fetchApiGraphData,
     fetchApiItemsData,
     fetchApiGroupsData,
+    addItemToGroup,
+    removeItemFromGroup,
     fetchDataInRange
 } from './data';
 export {

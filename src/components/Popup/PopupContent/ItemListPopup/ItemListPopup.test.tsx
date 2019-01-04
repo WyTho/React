@@ -67,7 +67,10 @@ describe('<ItemListPopup /> (functional component)', () => {
         } as IPopup,
         theme: lightTheme,
         groups: null as IApiGroup[],
-        pushPopup: () => { return }
+        items: null as IApiItem[],
+        pushPopup: () => { return },
+        addItemToGroup: () => { return },
+        removeItemFromGroup: () => { return }
     };
     beforeAll(() => wrapper = shallow(<ItemListPopup {...props} >{children}</ItemListPopup>));
 

@@ -29,12 +29,14 @@ const infoJSX = (title: string, values: string | string[], shouldHide?: boolean)
 };
 
 const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) => {
-    const { popup } = props;
-    const item: IApiItem = popup.data as IApiItem;
+    const { popup, items } = props;
+
+    // get a live copy from redux
+    const item: IApiItem = items.find((i: IApiItem) => i.id === (popup.data as IApiItem).id);
 
     const addItemToGroupClickHandler = () => props.pushPopup({
         ...popup,
-        title: `'${item.name}' toevoegen aan een groep`,
+        title: `Groepsbeheer voor '${item.name}'`,
         type: PopupType.ADD_ITEM_TO_GROUP
     });
 
@@ -92,7 +94,11 @@ const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) =>
                         {item.groups.length ?
                             infoJSX(null, item.groups.map(group => `- ${group.name}`))
                             :
-                            <div className='infoSection geen'>Geen</div>
+                            <div className='infoSection geen'>
+                                <Typography variant='caption'>
+                                    Geen
+                                </Typography>
+                            </div>
                         }
                     </Grid>
 

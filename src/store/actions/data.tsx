@@ -50,6 +50,15 @@ export const fetchApiDataFailed = (error: any) => ({
     payload: { error }
 });
 
+export const addItemToGroup = (itemId: number, groupId: number) => ({
+    type: Actions.ADD_ITEM_TO_GROUP,
+    payload: { itemId, groupId }
+});
+export const removeItemFromGroup = (itemId: number, groupId: number) => ({
+    type: Actions.REMOVE_ITEM_FROM_GROUP,
+    payload: { itemId, groupId }
+});
+
 export const fetchApiGraphData = (centerDate: Date, typesOfData?: DataSet[], axios: any = defaultAxios) => {
     const fromDate = getDateRangeOfSixtyDaysAround(centerDate).fromDate;
     const toDate = getDateRangeOfSixtyDaysAround(centerDate).toDate;

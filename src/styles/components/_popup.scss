@@ -24,12 +24,18 @@
     }
     .infoSection {
       margin-bottom: 12px;
-      &.geen {
-        opacity: 0.5;
-      }
     }
   }
   &.datapoint {
     margin: 24px
+  }
+  &.addItemToGroup {
+    margin: 24px;
+    .mr {
+      margin-right: 12px;
+    }
+    .mb {
+      margin-bottom: 12px;
+    }
   }
 }
