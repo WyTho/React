@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {IApiItem, IApiItemGroup} from '../data/dataTypes';
+import {IApiGroup, IApiItem, IApiItemGroup} from '../data/dataTypes';
 
 export interface IPopup {
     type: PopupType
     title: string
-    data: IPopupDataItems | IPopupDataDatapoint | IApiItem
+    data: IPopupDataItems | IPopupDataDatapoint | IApiItem | IApiGroup
 }
 
 export interface IPopupDataItems {
@@ -21,7 +21,8 @@ export enum PopupType {
     ITEM_LIST = 'ITEM_LIST',
     DATAPOINT = 'DATAPOINT',
     MANAGE_ITEM_GROUPS = 'MANAGE_ITEM_GROUPS',
-    MANAGE_GROUPS = 'MANAGE_GROUPS'
+    MANAGE_GROUPS = 'MANAGE_GROUPS',
+    GROUP = 'GROUP'
 }
 
 const groupIcons: any = {

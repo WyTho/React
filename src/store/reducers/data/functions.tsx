@@ -163,43 +163,4 @@ export default {
             })
         });
     },
-
-    // addItemToGroup: (state: IDataReducerState, action: any) => {
-    //     const itemId: number = action.payload.itemId;
-    //     const groupId: number = action.payload.groupId;
-
-    //     const group: IApiItemGroup = {
-    //         id: groupId,
-    //         name: state.groups.find(g => g.id === groupId).name
-    //     };
-
-    //     // TODO: reach out to server
-
-    //     return updateObject(state, {
-    //         loading: updateObject(state.loading, { items: false }),
-    //         items: [...state.items].map(item => {
-    //             if (item.id === itemId) {
-    //                 item.groups = [...item.groups, group]
-    //             }
-    //             return item
-    //         })
-    //     });
-    // },
-    // removeItemFromGroup: (state: IDataReducerState, action: any) => {
-    //     const itemId: number = action.payload.itemId;
-    //     const groupId: number = action.payload.groupId;
-
-    //     // TODO: reach out to server
-
-    //     return updateObject(state, {
-    //         loading: updateObject(state.loading, { items: false }),
-    //         items: [...state.items].map(item => {
-    //             if (item.id === itemId) {
-    //                 item.groups = [...item.groups].filter(g => g.id !== groupId)
-    //             }
-    //             return item
-    //         })
-    //     });
-    // },
-
 };

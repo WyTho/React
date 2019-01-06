@@ -28,13 +28,20 @@
   }
   &.datapoint,
   &.manageGroups,
-  &.manageItemGroups {
+  &.manageItemGroups,
+  &.group {
     margin: 24px;
     .mr {
       margin-right: 12px;
     }
     .mb {
       margin-bottom: 12px;
+    }
+    .inputWrapper {
+      margin-bottom: 24px;
+      > * {
+        width: 100%;
+      }
     }
   }
 }

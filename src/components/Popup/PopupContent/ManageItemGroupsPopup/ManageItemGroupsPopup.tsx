@@ -17,7 +17,7 @@ const manageItemGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupCont
     const groupsManagerClickHandler = () => {
         props.pushPopup({
             type: PopupType.MANAGE_GROUPS,
-            title: 'hello',
+            title: 'Groepen beheren',
             data: null
         })
     };

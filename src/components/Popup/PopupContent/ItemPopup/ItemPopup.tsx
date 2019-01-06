@@ -1,4 +1,4 @@
-import {Button, Grid, Icon, IconButton, Tooltip, Typography} from '@material-ui/core';
+import {Grid, Icon, IconButton, Tooltip, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {IPassedPopupContentProps, IReduxPopupContentProps} from '../PopupContent';
 import {beautifyDate} from '../../../../utils/date/date';
@@ -31,6 +31,7 @@ const infoJSX = (title: string, values: string | string[], shouldHide?: boolean)
 const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) => {
     const { popup, items } = props;
 
+    // todo: not nessecary anymore? i guess?
     // get a live copy from redux
     const item: IApiItem = items.find((i: IApiItem) => i.id === (popup.data as IApiItem).id);
 

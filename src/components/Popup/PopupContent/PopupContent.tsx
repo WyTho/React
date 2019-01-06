@@ -8,6 +8,7 @@ import ItemPopup from './ItemPopup/ItemPopup';
 import GraphDatapointPopup from './GraphDatapointPopup/GraphDatapointPopup';
 import ManageItemGroupsPopup from './ManageItemGroupsPopup/ManageItemGroupsPopup';
 import ManageGroupsPopup from './ManageGroupsPopup/ManageGroupsPopup';
+import GroupPopup from './GroupPopup/GroupPopup';
 import {IApiGroup, IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IPassedPopupContentProps {
@@ -16,8 +17,12 @@ export interface IPassedPopupContentProps {
 export interface IReduxPopupContentProps {
     theme: Theme
     pushPopup: (popup: IPopup) => void
+    popPopup: () => void
     addItemToGroup: (itemId: number, groupId: number) => void
     removeItemFromGroup: (itemId: number, groupId: number) => void
+    removeGroup: (groupId: number) => void
+    addGroup: (group: IApiGroup) => void
+    editGroup: (groupId: number, group: IApiGroup) => void
     groups: IApiGroup[]
     items: IApiItem[]
 }
@@ -42,6 +47,9 @@ export class PopupContent extends React.Component<IPassedPopupContentProps & IRe
             case PopupType.MANAGE_GROUPS:
                 popupContent = <ManageGroupsPopup {...props} />;
                 break;
+            case PopupType.GROUP:
+                popupContent = <GroupPopup {...props} />;
+                break;
             default:
                 popupContent = <>Undefined popup type</>
         }
@@ -58,7 +66,11 @@ const mapStateToProps = (state: any) => {
 };
 const mapDispatchToProps = (dispatch: any): Partial<IReduxPopupContentProps> => ({
     pushPopup: (popUp: IPopup) => dispatch(actions.pushPopup(popUp)),
+    popPopup: () => dispatch(actions.popPopup()),
     addItemToGroup: (itemId: number, groupId: number) => dispatch(actions.addItemToGroup(itemId, groupId)),
     removeItemFromGroup: (itemId: number, groupId: number) => dispatch(actions.removeItemFromGroup(itemId, groupId)),
+    removeGroup: (groupId: number) => dispatch(actions.removeGroup(groupId)),
+    addGroup: (group: IApiGroup) => dispatch(actions.addGroup(group)),
+    editGroup: (groupId: number, group: IApiGroup) => dispatch(actions.editGroup(groupId, group)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(PopupContent);

@@ -36,7 +36,7 @@ export interface IApiItem {
     groups: IApiItemGroup[],
 }
 export interface IApiGroup {
-    id: number
+    id?: number
     name: string
     is_module: boolean
     items: IApiItemCompact[]

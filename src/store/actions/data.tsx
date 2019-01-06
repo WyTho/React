@@ -3,6 +3,7 @@ import defaultAxios from '../../config.axios';
 import {TimeSpan} from '../../utils/date/dateTypes';
 import {epochTimestamp, getDateRangeOfSixtyDaysAround} from '../../utils/date/date';
 import {DataSet, getAllDatasets} from '../../utils/data/apiGraph';
+import {IApiGroup} from '../../utils/data/dataTypes';
 
 // TODO: TURN OFF
 const DEBUG_ASYNC_ACTIONS = true;
@@ -58,6 +59,25 @@ export const fetchApiDataFailed = (error: any, ignore = false) => {
     }
 };
 
+const reFetchItemsAndGroups = (dispatch: any, axios: any) => {
+    if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
+    dispatch(fetchApiItemsDataStart());
+    return axios.get(itemUrl)
+        .then((res: any) => {
+            dispatch(fetchApiItemsDataSuccess(res));
+            return Promise.resolve()
+        })
+        .then(() => {
+            if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
+            dispatch(fetchApiGroupsDataStart());
+            return axios.get(groupUrl)
+        })
+        .then((res: any) => {
+            dispatch(fetchApiGroupsDataSuccess(res));
+            return Promise.resolve()
+        })
+};
+
 export const addItemToGroup = (itemId: number, groupId: number, axios: any = defaultAxios) => {
     const url: string = `${groupUrl}/${groupId}/items/${itemId}`;
     const postObject = {
@@ -68,18 +88,7 @@ export const addItemToGroup = (itemId: number, groupId: number, axios: any = def
         if (DEBUG_ASYNC_ACTIONS) console.log('[POST]', url);
 
         axios.post(url, postObject)
-            .then(() => {
-                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
-                dispatch(fetchApiItemsDataStart());
-                axios.get(itemUrl)
-            })
-            .then((res: any) => dispatch(fetchApiItemsDataSuccess(res)))
-            .then(() => {
-                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
-                dispatch(fetchApiGroupsDataStart());
-                axios.get(groupUrl)
-            })
-            .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
+            .then(() => reFetchItemsAndGroups(dispatch, axios))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
     };
 };
@@ -90,18 +99,40 @@ export const removeItemFromGroup = (itemId: number, groupId: number, axios: any 
         if (DEBUG_ASYNC_ACTIONS) console.log('[DELETE]', url);
 
         axios.delete(url)
-            .then(() => {
-                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
-                dispatch(fetchApiItemsDataStart());
-                axios.get(itemUrl)
-            })
-            .then((res: any) => dispatch(fetchApiItemsDataSuccess(res)))
-            .then(() => {
-                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
-                dispatch(fetchApiGroupsDataStart());
-                axios.get(groupUrl)
-            })
-            .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
+            .then(() => reFetchItemsAndGroups(dispatch, axios))
+            .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
+    };
+};
+export const removeGroup = (groupId: number, axios: any = defaultAxios) => {
+    const url: string = `${groupUrl}/${groupId}`;
+    return (dispatch: any) => {
+
+        if (DEBUG_ASYNC_ACTIONS) console.log('[DELETE]', url);
+
+        axios.delete(url)
+            .then(() => reFetchItemsAndGroups(dispatch, axios))
+            .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
+    };
+};
+export const editGroup = (groupId: number, group: IApiGroup, axios: any = defaultAxios) => {
+    const url: string = `${groupUrl}/${groupId}`;
+    return (dispatch: any) => {
+
+        if (DEBUG_ASYNC_ACTIONS) console.log('[PUT]', url);
+
+        axios.put(url, group)
+            .then(() => reFetchItemsAndGroups(dispatch, axios))
+            .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
+    };
+};
+export const addGroup = (group: IApiGroup, axios: any = defaultAxios) => {
+    const url: string = `${groupUrl}`;
+    return (dispatch: any) => {
+
+        if (DEBUG_ASYNC_ACTIONS) console.log('[POST]', url);
+
+        axios.post(url, group)
+            .then(() => reFetchItemsAndGroups(dispatch, axios))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
     };
 };

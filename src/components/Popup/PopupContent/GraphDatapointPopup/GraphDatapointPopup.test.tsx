@@ -26,8 +26,12 @@ describe('<GraphDatapointPopup /> (functional component)', () => {
         groups: null as IApiGroup[],
         items: null as IApiItem[],
         pushPopup: () => { return },
+        popPopup: () => { return },
         addItemToGroup: () => { return },
-        removeItemFromGroup: () => { return }
+        removeItemFromGroup: () => { return },
+        removeGroup: () => { return },
+        addGroup: () => { return },
+        editGroup: () => { return },
     };
     beforeEach(() => wrapper = shallow(<GraphDatapointPopup {...props} >{children}</GraphDatapointPopup>));
 
