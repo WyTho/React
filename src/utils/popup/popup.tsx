@@ -20,7 +20,8 @@ export enum PopupType {
     ITEM = 'ITEM',
     ITEM_LIST = 'ITEM_LIST',
     DATAPOINT = 'DATAPOINT',
-    ADD_ITEM_TO_GROUP = 'ADD_ITEM_TO_GROUP'
+    MANAGE_ITEM_GROUPS = 'MANAGE_ITEM_GROUPS',
+    MANAGE_GROUPS = 'MANAGE_GROUPS'
 }
 
 const groupIcons: any = {

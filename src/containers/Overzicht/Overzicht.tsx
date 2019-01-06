@@ -60,6 +60,11 @@ export class Overzicht extends React.Component<IOverzichtProps, {}> {
 
         const isLoading = loading.initial || loading.partial;
 
+        const fetchApiData = () => {
+            props.fetchApiItemsData();
+            props.fetchApiGroupsData();
+        };
+
         return (
             <div className='Overzicht'>
                 <div className={'titleContainer'}>
@@ -93,10 +98,10 @@ export class Overzicht extends React.Component<IOverzichtProps, {}> {
                         <ChartForWaterUsage fetchApiGraphData={props.fetchApiGraphData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
-                        <StatusForLights fetchApiItemsData={props.fetchApiItemsData} openPopup={props.pushPopup} />
+                        <StatusForLights fetchApiData={fetchApiData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={3} sm={6} xs={12}>
-                        <StatusForOtherDevices fetchApiItemsData={props.fetchApiItemsData} openPopup={props.pushPopup} />
+                        <StatusForOtherDevices fetchApiData={fetchApiData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={6} sm={12} xs={12}>
 

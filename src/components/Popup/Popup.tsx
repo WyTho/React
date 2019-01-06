@@ -14,7 +14,9 @@ const popup = (props: IPopup) => (
             fullWidth={true}
             maxWidth={'sm'}>
         <DialogTitle>{props.title}</DialogTitle>
-        {props.children}
+        <div style={{ minHeight: 200 }}>
+            {props.children}
+        </div>
     </Dialog>
 );
 

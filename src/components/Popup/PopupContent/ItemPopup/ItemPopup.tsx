@@ -37,7 +37,7 @@ const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) =>
     const addItemToGroupClickHandler = () => props.pushPopup({
         ...popup,
         title: `Groepsbeheer voor '${item.name}'`,
-        type: PopupType.ADD_ITEM_TO_GROUP
+        type: PopupType.MANAGE_ITEM_GROUPS
     });
 
     let content = <div className='absoluteFlexContainer'><Loading /></div>;

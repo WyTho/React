@@ -26,10 +26,9 @@
       margin-bottom: 12px;
     }
   }
-  &.datapoint {
-    margin: 24px
-  }
-  &.addItemToGroup {
+  &.datapoint,
+  &.manageGroups,
+  &.manageItemGroups {
     margin: 24px;
     .mr {
       margin-right: 12px;

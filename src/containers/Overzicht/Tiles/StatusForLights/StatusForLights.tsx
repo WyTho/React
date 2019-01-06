@@ -55,7 +55,7 @@ export class StatusForLights extends React.Component<IStatusItemsProps, {}> {
             <InformationCard title={title}
                              loading={loading}
                              errorMessage={!loading && !items ?  `Het laden van ${title.toLowerCase()} is mislukt!` : null}
-                             onFetchData={props.fetchApiItemsData}
+                             onFetchData={props.fetchApiData}
                              onClicked={onclickHandler}>
                 { content }
             </InformationCard>

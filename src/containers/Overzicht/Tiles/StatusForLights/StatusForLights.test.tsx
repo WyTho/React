@@ -12,7 +12,7 @@ describe('<StatusForLights /> (component)', () => {
 
     const props: IStatusItemsProps = {
         theme: lightTheme,
-        fetchApiItemsData: () => { return },
+        fetchApiData: () => { return },
         openPopup: () => { return },
         items: null as IApiItem[],
         loading: true

@@ -5,7 +5,7 @@ import {IPopup} from '../popup/popup';
 
 export interface IStatusItemsProps {
     theme: Theme
-    fetchApiItemsData: () => void
+    fetchApiData: () => void
     openPopup: (popup: IPopup) => void
     items: IApiItem[],
     loading: boolean

@@ -6,7 +6,8 @@ import {Theme} from '@material-ui/core';
 import ItemListPopup from './ItemListPopup/ItemListPopup';
 import ItemPopup from './ItemPopup/ItemPopup';
 import GraphDatapointPopup from './GraphDatapointPopup/GraphDatapointPopup';
-import AddItemToGroupPopup from './AddItemToGroupPopup/AddItemToGroupPopup';
+import ManageItemGroupsPopup from './ManageItemGroupsPopup/ManageItemGroupsPopup';
+import ManageGroupsPopup from './ManageGroupsPopup/ManageGroupsPopup';
 import {IApiGroup, IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IPassedPopupContentProps {
@@ -35,8 +36,11 @@ export class PopupContent extends React.Component<IPassedPopupContentProps & IRe
             case PopupType.DATAPOINT:
                 popupContent = <GraphDatapointPopup {...props} />;
                 break;
-            case PopupType.ADD_ITEM_TO_GROUP:
-                popupContent = <AddItemToGroupPopup {...props} />;
+            case PopupType.MANAGE_ITEM_GROUPS:
+                popupContent = <ManageItemGroupsPopup {...props} />;
+                break;
+            case PopupType.MANAGE_GROUPS:
+                popupContent = <ManageGroupsPopup {...props} />;
                 break;
             default:
                 popupContent = <>Undefined popup type</>
