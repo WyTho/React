@@ -70,8 +70,8 @@ const REDUCER = ( state: IDataReducerState = initialState, action: any ) => {
         case Actions.FETCH_API_GROUPS_DATA_START:   return functions.fetchApiGroupsDataStart(state);
         case Actions.FETCH_API_GROUPS_DATA_SUCCESS: return functions.fetchApiGroupsDataSuccess(state, action);
 
-        case Actions.ADD_ITEM_TO_GROUP:             return functions.addItemToGroup(state, action);
-        case Actions.REMOVE_ITEM_FROM_GROUP:        return functions.removeItemFromGroup(state, action);
+        // case Actions.ADD_ITEM_TO_GROUP:             return functions.addItemToGroup(state, action);
+        // case Actions.REMOVE_ITEM_FROM_GROUP:        return functions.removeItemFromGroup(state, action);
 
         case Actions.FETCH_API_DATA_FAILED:         return functions.fetchApiGraphDataFailed(state, action);
 

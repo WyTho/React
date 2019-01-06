@@ -4,6 +4,12 @@ import {TimeSpan} from '../../utils/date/dateTypes';
 import {epochTimestamp, getDateRangeOfSixtyDaysAround} from '../../utils/date/date';
 import {DataSet, getAllDatasets} from '../../utils/data/apiGraph';
 
+// TODO: TURN OFF
+const DEBUG_ASYNC_ACTIONS = true;
+
+const groupUrl: string = '/api/group';
+const itemUrl: string = '/api/item';
+
 export const setTimeSpanForGraphs = (timeSpan: TimeSpan) => ({
     type: Actions.SET_TIMESPAN_FOR_GRAPHS,
     payload: { timeSpan }
@@ -45,19 +51,60 @@ export const fetchApiGroupsDataSuccess = (data: any[]) => ({
     payload: { data }
 });
 
-export const fetchApiDataFailed = (error: any) => ({
-    type: Actions.FETCH_API_DATA_FAILED,
-    payload: { error }
-});
+export const fetchApiDataFailed = (error: any, ignore = false) => {
+    return ignore ? { type: Actions.IGNORE } : {
+        type: Actions.FETCH_API_DATA_FAILED,
+        payload: { error }
+    }
+};
 
-export const addItemToGroup = (itemId: number, groupId: number) => ({
-    type: Actions.ADD_ITEM_TO_GROUP,
-    payload: { itemId, groupId }
-});
-export const removeItemFromGroup = (itemId: number, groupId: number) => ({
-    type: Actions.REMOVE_ITEM_FROM_GROUP,
-    payload: { itemId, groupId }
-});
+export const addItemToGroup = (itemId: number, groupId: number, axios: any = defaultAxios) => {
+    const url: string = `${groupUrl}/${groupId}/items/${itemId}`;
+    const postObject = {
+        idunno: 'idunno'
+    };
+    return (dispatch: any) => {
+
+        if (DEBUG_ASYNC_ACTIONS) console.log('[POST]', url);
+
+        axios.post(url, postObject)
+            .then(() => {
+                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
+                dispatch(fetchApiItemsDataStart());
+                axios.get(itemUrl)
+            })
+            .then((res: any) => dispatch(fetchApiItemsDataSuccess(res)))
+            .then(() => {
+                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
+                dispatch(fetchApiGroupsDataStart());
+                axios.get(groupUrl)
+            })
+            .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
+            .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
+    };
+};
+export const removeItemFromGroup = (itemId: number, groupId: number, axios: any = defaultAxios) => {
+    const url: string = `${groupUrl}/${groupId}/items/${itemId}`;
+    return (dispatch: any) => {
+
+        if (DEBUG_ASYNC_ACTIONS) console.log('[DELETE]', url);
+
+        axios.delete(url)
+            .then(() => {
+                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
+                dispatch(fetchApiItemsDataStart());
+                axios.get(itemUrl)
+            })
+            .then((res: any) => dispatch(fetchApiItemsDataSuccess(res)))
+            .then(() => {
+                if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
+                dispatch(fetchApiGroupsDataStart());
+                axios.get(groupUrl)
+            })
+            .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
+            .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
+    };
+};
 
 export const fetchApiGraphData = (centerDate: Date, typesOfData?: DataSet[], axios: any = defaultAxios) => {
     const fromDate = getDateRangeOfSixtyDaysAround(centerDate).fromDate;
@@ -65,27 +112,23 @@ export const fetchApiGraphData = (centerDate: Date, typesOfData?: DataSet[], axi
     return fetchApiGraphDataDispatcher(epochTimestamp(fromDate), epochTimestamp(toDate), typesOfData, axios)
 };
 export const fetchApiItemsData = (axios: any = defaultAxios) => {
-    const url: string = '/api/item';
     return (dispatch: any) => {
         dispatch(fetchApiItemsDataStart());
 
-        // TODO: REMOVE
-        console.log('[GET]', url);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
 
-        axios.get(url)
+        axios.get(itemUrl)
             .then((res: any) => dispatch(fetchApiItemsDataSuccess(res)))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
     };
 };
 export const fetchApiGroupsData = (axios: any = defaultAxios) => {
-    const url: string = '/api/group';
     return (dispatch: any) => {
         dispatch(fetchApiGroupsDataStart());
 
-        // TODO: REMOVE
-        console.log('[GET]', url);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
 
-        axios.get(url)
+        axios.get(groupUrl)
             .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
     };
@@ -108,8 +151,7 @@ const fetchApiGraphDataDispatcher = (
         );
     }
 
-    // TODO: REMOVE
-    urls.forEach(url => console.log('[GET]', url));
+    if (DEBUG_ASYNC_ACTIONS) urls.forEach(url => console.log('[GET]', url));
 
     return (dispatch: any) => {
         dispatch(fetchApiGraphDataStart());

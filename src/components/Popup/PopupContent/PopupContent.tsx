@@ -59,6 +59,6 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any): Partial<IReduxPopupContentProps> => ({
     pushPopup: (popUp: IPopup) => dispatch(actions.pushPopup(popUp)),
     addItemToGroup: (itemId: number, groupId: number) => dispatch(actions.addItemToGroup(itemId, groupId)),
-    removeItemFromGroup: (itemId: number, groupId: number) => dispatch(actions.removeItemFromGroup(itemId, groupId))
+    removeItemFromGroup: (itemId: number, groupId: number) => dispatch(actions.removeItemFromGroup(itemId, groupId)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(PopupContent);

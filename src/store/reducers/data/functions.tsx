@@ -7,7 +7,7 @@ import {
 import {updateObject} from '../../utilities';
 import {IDataReducerState} from './index';
 import {DataSet} from '../../../utils/data/apiGraph';
-import {IApiGraph, IApiItemGroup} from '../../../utils/data/dataTypes';
+import {IApiGraph} from '../../../utils/data/dataTypes';
 
 import mergeForJest from 'deepmerge';
 import * as mergeForTypescript from 'deepmerge';
@@ -164,42 +164,42 @@ export default {
         });
     },
 
-    addItemToGroup: (state: IDataReducerState, action: any) => {
-        const itemId: number = action.payload.itemId;
-        const groupId: number = action.payload.groupId;
+    // addItemToGroup: (state: IDataReducerState, action: any) => {
+    //     const itemId: number = action.payload.itemId;
+    //     const groupId: number = action.payload.groupId;
 
-        const group: IApiItemGroup = {
-            id: groupId,
-            name: state.groups.find(g => g.id === groupId).name
-        };
+    //     const group: IApiItemGroup = {
+    //         id: groupId,
+    //         name: state.groups.find(g => g.id === groupId).name
+    //     };
 
-        // TODO: reach out to server
+    //     // TODO: reach out to server
 
-        return updateObject(state, {
-            loading: updateObject(state.loading, { items: false }),
-            items: [...state.items].map(item => {
-                if (item.id === itemId) {
-                    item.groups = [...item.groups, group]
-                }
-                return item
-            })
-        });
-    },
-    removeItemFromGroup: (state: IDataReducerState, action: any) => {
-        const itemId: number = action.payload.itemId;
-        const groupId: number = action.payload.groupId;
+    //     return updateObject(state, {
+    //         loading: updateObject(state.loading, { items: false }),
+    //         items: [...state.items].map(item => {
+    //             if (item.id === itemId) {
+    //                 item.groups = [...item.groups, group]
+    //             }
+    //             return item
+    //         })
+    //     });
+    // },
+    // removeItemFromGroup: (state: IDataReducerState, action: any) => {
+    //     const itemId: number = action.payload.itemId;
+    //     const groupId: number = action.payload.groupId;
 
-        // TODO: reach out to server
+    //     // TODO: reach out to server
 
-        return updateObject(state, {
-            loading: updateObject(state.loading, { items: false }),
-            items: [...state.items].map(item => {
-                if (item.id === itemId) {
-                    item.groups = [...item.groups].filter(g => g.id !== groupId)
-                }
-                return item
-            })
-        });
-    },
+    //     return updateObject(state, {
+    //         loading: updateObject(state.loading, { items: false }),
+    //         items: [...state.items].map(item => {
+    //             if (item.id === itemId) {
+    //                 item.groups = [...item.groups].filter(g => g.id !== groupId)
+    //             }
+    //             return item
+    //         })
+    //     });
+    // },
 
 };

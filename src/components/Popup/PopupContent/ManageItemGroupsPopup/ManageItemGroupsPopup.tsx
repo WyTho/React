@@ -2,7 +2,8 @@ import * as React from 'react';
 import {IPassedPopupContentProps, IReduxPopupContentProps} from '../PopupContent';
 import {IApiItem} from '../../../../utils/data/dataTypes';
 import Loading from '../../../../components/Loading/Loading'
-import {Divider, Icon, IconButton, Tooltip, Typography} from '@material-ui/core';
+import {Button, Divider, Icon, IconButton, Tooltip, Typography} from '@material-ui/core';
+import {PopupType} from '../../../../utils/popup/popup';
 
 const manageItemGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) => {
     const { popup, groups, items } = props;
@@ -12,6 +13,13 @@ const manageItemGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupCont
     };
     const removeItemFromGroupHandler = (groupId: number) => {
         props.removeItemFromGroup(item.id, groupId)
+    };
+    const groupsManagerClickHandler = () => {
+        props.pushPopup({
+            type: PopupType.MANAGE_GROUPS,
+            title: 'hello',
+            data: null
+        })
     };
 
     // get a live copy from redux
@@ -25,6 +33,12 @@ const manageItemGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupCont
 
         content = (
             <div className='popupContent manageItemGroups'>
+                <Button variant='contained'
+                        onClick={groupsManagerClickHandler}
+                        color='primary'
+                        style={{ marginBottom: 24, float: 'right' }}>
+                    Groepen beheren
+                </Button>
                 {!addedGroups.length ? null : (
                     <>
                         <Typography variant='subtitle2'>Groepen waar dit apparaat in zit</Typography>
