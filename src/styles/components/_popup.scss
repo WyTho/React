@@ -34,6 +34,9 @@
     .mr {
       margin-right: 12px;
     }
+    .ml {
+      margin-left: 12px;
+    }
     .mb {
       margin-bottom: 12px;
     }
@@ -42,6 +45,10 @@
       > * {
         width: 100%;
       }
+    }
+    .flexRight {
+      display: flex;
+      flex-direction: row-reverse;
     }
   }
 }

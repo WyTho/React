@@ -27,9 +27,9 @@ const manageItemGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupCont
 
     let content = <div className='absoluteFlexContainer'><Loading /></div>;
     if (item && groups) {
-
-        const addedGroups    = groups.filter(group =>  item.groups.find(itemGroup => itemGroup.id === group.id));
-        const notAddedGroups = groups.filter(group => !item.groups.find(itemGroup => itemGroup.id === group.id));
+        const possibleGroups = groups.filter(group => !group.is_module);
+        const addedGroups    = possibleGroups.filter(group =>  item.groups.find(itemGroup => itemGroup.id === group.id));
+        const notAddedGroups = possibleGroups.filter(group => !item.groups.find(itemGroup => itemGroup.id === group.id));
 
         content = (
             <div className='popupContent manageItemGroups'>

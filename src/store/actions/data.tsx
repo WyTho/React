@@ -79,26 +79,33 @@ const reFetchItemsAndGroups = (dispatch: any, axios: any) => {
 };
 
 export const addItemToGroup = (itemId: number, groupId: number, axios: any = defaultAxios) => {
-    const url: string = `${groupUrl}/${groupId}/items/${itemId}`;
-    const postObject = {
-        idunno: 'idunno'
+    const url: string = `${groupUrl}/${groupId}`;
+
+    const putObject = {
+        item_id: itemId
     };
+
     return (dispatch: any) => {
 
-        if (DEBUG_ASYNC_ACTIONS) console.log('[POST]', url);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[PUT]', url);
 
-        axios.post(url, postObject)
+        axios.put(url, putObject)
             .then(() => reFetchItemsAndGroups(dispatch, axios))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
     };
 };
 export const removeItemFromGroup = (itemId: number, groupId: number, axios: any = defaultAxios) => {
-    const url: string = `${groupUrl}/${groupId}/items/${itemId}`;
+    const url: string = `${groupUrl}/${groupId}`;
+
+    const putObject = {
+        item_id: itemId
+    };
+
     return (dispatch: any) => {
 
-        if (DEBUG_ASYNC_ACTIONS) console.log('[DELETE]', url);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[PUT]', url);
 
-        axios.delete(url)
+        axios.put(url, putObject)
             .then(() => reFetchItemsAndGroups(dispatch, axios))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
     };

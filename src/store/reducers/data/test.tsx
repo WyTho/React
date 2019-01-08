@@ -1,4 +1,4 @@
-import reducer from './index';
+import reducer, {IDataReducerState} from './index';
 import functions from './functions';
 import {DataSet, getAllDatasets} from '../../../utils/data/apiGraph';
 import {TimeSpan} from '../../../utils/date/dateTypes';
@@ -9,30 +9,34 @@ import * as dateUtils from '../../../utils/date/date';
 import * as merge from 'deepmerge';
 
 describe('functions.tsx (data reducer)', () => {
-    const initialState = {
-        selected: {
-            timeSpan: TimeSpan.day,
-            graphStartDateTime: getBeginningOfTheDay(new Date()),
-            currentHourDateTime: getBeginningOfTheHour(new Date())
-        },
-        items: null as IApiItem[],
-        groups: null as IApiGroup[],
-        loading: {
-            initial: true,
-            partial: false,
-            items: false,
-            groups: false
-        },
-        error: {
-            status: false,
-            error: null as Error,
-            message: null as string
-        },
-        dataset: getAllDatasets().reduce((o: any, dataset: DataSet) => {
-            o[dataset] = null as IApiGraph;
-            return o
-        }, {})
-    };
+    let initialState: IDataReducerState = null;
+    beforeEach(() => {
+        initialState = {
+            selected: {
+                timeSpan: TimeSpan.day,
+                graphStartDateTime: getBeginningOfTheDay(new Date()),
+                currentHourDateTime: getBeginningOfTheHour(new Date()),
+                previouslySelectedTimeSpan: null as TimeSpan,
+            },
+            items: null as IApiItem[],
+            groups: null as IApiGroup[],
+            loading: {
+                initial: true,
+                partial: false,
+                items: false,
+                groups: false
+            },
+            error: {
+                status: false,
+                error: null as Error,
+                message: null as string
+            },
+            dataset: getAllDatasets().reduce((o: any, dataset: DataSet) => {
+                o[dataset] = null as IApiGraph;
+                return o
+            }, {})
+        } as IDataReducerState;
+    });
 
     describe('SET_TIMESPAN_FOR_GRAPHS', () => {
         it('should set the timeSpan to week correctly', () => {
@@ -47,6 +51,7 @@ describe('functions.tsx (data reducer)', () => {
                 ...initialState,
                 selected: {
                     ...initialState.selected,
+                    previouslySelectedTimeSpan: TimeSpan.day,
                     timeSpan: newTimeSpan
                 }
             };
@@ -64,6 +69,7 @@ describe('functions.tsx (data reducer)', () => {
                 ...initialState,
                 selected: {
                     ...initialState.selected,
+                    previouslySelectedTimeSpan: TimeSpan.day,
                     timeSpan: newTimeSpan
                 }
             };
@@ -88,6 +94,7 @@ describe('functions.tsx (data reducer)', () => {
                 selected: {
                     ...initialState.selected,
                     timeSpan,
+                    previouslySelectedTimeSpan: TimeSpan.day,
                     graphStartDateTime: getBeginningOfTheDay(wednesday)
                 }
             };
@@ -116,6 +123,7 @@ describe('functions.tsx (data reducer)', () => {
                 selected: {
                     ...initialState.selected,
                     timeSpan,
+                    previouslySelectedTimeSpan: TimeSpan.week,
                     graphStartDateTime: getBeginningOfTheWeek(wednesday)
                 }
             };
@@ -144,6 +152,7 @@ describe('functions.tsx (data reducer)', () => {
                 selected: {
                     ...initialState.selected,
                     timeSpan,
+                    previouslySelectedTimeSpan: TimeSpan.month,
                     graphStartDateTime: getBeginningOfTheMonth(wednesday)
                 }
             };

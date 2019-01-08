@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {IPassedPopupContentProps, IReduxPopupContentProps} from '../PopupContent';
-import {Button, TextField} from '@material-ui/core';
+import {Button, Icon, IconButton, TextField, Tooltip, Typography} from '@material-ui/core';
 import {IApiGroup} from '../../../../utils/data/dataTypes';
 import {ChangeEvent, FormEvent} from 'react';
 
@@ -59,9 +59,26 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
                             required
                         />
                     </div>
-                    <div style={{ float: 'right' }}>
-                        <Button onClick={props.popPopup}>Annuleren</Button>
-                        <Button type='submit' variant='contained' color='primary'>{group ? 'Wijzigen' : 'Aanmaken'}</Button>
+                    {group ? (
+                        <div>
+                            {group.items.map(item => (
+                                <Typography key={`group-item-${item.id}`} variant='caption'>
+                                    <Tooltip title={`'${item.name}' verwijderen van deze groep`} aria-label='Verwijderen'>
+                                        <IconButton className='mr'
+                                                    aria-label='Remove'
+                                                    onClick={() => props.removeItemFromGroup(item.id, group.id)}
+                                                    color='secondary'>
+                                            <Icon>remove</Icon>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <span>{item.name}</span>
+                                </Typography>
+                            ))}
+                        </div>
+                    ) : null}
+                    <div className='flexRight'>
+                        <Button className='ml' type='submit' variant='contained' color='primary'>{group ? 'Wijzigen' : 'Aanmaken'}</Button>
+                        <Button className='ml' onClick={props.popPopup}>Annuleren</Button>
                     </div>
                 </form>
             </div>
