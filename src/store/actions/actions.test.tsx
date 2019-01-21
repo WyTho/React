@@ -120,7 +120,7 @@ describe('data actions', () => {
             };
             expect(fetchApiItemsData(mockAxios)(mockDispatcher));
             expect(mockAxios.get).toHaveBeenCalledTimes(1);
-            expect(mockAxios.get).toHaveBeenCalledWith('/api/item')
+            expect(mockAxios.get).toHaveBeenCalledWith('/api/items')
         });
         it('should call axios the correct amount of times with the correct urls when retrieving datasets with center date', () => {
             const mockAxios = {
@@ -139,7 +139,7 @@ describe('data actions', () => {
             typesOfData.forEach((typeOfData, i: number) => {
                 expect(mockAxios.get).toHaveBeenNthCalledWith(
                     i + 1,
-                    `/api/graph/${typeOfData}?starting_date_timestamp=${fromDate}&ending_date_timestamp=${toDate}`
+                    `/api/graphs/${typeOfData}?starting_date_timestamp=${fromDate}&ending_date_timestamp=${toDate}`
                 )
             })
         });
@@ -160,7 +160,7 @@ describe('data actions', () => {
             typesOfData.forEach((typeOfData, i: number) => {
                 expect(mockAxios.get).toHaveBeenNthCalledWith(
                     i + 1,
-                    `/api/graph/${typeOfData}?starting_date_timestamp=${fromDate}&ending_date_timestamp=${toDate}`
+                    `/api/graphs/${typeOfData}?starting_date_timestamp=${fromDate}&ending_date_timestamp=${toDate}`
                 )
             })
         });

@@ -9,7 +9,14 @@ const manageGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupContentP
     const { groups } = props;
 
     const removeGroupHandler = (group: IApiGroup) => {
-        const confirmation = confirm(`Weet je zeker dat je groep '${group.name}' wilt verwijderen?`);
+        let confirmation;
+
+        if (group.items.length) {
+            confirmation = confirm(`Er zitten nog ${group.items.length} item(s) in de groep '${group.name}', weet je zeker dat je dit wilt verwijderen?`);
+        } else {
+            confirmation = confirm(`Weet je zeker dat je groep '${group.name}' wilt verwijderen?`);
+        }
+
         if (confirmation) {
             props.removeGroup(group.id);
         }
@@ -46,11 +53,10 @@ const manageGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupContentP
                     <>
                         <Typography variant='subtitle2'>Groepen beheren</Typography>
                         {groups.map(group => {
-                            const canDelete = !group.items.length && !group.is_module;
-                            const canEdit = !group.is_module;
+
                             let deleteMessage = 'Verwijderen';
                             let editMessage = 'Bewerken';
-                            if (group.items.length) deleteMessage = 'Verwijder eerst de items die bij deze groep horen';
+
                             if (group.is_module) {
                                 deleteMessage = 'Een module van het huis is niet te verwijderen';
                                 editMessage = 'Een module van het huis is niet te bewerken';
@@ -58,7 +64,7 @@ const manageGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupContentP
                             return (
                                 <Typography key={`manageGroups-${group.id}`} variant='caption'>
                                     <Tooltip title={deleteMessage} aria-label='Remove'>
-                                    {canDelete ? (
+                                    {!group.is_module ? (
                                             <IconButton className='mr'
                                                         aria-label='Remove'
                                                         onClick={() => removeGroupHandler(group)}
@@ -75,7 +81,7 @@ const manageGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupContentP
                                     </Tooltip>
 
                                     <Tooltip title={editMessage} aria-label='Edit'>
-                                        {canEdit ? (
+                                        {!group.is_module ? (
                                             <IconButton className='mr'
                                                         aria-label='Edit'
                                                         onClick={() => editGroupHandler(group)}

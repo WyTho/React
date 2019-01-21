@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {IPassedPopupContentProps, IReduxPopupContentProps} from '../PopupContent';
 import {Button, Icon, IconButton, TextField, Tooltip, Typography} from '@material-ui/core';
-import {IApiGroup} from '../../../../utils/data/dataTypes';
+import {IApiGroup, IApiItem} from '../../../../utils/data/dataTypes';
 import {ChangeEvent, FormEvent} from 'react';
 
 export interface IGroupPopupState {
@@ -23,9 +23,12 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
     }
 
     public render() {
-        const { props, props: { popup } } = this;
+        const { props, props: { popup, items } } = this;
 
         const group: IApiGroup = popup.data as IApiGroup;
+
+        // get a live copy from redux
+        const groupItems: IApiItem[] = !group ? [] : items.filter((i: IApiItem) => i.groups.find(g => g.id === group.id));
 
         const editGroupHandler = (e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();
@@ -61,7 +64,7 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
                     </div>
                     {group ? (
                         <div>
-                            {group.items.map(item => (
+                            {groupItems.map(item => (
                                 <Typography key={`group-item-${item.id}`} variant='caption'>
                                     <Tooltip title={`'${item.name}' verwijderen van deze groep`} aria-label='Verwijderen'>
                                         <IconButton className='mr'

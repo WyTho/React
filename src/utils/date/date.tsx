@@ -179,17 +179,26 @@ export const getDiffrenceIn = (timeSpan: TimeSpan, date1: Date, date2: Date): nu
     if (timeSpan === TimeSpan.day) {
         date1 = getBeginningOfTheDay(date1);
         date2 = getBeginningOfTheDay(date2);
-        diff = Math.ceil((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
+
+        diff = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
+
     } else if (timeSpan === TimeSpan.week) {
         date1 = getBeginningOfTheWeek(date1);
         date2 = getBeginningOfTheWeek(date2);
-        diff = Math.ceil((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24 * 7));
+        diff = (date2.getTime() - date1.getTime()) / (1000 * 3600 * 24 * 7);
     } else {
         let months = (date2.getFullYear() - date1.getFullYear()) * 12;
         months -= date1.getMonth();
         months += date2.getMonth();
         diff = months;
     }
+
+    if (diff < 0) {
+        diff = -Math.abs(Math.ceil(Math.abs(diff)))
+    } else {
+        diff = Math.ceil(diff)
+    }
+
     return diff
 };
 

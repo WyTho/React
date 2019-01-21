@@ -5,11 +5,13 @@ import {epochTimestamp, getDateRangeOfSixtyDaysAround} from '../../utils/date/da
 import {DataSet, getAllDatasets} from '../../utils/data/apiGraph';
 import {IApiGroup} from '../../utils/data/dataTypes';
 
-// TODO: TURN OFF
-const DEBUG_ASYNC_ACTIONS = true;
+const DEBUG_ASYNC_ACTIONS = false;
 
-const groupUrl: string = '/api/group';
-const itemUrl: string = '/api/item';
+const baseUrl: string = '/api';
+const groupsUrl: string = 'groups';
+const itemsUrl: string = 'items';
+const graphsUrl: string = 'graphs';
+
 
 export const setTimeSpanForGraphs = (timeSpan: TimeSpan) => ({
     type: Actions.SET_TIMESPAN_FOR_GRAPHS,
@@ -60,17 +62,17 @@ export const fetchApiDataFailed = (error: any, ignore = false) => {
 };
 
 const reFetchItemsAndGroups = (dispatch: any, axios: any) => {
-    if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
+    if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', `${baseUrl}/${itemsUrl}`);
     dispatch(fetchApiItemsDataStart());
-    return axios.get(itemUrl)
+    return axios.get(`${baseUrl}/${itemsUrl}`)
         .then((res: any) => {
             dispatch(fetchApiItemsDataSuccess(res));
             return Promise.resolve()
         })
         .then(() => {
-            if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
+            if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', `${baseUrl}/${groupsUrl}`);
             dispatch(fetchApiGroupsDataStart());
-            return axios.get(groupUrl)
+            return axios.get(`${baseUrl}/${groupsUrl}`)
         })
         .then((res: any) => {
             dispatch(fetchApiGroupsDataSuccess(res));
@@ -79,39 +81,36 @@ const reFetchItemsAndGroups = (dispatch: any, axios: any) => {
 };
 
 export const addItemToGroup = (itemId: number, groupId: number, axios: any = defaultAxios) => {
-    const url: string = `${groupUrl}/${groupId}`;
+    const url: string = `${baseUrl}/${groupsUrl}/${groupId}/${itemsUrl}`;
 
-    const putObject = {
+    const postObject = {
         item_id: itemId
     };
 
     return (dispatch: any) => {
 
-        if (DEBUG_ASYNC_ACTIONS) console.log('[PUT]', url);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[POST]', url);
 
-        axios.put(url, putObject)
+        axios.post(url, postObject)
             .then(() => reFetchItemsAndGroups(dispatch, axios))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
     };
 };
 export const removeItemFromGroup = (itemId: number, groupId: number, axios: any = defaultAxios) => {
-    const url: string = `${groupUrl}/${groupId}`;
-
-    const putObject = {
-        item_id: itemId
-    };
+    const url: string = `${baseUrl}/${groupsUrl}/${groupId}/${itemsUrl}/${itemId}`;
 
     return (dispatch: any) => {
 
-        if (DEBUG_ASYNC_ACTIONS) console.log('[PUT]', url);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[DELETE]', url);
 
-        axios.put(url, putObject)
+        axios.delete(url)
             .then(() => reFetchItemsAndGroups(dispatch, axios))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err, true)));
     };
 };
 export const removeGroup = (groupId: number, axios: any = defaultAxios) => {
-    const url: string = `${groupUrl}/${groupId}`;
+    const url: string = `${baseUrl}/${groupsUrl}/${groupId}`;
+
     return (dispatch: any) => {
 
         if (DEBUG_ASYNC_ACTIONS) console.log('[DELETE]', url);
@@ -122,7 +121,8 @@ export const removeGroup = (groupId: number, axios: any = defaultAxios) => {
     };
 };
 export const editGroup = (groupId: number, group: IApiGroup, axios: any = defaultAxios) => {
-    const url: string = `${groupUrl}/${groupId}`;
+    const url: string = `${baseUrl}/${groupsUrl}/${groupId}`;
+
     return (dispatch: any) => {
 
         if (DEBUG_ASYNC_ACTIONS) console.log('[PUT]', url);
@@ -133,7 +133,8 @@ export const editGroup = (groupId: number, group: IApiGroup, axios: any = defaul
     };
 };
 export const addGroup = (group: IApiGroup, axios: any = defaultAxios) => {
-    const url: string = `${groupUrl}`;
+    const url: string = `${baseUrl}/${groupsUrl}`;
+
     return (dispatch: any) => {
 
         if (DEBUG_ASYNC_ACTIONS) console.log('[POST]', url);
@@ -153,9 +154,9 @@ export const fetchApiItemsData = (axios: any = defaultAxios) => {
     return (dispatch: any) => {
         dispatch(fetchApiItemsDataStart());
 
-        if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', itemUrl);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', `${baseUrl}/${itemsUrl}`);
 
-        axios.get(itemUrl)
+        axios.get(`${baseUrl}/${itemsUrl}`)
             .then((res: any) => dispatch(fetchApiItemsDataSuccess(res)))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
     };
@@ -164,9 +165,9 @@ export const fetchApiGroupsData = (axios: any = defaultAxios) => {
     return (dispatch: any) => {
         dispatch(fetchApiGroupsDataStart());
 
-        if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', groupUrl);
+        if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', `${baseUrl}/${groupsUrl}`);
 
-        axios.get(groupUrl)
+        axios.get(`${baseUrl}/${groupsUrl}`)
             .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
     };
@@ -182,7 +183,7 @@ const fetchApiGraphDataDispatcher = (
     typesOfData: DataSet[] = getAllDatasets(),
     axios: any = defaultAxios
 ) => {
-    let urls: string[] = typesOfData.map(typeOfData => '/api/graph/' + typeOfData);
+    let urls: string[] = typesOfData.map(typeOfData => `${baseUrl}/${graphsUrl}/${typeOfData}`);
     if (startingDateEpochTimestamp && endingDateEpochTimestamp) {
         urls = urls.map(url =>
             url + '?starting_date_timestamp=' + startingDateEpochTimestamp + '&ending_date_timestamp=' + endingDateEpochTimestamp
