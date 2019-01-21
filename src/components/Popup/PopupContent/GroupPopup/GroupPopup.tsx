@@ -28,7 +28,7 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
         const group: IApiGroup = popup.data as IApiGroup;
 
         // get a live copy from redux
-        const groupItems: IApiItem[] = !group ? [] : items.filter((i: IApiItem) => i.groups.find(g => g.id === group.id));
+        const groupItems: IApiItem[] = !group || !items ? [] : items.filter((i: IApiItem) => i.groups.find(g => g.id === group.id));
 
         const editGroupHandler = (e: FormEvent<HTMLFormElement>) => {
             e.preventDefault();

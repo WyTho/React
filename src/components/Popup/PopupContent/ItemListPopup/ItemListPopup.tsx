@@ -13,13 +13,16 @@ import {getIconNameForGroups, IPopupDataItems, PopupType} from '../../../../util
 import {IPassedPopupContentProps, IReduxPopupContentProps} from '../PopupContent';
 
 const itemListPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) => {
-    const { popup, theme } = props;
+    const { popup, theme, items } = props;
+
     return (
         <div className='popupContent items'>
             <List>
                 {([1, 0]).map(itemState => {
                     const key = itemState ? 'on' : 'off';
-                    const partialItems = (popup.data as IPopupDataItems)[key];
+                    const partialItems = !items ? [] : items.filter(
+                        item => (popup.data as IPopupDataItems)[key].find(i => i.id === item.id)
+                    );
                     const subHeaderForState = (
                         <ListSubheader style={{ background: theme.palette.background.paper }}>
                             {itemState ? 'Actief' : 'Inactief'}

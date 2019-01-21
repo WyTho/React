@@ -522,6 +522,81 @@ describe('functions.tsx (data reducer)', () => {
 
     });
 
+    describe('FETCH_API_GROUPS_DATA_START', () => {
+        const action = {
+            type: Actions.FETCH_API_GROUPS_DATA_START
+        };
+
+        it('should set groups loading to true', () => {
+            const expectedState = {
+                ...initialState,
+                loading: {
+                    ...initialState.loading,
+                    groups: true
+                }
+            };
+            expect(reducer(initialState, action)).toEqual(expectedState)
+        })
+    });
+
+    describe('FETCH_API_GROUPS_DATA_SUCCESS', () => {
+        it('should set group-loading to false and set the groups if the fetch was successful', () => {
+            const action = {
+                type: Actions.FETCH_API_GROUPS_DATA_SUCCESS,
+                payload: {
+                    data: {
+                        data: {
+                            groups: [] as IApiGroup[]
+                        }
+                    }
+                }
+            };
+            const expectedState = {
+                ...initialState,
+                loading: {
+                    ...initialState.loading,
+                    groups: false
+                },
+                groups: [] as IApiGroup[]
+            };
+            expect(reducer(initialState, action)).toEqual(expectedState);
+
+            const dummyGroup: IApiGroup = {
+                id: 0,
+                is_module: false,
+                name: '',
+                items: [] as IApiItem[]
+            };
+
+            const action2 = {
+                ...action,
+                payload: {
+                    data: {
+                        data: {
+                            groups: [
+                                dummyGroup,
+                                dummyGroup,
+                                dummyGroup,
+                                dummyGroup
+                            ] as IApiGroup[]
+                        }
+                    }
+                }
+            };
+            const expectedState2 = {
+                ...expectedState,
+                groups: [
+                    dummyGroup,
+                    dummyGroup,
+                    dummyGroup,
+                    dummyGroup
+                ] as IApiGroup[]
+            };
+            expect(reducer(initialState, action2)).toEqual(expectedState2)
+        });
+
+    });
+
     describe('FETCH_API_DATA_FAILED', () => {
         it('should set error to true and set the errorMessage', () => {
 

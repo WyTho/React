@@ -31,9 +31,8 @@ const infoJSX = (title: string, values: string | string[], shouldHide?: boolean)
 const itemPopup = (props: IPassedPopupContentProps & IReduxPopupContentProps) => {
     const { popup, items } = props;
 
-    // todo: not nessecary anymore? i guess?
     // get a live copy from redux
-    const item: IApiItem = items.find((i: IApiItem) => i.id === (popup.data as IApiItem).id);
+    const item: IApiItem = !items ? null : items.find((i: IApiItem) => i.id === (popup.data as IApiItem).id);
 
     const addItemToGroupClickHandler = () => props.pushPopup({
         ...popup,

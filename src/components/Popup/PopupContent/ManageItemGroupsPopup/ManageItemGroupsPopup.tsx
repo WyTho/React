@@ -23,7 +23,7 @@ const manageItemGroupsPopup = (props: IPassedPopupContentProps & IReduxPopupCont
     };
 
     // get a live copy from redux
-    const item: IApiItem = items.find((i: IApiItem) => i.id === (popup.data as IApiItem).id);
+    const item: IApiItem = !items ? null : items.find((i: IApiItem) => i.id === (popup.data as IApiItem).id);
 
     let content = <div className='absoluteFlexContainer'><Loading /></div>;
     if (item && groups) {
