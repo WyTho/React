@@ -7,7 +7,7 @@ import {IApiGroup} from '../../utils/data/dataTypes';
 
 const DEBUG_ASYNC_ACTIONS = false;
 
-const baseUrl: string = '/api';
+const baseUrl: string = '/api/v1';
 const groupsUrl: string = 'groups';
 const itemsUrl: string = 'items';
 const graphsUrl: string = 'graphs';
