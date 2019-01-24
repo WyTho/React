@@ -31,7 +31,7 @@ module.exports = {
         open: true, // Open the page in browser
 
         // provide an overlay for capturing compilation related warnings and errors
-        overlay: true,
+        overlay: true
 
     },
 
@@ -66,9 +66,13 @@ module.exports = {
                         },
                         {
                             loader: 'sass-loader'
-                        },
+                        }
                     ]
                 })
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                loader: 'file-loader'
             }
         ]
     },
