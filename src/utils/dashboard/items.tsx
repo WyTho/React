@@ -1,7 +1,10 @@
 import * as React from 'react';
-import {Grid, Icon, Theme, Typography} from '@material-ui/core';
+import {Grid, Theme, Typography} from '@material-ui/core';
 import {IApiItem} from '../data/dataTypes';
 import {IPopup} from '../popup/popup';
+import * as devicesImage from '../../assets/images/001-furniture-and-household.svg';
+import * as lightsImage from '../../assets/images/002-idea.svg';
+import * as heatingImage from '../../assets/images/003-radiator.svg';
 
 export interface IStatusItemsProps {
     theme: Theme
@@ -24,13 +27,17 @@ export const createContentForItemsTile = (
     itemsToShow: IApiItem[] = []
 ) => {
     on = on.filter(item => itemsToShow.map(i => i.id).indexOf(item.id) !== -1);
-
-    let icon = 'device_unknown';
+    let image;
     if (type === ItemTileType.LIGHTS) {
-        icon = 'wb_incandescent'
+        image = lightsImage;
     }
     if (type === ItemTileType.OTHER) {
-        icon = 'settings_input_composite'
+        const firstItem = on[0];
+        if (firstItem && on[0].name === 'Heating') {
+            image = heatingImage;
+        } else {
+            image = devicesImage;
+        }
     }
     const amountOnJSX = (
         <Typography variant='subtitle1' color='secondary'>
@@ -52,7 +59,7 @@ export const createContentForItemsTile = (
                 </Typography>
             </Grid>
             <Grid item>
-                <Icon style={{ fontSize: 120 }} color='secondary'>{ icon }</Icon>
+                <img src={image} alt='type of devices' style={{ height: 120 }}/>
             </Grid>
             <Grid item>
                 {itemsToShow.length ? itemsToShowJSX : amountOnJSX}
