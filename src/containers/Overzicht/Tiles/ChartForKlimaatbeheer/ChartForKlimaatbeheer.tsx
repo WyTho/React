@@ -74,7 +74,7 @@ export class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBehee
                             <Typography variant='overline'
                                         className='tinyText'
                                         style={{ color: theme.palette.secondary.main }}>
-                                99 Kwh
+                                124.28 Kwh
                             </Typography>
 
                         </Grid>
@@ -88,7 +88,7 @@ export class ChartForKlimaatbeheer extends React.Component<IChartForKlimaatBehee
                             <Typography variant='overline'
                                         className='tinyText'
                                         style={{ color: theme.palette.secondary.main }}>
-                                999 Kwh
+                                729.59 Kwh
                             </Typography>
 
                         </Grid>
