@@ -8,6 +8,7 @@ export {
     fetchApiGraphData,
     fetchApiItemsData,
     fetchApiGroupsData,
+    fetchApiAnalyticsData,
 
     addItemToGroup,
     removeItemFromGroup,

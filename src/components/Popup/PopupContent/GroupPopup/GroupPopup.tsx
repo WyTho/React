@@ -1,16 +1,18 @@
 import * as React from 'react';
 import {IPassedPopupContentProps, IReduxPopupContentProps} from '../PopupContent';
 import {Button, Icon, IconButton, TextField, Tooltip, Typography} from '@material-ui/core';
-import {IApiGroup, IApiItem} from '../../../../utils/data/dataTypes';
+import {IApiGroup, IApiItem, IApiItemCompact} from '../../../../utils/data/dataTypes';
 import {ChangeEvent, FormEvent} from 'react';
 
 export interface IGroupPopupState {
     name: string
+    items: IApiItemCompact[]
 }
 
 export class GroupPopup extends React.Component<IPassedPopupContentProps & IReduxPopupContentProps, IGroupPopupState> {
     public state = {
-        name: ''
+        name: '',
+        items: [] as IApiItemCompact[]
     };
 
     public componentDidMount() {
@@ -18,7 +20,12 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
         if (group) {
             this.setState({
                 name: group.name
-            })
+            });
+            if (group.items) {
+                this.setState({
+                    items: group.items
+                });
+            }
         }
     }
 
@@ -45,7 +52,7 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
             const newGroup: IApiGroup = {
                 name: this.state.name,
                 is_module: false,
-                items: []
+                items: this.state.items
             };
             props.addGroup(newGroup);
             props.popPopup()
@@ -53,7 +60,7 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
 
         return (
             <div className='popupContent group'>
-                <form autoComplete='off' onSubmit={group ? editGroupHandler : addGroupHandler}>
+                <form autoComplete='off' onSubmit={group ? group.id ? editGroupHandler : addGroupHandler : addGroupHandler}>
                     <div className='inputWrapper'>
                         <TextField
                             id='nameInput'
@@ -80,7 +87,7 @@ export class GroupPopup extends React.Component<IPassedPopupContentProps & IRedu
                         </div>
                     ) : null}
                     <div className='flexRight'>
-                        <Button className='ml' type='submit' variant='contained' color='primary'>{group ? 'Wijzigen' : 'Aanmaken'}</Button>
+                        <Button className='ml' type='submit' variant='contained' color='primary'>{group ? group.id ? 'Wijzigen' : 'Aanmaken' : 'Aanmaken'}</Button>
                         <Button className='ml' onClick={props.popPopup}>Annuleren</Button>
                     </div>
                 </form>

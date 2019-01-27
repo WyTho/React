@@ -15,6 +15,7 @@ import {TimeSpan} from '../../utils/date/dateTypes';
 import {DataSet} from '../../utils/data/apiGraph';
 import ChartForWaterUsage from './Tiles/ChartForWaterUsage/ChartForWaterUsage';
 import StatusForLights from './Tiles/StatusForLights/StatusForLights';
+import EventAnalytics from './Tiles/EventAnalytics/EventAnalytics';
 import TimeButtons from './Navigation/TimeButtons/TimeButtons';
 import TimeSpanButtons from './Navigation/TimeSpanButtons/TimeSpanButtons';
 import StatusForOtherDevices from './Tiles/StatusForOtherDevices/StatusForOtherDevices';
@@ -42,6 +43,7 @@ export interface IOverzichtProps {
     fetchApiGraphData: (centerDate: Date, typeOfData?: DataSet[]) => void
     fetchApiItemsData: () => void
     fetchApiGroupsData: () => void
+    fetchApiAnalyticsData: () => void
     pushPopup: (popup: IPopup) => void
 }
 
@@ -52,6 +54,7 @@ export class Overzicht extends React.Component<IOverzichtProps, {}> {
             this.props.fetchApiGraphData(this.props.selected.graphStartDateTime);
             this.props.fetchApiItemsData();
             this.props.fetchApiGroupsData();
+            this.props.fetchApiAnalyticsData();
         }
     }
 
@@ -63,6 +66,9 @@ export class Overzicht extends React.Component<IOverzichtProps, {}> {
         const fetchApiData = () => {
             props.fetchApiItemsData();
             props.fetchApiGroupsData();
+        };
+        const fetchApiAnalyticsData = () => {
+            props.fetchApiAnalyticsData();
         };
 
         return (
@@ -104,7 +110,7 @@ export class Overzicht extends React.Component<IOverzichtProps, {}> {
                         <StatusForOtherDevices fetchApiData={fetchApiData} openPopup={props.pushPopup} />
                     </Grid>
                     <Grid className={'GridItem'} item md={6} sm={12} xs={12}>
-
+                        <EventAnalytics fetchApiData={fetchApiAnalyticsData} openPopup={props.pushPopup} />
                     </Grid>
 
                 </Grid>
@@ -132,6 +138,7 @@ const mapDispatchToProps = (dispatch: any): Partial<IOverzichtProps> => ({
         dispatch(actions.fetchApiGraphData(centerDate, typeOfData)),
     fetchApiItemsData: () => dispatch(actions.fetchApiItemsData()),
     fetchApiGroupsData: () => dispatch(actions.fetchApiGroupsData()),
+    fetchApiAnalyticsData: () => dispatch(actions.fetchApiAnalyticsData()),
     pushPopup: (popup: IPopup) => dispatch(actions.pushPopup(popup))
 });
 

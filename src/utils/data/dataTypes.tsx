@@ -60,3 +60,9 @@ export interface IApiItemGroup {
     id: number
     name: string
 }
+
+export interface IApiAnalytics {
+    item_ids: number[]
+    is_predicted_group_percentage: number
+    is_relevant_group_percentage: number
+}

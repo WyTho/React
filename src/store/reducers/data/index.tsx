@@ -3,7 +3,7 @@ import {TimeSpan} from '../../../utils/date/dateTypes';
 import {getBeginningOfTheDay, getBeginningOfTheHour} from '../../../utils/date/date';
 import functions from './functions';
 import {DataSet, getAllDatasets} from '../../../utils/data/apiGraph';
-import {IApiGraph, IApiGroup, IApiItem} from '../../../utils/data/dataTypes';
+import {IApiAnalytics, IApiGraph, IApiGroup, IApiItem} from '../../../utils/data/dataTypes';
 
 export interface IDataReducerState {
     selected: {
@@ -14,11 +14,13 @@ export interface IDataReducerState {
     },
     items: IApiItem[]
     groups: IApiGroup[]
+    analytics: IApiAnalytics[]
     loading: {
         initial: boolean
         partial: boolean
         items: boolean
         groups: boolean
+        analytics: boolean
     },
     error: {
         status: boolean
@@ -38,11 +40,13 @@ const initialState: IDataReducerState = {
     },
     items: null as IApiItem[],
     groups: null as IApiGroup[],
+    analytics: null as IApiAnalytics[],
     loading: {
         initial: true,
         partial: false,
         items: false,
-        groups: false
+        groups: false,
+        analytics: false
     },
     error: {
         status: false,
@@ -69,6 +73,9 @@ const REDUCER = ( state: IDataReducerState = initialState, action: any ) => {
 
         case Actions.FETCH_API_GROUPS_DATA_START:   return functions.fetchApiGroupsDataStart(state);
         case Actions.FETCH_API_GROUPS_DATA_SUCCESS: return functions.fetchApiGroupsDataSuccess(state, action);
+
+        case Actions.FETCH_API_ANALYTICS_DATA_START:   return functions.fetchApiAnalyticsDataStart(state);
+        case Actions.FETCH_API_ANALYTICS_DATA_SUCCESS: return functions.fetchApiAnalyticsDataSuccess(state, action);
 
         // case Actions.ADD_ITEM_TO_GROUP:             return functions.addItemToGroup(state, action);
         // case Actions.REMOVE_ITEM_FROM_GROUP:        return functions.removeItemFromGroup(state, action);

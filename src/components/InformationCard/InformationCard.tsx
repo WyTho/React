@@ -10,7 +10,7 @@ interface IProps {
     errorMessage?: string
     noDataMessage?: string
     onFetchData: () => void
-    onClicked: () => void
+    onClicked?: () => void
 }
 const defaults = {
     elevation: 1,
@@ -58,6 +58,7 @@ const informationCard = (props: IProps) => {
     return (
         <Paper className='card DashboardCard InformationCard'
                elevation={typeof elevation !== 'undefined' ? elevation : defaults.elevation}
+               style={onClicked ? {cursor: 'pointer'} : {}}
                onClick={onClicked}>
             <div className={'titleContainer'}>
                 <Typography variant='h6'>

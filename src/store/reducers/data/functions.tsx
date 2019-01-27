@@ -150,11 +150,26 @@ export default {
         });
     },
 
+    fetchApiAnalyticsDataStart: (state: IDataReducerState) => {
+        return updateObject(state, {
+            loading: updateObject(state.loading, { analytics: true })
+        });
+    },
+
+    fetchApiAnalyticsDataSuccess: (state: IDataReducerState, action: any) => {
+        return updateObject(state, {
+            loading: updateObject(state.loading, { analytics: false }),
+            analytics: action.payload.data.data.results
+        });
+    },
+
     fetchApiGraphDataFailed: (state: IDataReducerState, action: any) => {
         return updateObject(state, {
             loading: updateObject(state.loading, {
                 partial: false,
-                items: false
+                items: false,
+                groups: false,
+                analytics: false
             }),
             error: updateObject(state.error, {
                 status: true,

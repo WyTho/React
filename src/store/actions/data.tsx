@@ -11,6 +11,7 @@ const baseUrl: string = '/api/v1';
 const groupsUrl: string = 'groups';
 const itemsUrl: string = 'items';
 const graphsUrl: string = 'graphs';
+const eventsUrl: string = 'events';
 
 
 export const setTimeSpanForGraphs = (timeSpan: TimeSpan) => ({
@@ -51,6 +52,15 @@ export const fetchApiGroupsDataStart = () => ({
 
 export const fetchApiGroupsDataSuccess = (data: any[]) => ({
     type: Actions.FETCH_API_GROUPS_DATA_SUCCESS,
+    payload: { data }
+});
+
+export const fetchApiAnalyticsDataStart = () => ({
+    type: Actions.FETCH_API_ANALYTICS_DATA_START
+});
+
+export const fetchApiAnalyticsDataSuccess = (data: any[]) => ({
+    type: Actions.FETCH_API_ANALYTICS_DATA_SUCCESS,
     payload: { data }
 });
 
@@ -169,6 +179,17 @@ export const fetchApiGroupsData = (axios: any = defaultAxios) => {
 
         axios.get(`${baseUrl}/${groupsUrl}`)
             .then((res: any) => dispatch(fetchApiGroupsDataSuccess(res)))
+            .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
+    };
+};
+export const fetchApiAnalyticsData = (axios: any = defaultAxios) => {
+    return (dispatch: any) => {
+        dispatch(fetchApiAnalyticsDataStart());
+
+        if (DEBUG_ASYNC_ACTIONS) console.log('[GET]', `${baseUrl}/${eventsUrl}/analyze`);
+
+        axios.get(`${baseUrl}/${eventsUrl}/analyze`)
+            .then((res: any) => dispatch(fetchApiAnalyticsDataSuccess(res)))
             .catch((err: Error) => dispatch(fetchApiDataFailed(err)));
     };
 };
