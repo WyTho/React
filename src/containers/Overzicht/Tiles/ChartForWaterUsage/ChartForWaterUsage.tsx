@@ -60,10 +60,10 @@ export class ChartForWaterUsage extends React.Component<IChartForWaterUsageProps
                 <Grid container direction='row' justify='space-between' alignItems='stretch'>
                     <Grid item>
                         <Typography variant='overline' className='smallerText'>
-                            Huidig verbruik
+                            Waterverbruik dit uur:
                         </Typography>
                         <Typography variant='subtitle1'>
-                            {currentAverageWaterUsage}
+                            {currentAverageWaterUsage} Liter
                         </Typography>
                     </Grid>
                 </Grid>
