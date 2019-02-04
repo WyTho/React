@@ -26,7 +26,7 @@ export class StatusForLights extends React.Component<IStatusItemsProps, {}> {
 
             const deviceIsOn = (item: IApiItem) => {
                 if (item.last_use) {
-                    if (item.last_use.data !== item.usages[0].min_value) {
+                    if (item.last_use.data) {
                         return true
                     }
                 }
@@ -35,7 +35,6 @@ export class StatusForLights extends React.Component<IStatusItemsProps, {}> {
 
             on = devices.filter(item => deviceIsOn(item));
             off = devices.filter(item => !deviceIsOn(item));
-
             const usage: number = on
                 .map(light => light.usages.find(u => u.consumption_type === 'KILOWATT').consumption_amount)
                 .reduce((sum, u) => sum + u, 0);

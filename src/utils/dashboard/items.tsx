@@ -26,7 +26,9 @@ export const createContentForItemsTile = (
     off: IApiItem[],
     itemsToShow: IApiItem[] = []
 ) => {
-    on = on.filter(item => itemsToShow.map(i => i.id).indexOf(item.id) !== -1);
+    if (itemsToShow.length){
+        on = on.filter(item => itemsToShow.map(i => i.id).indexOf(item.id) !== -1);
+    }
     let image;
     if (type === ItemTileType.LIGHTS) {
         image = lightsImage;

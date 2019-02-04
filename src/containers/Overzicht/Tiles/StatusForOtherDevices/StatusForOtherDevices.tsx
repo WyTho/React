@@ -26,7 +26,7 @@ export class StatusForOtherDevices extends React.Component<IStatusItemsProps, {}
 
             const deviceIsOn = (item: IApiItem) => {
                 if (item.last_use) {
-                    if (item.last_use.data !== item.usages[0].min_value) {
+                    if (item.last_use.data) {
                         return true
                     }
                 }
